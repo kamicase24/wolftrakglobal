@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report.assets_common">
+    <link href="/web/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+    <link href="/website/static/src/css/website.css" rel="stylesheet"/>
+    <link href="/web/static/lib/fontawesome/css/font-awesome.css" rel="stylesheet"/>
+    <link href="/base/static/src/css/description.css" rel="stylesheet"/>
+    <link href="/wolftrakglobal/static/src/css/report.css" rel="stylesheet"/>
+</template>
+
+<template id="report.assets_pdf">
+    <link href="/wolftrakglobal/static/src/css/reset.min.css" rel="stylesheet"/>
+</template>
+</data>
+</openerp>
