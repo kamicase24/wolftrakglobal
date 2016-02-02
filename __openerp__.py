@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "wolftrakglobal",
+    'name': "WolftrakGlobal",
 
     'summary': """
         Short (1 phrase/line) summary of the module's purpose, used as
@@ -10,8 +10,8 @@
         Long description of module's purpose
     """,
 
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
+    'author': "WolftrakGlobal",
+    'website': "http://www.wolftrakglobal.com",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/master/openerp/addons/base/module/module_data.xml
@@ -25,9 +25,11 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'views/views.xml',
+        'views/nominawolf.xml',
         'views/templates.xml',
         'views/layouts.xml',
+        'views/factura.xml',
+        'views/headerwolftrakglobal.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

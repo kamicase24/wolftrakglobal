@@ -1,0 +1,84 @@
+<openerp>
+	<data>
+		<template id="report.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="report.external_layout">
+
+					<div class="page">
+						<h2>Pay Slip</h2>
+						<p t-field="o.name"/>
+
+						<table class="table table-condensed table-bordered">
+							<tr>
+								<td><strong>Identification No</strong></td>
+								<td><span t-field="o.employee_id.identification_id"/></td>
+								<td><strong>Name</strong></td>
+								<td><span t-field="o.employee_id"/></td>
+								<td><strong>Designation</strong></td>
+								<td><span t-field="o.employee_id.job_id"/></td>
+							</tr>
+							<tr>
+								<td><strong>Address</strong></td>
+								<td colspan="5">
+									<span t-field="o.employee_id.address_home_id.street"/>
+									<span t-field="o.employee_id.address_home_id.street2"/>
+									<span t-field="o.employee_id.address_home_id.city"/>
+									<span t-field="o.employee_id.address_home_id.state_id"/>
+									<span t-field="o.employee_id.address_home_id.zip"/>
+								</td>
+							</tr>
+							<tr>
+								<td><strong>Telefono Movil</strong></td>
+								<td><span t-field="o.employee_id.address_home_id.mobile"/></td>
+								<td><strong>Telefono de Hogar</strong></td>
+								<td><span t-field="o.employee_id.address_home_id.phone"/></td>
+								<td><strong>Email</strong></td>
+								<td><span t-field="o.employee_id.work_email"/></td>
+							</tr>
+							<tr>
+								<td><strong>Reference</strong></td>
+								<td><span t-field="o.number"/></td>
+								<td><strong>Dias Trabajados</strong></td>
+								<td><span t-field="o.worked_days_line_ids[0].number_of_days"/></td>
+								<td><strong>Dias de Descanso</strong></td>
+								<td><span t-field="o.worked_days_line_ids[1].number_of_days"/></td>
+							</tr>
+							<tr>
+								<td><strong>Date From</strong></td>
+								<td><span t-field="o.date_from"/></td>
+								<td><strong>Date To</strong></td>
+								<td><span t-field="o.date_to"/></td>
+								<td><strong>Bank Account</strong></td>
+								<td><span t-field="o.employee_id.bank_account_id"/></td>
+							</tr>
+						</table>
+
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<!--  <th>Code</th> -->
+									<th>Name</th>
+									<!-- <th>Quantity/rate</th> -->
+									<!-- <th>Amount</th> -->
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr t-foreach="get_payslip_lines(o.line_ids)" t-as="p">
+									<!--   <td><span t-field="p.code"/></td>  -->
+									<td><span t-field="p.name"/></td>
+									<!--   <td><span t-field="p.quantity"/></td> -->
+									<!--   <td><span t-esc="formatLang(p.amount, currency_obj=o.company_id.currency_id)"/></td> -->
+									<td><span t-esc="formatLang(p.total, currency_obj=o.company_id.currency_id)"/></td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p><strong>La Empresa_____________________________________________________El trabajador</strong></p>
+
+					</div>
+				</t>
+			</t>
+		</template>
+	</data>
+</openerp>

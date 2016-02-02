@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+    <template id="report.external_layout_header">
+      <div class="header">
+        <div class="row">
+          <div class="col-xs-12">
+            <div style="border-bottom: 1px solid black;"/>
+          </div>
+        </div>
+        <div class="row">
+          <span t-field="company.partner_id.street"/> 
+          <span t-field="company.partner_id.street2"/> 
+          <span t-field="company.partner_id.city"/> 
+          <span t-field="company.partner_id.state_id"/>
+          <span t-field="company.partner_id.zip"/>
+          <span t-field="company.partner_id.country_id"/>
+          <table class="table">
+            <tr align="center">
+              <td>
+                <img class="img img-responsive" src="wolftrakglobal/static/src/img/lobo2.png"/>
+              </td>
+              <td> 
+                <img class="img img-responsive  text-center" src="wolftrakglobal/static/src/img/send2.png"/>
+                <h6 class="text-center">servicios@wolftrakglobal.com</h6>
+              </td>
+              <td  align="center"> 
+                <img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/logotype2.png"/>
+                <h6 class="text-center">soporte@wolftrakglobal.com</h6>
+              </td>
+              <td> 
+                <img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/call2.png"/>
+                <h6 class="text-center">+1 829 956 5565</h6>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </template>
+  </data>
+</openerp>
