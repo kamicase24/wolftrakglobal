@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from openerp import models, fields #importa los objetos models y fields de el Core de Odoo
-class wolftraknew(models.Model): #declara un nuevo modelo. Deriva de models.Model
+from openerp.osv import orm
+class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 	#define el atributo _nombre, identificador que sera usado por Odoo para referises a este modelo 
-	_name = 'wolftrakglobal'
-	_inherit = 'res.partner'
-	
-	_order = "display_name"
-	_columns = {
-		'category_id': fields.Char('res.partner.category', id1='partner_id', id2='category_id', string='Tags')    	
-    }
+	_name = 'account.invoice'
+	_inherit = 'account.invoice'
+
+	ncf = fields.Char(string="NCF")
+
+	# _default = {
+	# 	'ncf' : "hola"
+	# }
 
 	# estas ultimas 3 lineas define los campos del modelo
 	# name    = fields.Char('Description', required=True)
