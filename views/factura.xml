@@ -29,9 +29,14 @@
                             <td class="colora"><span t-field="o.date_invoice"/></td>
                         </tr>
                         <tr> 
-                            <td class="colorb"><strong>RNC/Cedula: </strong> <span t-field="o.partner_id.vat"/></td>
-                            <td class="colorb" align="right"><strong>Fecha de Vencimiento:</strong></td>
-                            <td class="colorb"><span t-field="o.date_due"/></td> 
+                            <td class="colorb">
+                                <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Cedula: </strong>
+                                <strong t-if="o.company_id.name == 'Mytraktech'">RNC: </strong> 
+                                <span t-field="o.partner_id.fax"/>
+                            </td>
+                            <td t-if="o.state == 'proforma2'" class="colorb" align="right"><strong>Fecha de Vencimiento:</strong></td>
+                            <td t-if="o.state == 'proforma2'" class="colorb"><span t-field="o.date_due"/></td>
+                            <td t-if="o.state != 'proforma2'" colspan="2" class="colorb"></td>
                         </tr>
                         <tr>
                             <td class="colora" colspan="3">
@@ -42,6 +47,13 @@
                                 <span t-field="o.partner_id.state_id"/>
                                 <span t-field="o.partner_id.zip"/>
                                 <span t-field="o.partner_id.country_id"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="colorb" colspan="3">
+                                <strong t-if="o.company_id.name == 'Mytraktech'">NCF: </strong>
+                                <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Número de Factura: </strong>
+                                <span t-field="o.name"/>
                             </td>
                         </tr>
                     </table>
@@ -70,7 +82,7 @@
                     <table class="table table-condensed">
                         <thead>
                             <tr>
-                                <th class="tablecolor textcolor">Codigo</th>
+                                <!-- <th class="tablecolor textcolor">Codigo</th> -->
                                 <th class="tablecolor textcolor">Nombre</th>
                                 <th class="text-right tablecolor textcolor">Quantity</th>
                                 <th class="text-right tablecolor textcolor">Unit Price</th>
@@ -81,11 +93,11 @@
                         </thead>
                         <tbody class="invoice_tbody">
                             <tr t-foreach="o.invoice_line_ids" t-as="l">
-                                <td><span t-field="l.product_id.default_code"/></td>
+                                <!-- <td><span t-field="l.product_id.default_code"/></td> -->
                                 <td><span t-field="l.product_id.name"/></td>
                                 <td class="text-right">
                                     <span t-esc="int(l.quantity)"/>
-                                    <span t-field="l.uom_id" groups="product.group_uom"/>
+                                    <!-- <span t-field="l.uom_id" groups="product.group_uom"/> -->
                                 </td>
                                 <td class="text-right">
                                     <span t-field="l.price_unit"/>
@@ -140,22 +152,38 @@
                              </tr>
                          </table>
                      </div>
-                 </div>
+                </div>
 
-                 <table class="table tablenob">
+                <table class="table tablenob">
                     <tr>
                         <td class="tablecolor"  colspan="2">
-                            <strong class="textcolor text-center">Metodos de Pago</strong>
+                            <strong class="textcolor text-center tablecolor">Metodos de Pago</strong>
+                        </td>
+                        <td>
+                            <strong class="textcolor text-center">Puede ser a través de deposito o transferencia a los siguientes bancos:</strong>
                         </td>
                     </tr>
+
                     <tr>
-                        <td aling="center">
+                        <td t-if="o.company_id.name == 'WOLFTRAK GLOBAL'" aling="center">
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/bod.png"/>
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/ven.png"/>
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/plus.png"/>
                         </td>
+
+                        <td t-if="o.company_id.name == 'Mytraktech'" align="center">
+                            <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>
+                            <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
+                        </td>
+                    
+<!--                     <tr  t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">
                         <td>
-                            <p>Todos nuestros pagos pueden ser echos<br/> por transferencias y depositos bancarios.</p>
+                            <p>Cuenta No.: 787276476<br/>administracion@wolftrakglobal.com</p>
+                        </td>
+                    </tr> -->
+                    
+                        <td  t-if="o.company_id.name == 'Mytraktech'">
+                            <p>Cuenta No.: 787276476<br/>Paypal: administracion@wolftrakglobal.com</p>
                         </td>
                     </tr>
                 </table>

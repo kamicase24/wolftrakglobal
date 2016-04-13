@@ -2,13 +2,12 @@
 {
     'name': "WolftrakGlobal",
 
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
-
     'description': """
-        Long description of module's purpose
+        Modulo Personalizado para WolftrakGlobal c.a 2016
     """,
+    'summary': """
+        Modulo Personalizado para WolftrakGlobal c.a 2016""",
+
 
     'author': "WolftrakGlobal",
     'website': "http://www.wolftrakglobal.com",
@@ -20,8 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
-
+    'depends': ['base','account'],
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
@@ -29,7 +27,11 @@
         'views/templates.xml',
         'views/layouts.xml',
         'views/factura.xml',
-        'views/headerwolftrakglobal.xml'
+        'views/headerwolftrakglobal.xml',
+        'views/footerwolftrakglobal.xml',
+        'views/menubar.xml',
+        #'views/userswolftrak.xml',
+        #'views/invoicewolftrakg.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -18,14 +18,15 @@
           <table class="table">
             <tr align="center">
               <td>
-                <img class="img img-responsive" src="wolftrakglobal/static/src/img/lobo2.png"/>
+                <img t-if="company.partner_id.name == 'WOLFTRAK GLOBAL'" class="img img-responsive" src="wolftrakglobal/static/src/img/lobo3.png"/>
+                <img t-if="company.partner_id.name == 'Mytraktech'" class="img img-responsive" src="wolftrakglobal/static/src/img/mtt.png"/>
               </td>
               <td> 
                 <img class="img img-responsive  text-center" src="wolftrakglobal/static/src/img/send2.png"/>
                 <h6 class="text-center">servicios@wolftrakglobal.com</h6>
               </td>
               <td  align="center"> 
-                <img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/logotype2.png"/>
+                <img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/logotype.png"/>
                 <h6 class="text-center">soporte@wolftrakglobal.com</h6>
               </td>
               <td> 

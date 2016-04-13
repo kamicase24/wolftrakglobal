@@ -26,7 +26,7 @@ body {
 }
 
 .tablecolor {
-	background: #4374c4;
+	background: #222857;
 }
 
 .textcolor {
@@ -47,4 +47,9 @@ body {
 
 .tablenob {
     width: auto;
+}
+
+.table-inline {
+    display: inline-block;
+    vertical-align: top;
 }
