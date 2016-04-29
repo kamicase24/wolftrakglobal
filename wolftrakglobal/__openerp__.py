@@ -30,7 +30,7 @@
         'views/headerwolftrakglobal.xml',
         'views/footerwolftrakglobal.xml',
         #'views/menubar.xml',
-        #'views/userswolftrak.xml',
+        'views/userswolftrak.xml',
         'views/invoicewolftrakg.xml'
     ],
     # only loaded in demonstration mode

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-    	<record id="view_partner_form_inherit_wolftrakglobal" model="ir.ui.view">
-            <field name="name">res.partner.form.wolftrakglobal</field>
+    	<record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-            	<xxpath expr="//form/sheet/group/group" position="inside">
-            		<field name="category_id"/>
-                    <p> Hola mundo </p>
+            	<xpath expr="//form/sheet/group/group" position="inside">
+            		<field name="ci"/>
             	</xpath>
             </field>
     	</record>
