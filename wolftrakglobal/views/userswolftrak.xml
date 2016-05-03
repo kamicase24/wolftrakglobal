@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
             	<xpath expr="//form/sheet/group/group" position="inside">
-            		<field name="ci"/>
+            		<field name="ci" placeholder="RD24115035"/>
             	</xpath>
             </field>
     	</record>
