@@ -6,9 +6,16 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-            	<xpath expr="//form/sheet/group/group" position="inside">
-            		<field name="ci" placeholder="RD24115035"/>
-            	</xpath>
+            	<xpath expr="//form/sheet/div[2]" position="inside">
+                    <h3>
+                        <field name="ci" placeholder="Documento de Identificacion"/>
+                    </h3>
+                </xpath>
+                
+                <xpath expr="//form/sheet/group/group" position="inside">
+                    <field name="estado"/>
+                </xpath>
+                
             </field>
     	</record>
     </data>
