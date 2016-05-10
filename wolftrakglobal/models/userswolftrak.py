@@ -43,14 +43,18 @@ def get_rnc_record(cedula_rnc, config_data = None):
 		#Http request was successful, parsing...
 		soup = BeautifulSoup(result.content)             
 		data_rows  = soup.find('tr', attrs={'class': 'GridItemStyle'})
-		if not data_rows:
-			raise Exception(config_data['not_found_string'])
-		else:
+		# if not data_rows:
+		# 	raise Exception(config_data['not_found_string'])
+		# else:
+		#comentado debido a que se utilizará try para pasar los except
+		try:
 			tds = data_rows.findChildren('td')   
 			rnc_vals = [str(td.text.strip()) for td in tds]
 			rnc = Rnc(rnc_vals)    
 			# return rnc
 			return rnc_vals
+		except :
+			pass
 
 class wolftrak_new2(osv.Model):
 	_name = "res.partner"
@@ -66,12 +70,17 @@ class wolftrak_new2(osv.Model):
 		# Realiza la comparacion del dato que se insertara con los registrados en la base de datos
 		db_ci = self.search([('ci', '=', self.ci)])
 		if db_ci and self.ci:
-			# limpia el campo si el documento de identidad esta registrado
+			# limpia los campo si el documento de identidad esta registrado
 			self.ci = ''
-		if not self.ci:
+			self.name = ''
+			self.estado = ''
+		# pasado el rroceso de busqueda de rnc por try para evitar la generacion de ventanas de error
+		try:
 			rnc_record = get_rnc_record(self.ci)
 			self.name = rnc_record[2]
-		#self.estado = rnc_record[5] activar cuando se cree el campo del estado.
+			self.estado = rnc_record[5]
+		except :
+			pass
 	
 		# raise orm.except_orm(_("Warning"),_(""" Este documento ya esta registrado """),)
 
