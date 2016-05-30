@@ -77,7 +77,7 @@ class wolftrak_new2(osv.Model):
 		# pasado el rroceso de busqueda de rnc por try para evitar la generacion de ventanas de error
 		try:
 			rnc_record = get_rnc_record(self.ci)
-			self.name = rnc_record[2]
+			self.name = rnc_record[1]
 			self.estado = rnc_record[5]
 		except :
 			pass
