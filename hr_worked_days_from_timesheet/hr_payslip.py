@@ -50,45 +50,39 @@ class hr_payslip(orm.Model):
         worked_days.append({}) # 5 Total de la parte de tiempo
         worked_days.append({}) # 6 Dia de beneficio
         worked_days.append({}) # 7 Permisos de previo aviso
+
         # Create one worked days record for each timesheet sheet
         for ts_sheet in timesheet_sheets:
+
             # Get formated date from the timesheet sheet
             date_from = datetime.datetime.strptime(
                 ts_sheet.date_from,
                 DEFAULT_SERVER_DATE_FORMAT
             ).strftime(date_format)
+
             # Create a worked days record with no time
-            worked_days[0][ts_sheet.id] = {
-                'name': _('Total servicio %s') % date_from,
-                'number_of_hours': 0,
-                'contract_id': payslip.contract_id.id,
-                'code': 'TS',
-                'imported_from_timesheet': True,
-            }
-            for ts in ts_sheet.timesheet_ids:
-                # The timesheet_sheet overlaps the payslip period,
-                # but this does not mean that every timesheet in it
-                # overlaps the payslip period.
-                if date_from <= ts.date <= date_to:
-                    worked_days[0][ts_sheet.id][
-                        'number_of_hours'
-                    ] += ts.unit_amount
-                unit_amount = ts.unit_amount #Total de las partes de tiempo
-                total_att = ts_sheet.total_attendance #Total del servicio
+            # worked_days[0][ts_sheet.id] = {
+            #     'name': _('Total servicio %s') % date_from,
+            #     'number_of_hours': 0,
+            #     'contract_id': payslip.contract_id.id,
+            #     'code': 'TS',
+            #     'imported_from_timesheet': True,
+            # }
+            # for ts in ts_sheet.timesheet_ids:
+            #     # The timesheet_sheet overlaps the payslip period,
+            #     # but this does not mean that every timesheet in it
+            #     # overlaps the payslip period.
+            #     if date_from <= ts.date <= date_to:
+            #         worked_days[0][ts_sheet.id][
+            #             'number_of_hours'
+            #         ] += ts.unit_amount
+            #     unit_amount = ts.unit_amount #Total de las partes de tiempo
+            #     total_att = ts_sheet.total_attendance #Total del servicio
 
-            worked_days[0][ts_sheet.id]['number_of_hours'] = ts_sheet.total_attendance
-            worked_days[0][ts_sheet.id]['number_of_days'] = math.ceil(ts_sheet.total_attendance/unit_amount)
+            # worked_days[0][ts_sheet.id]['number_of_hours'] = ts_sheet.total_attendance
+            # worked_days[0][ts_sheet.id]['number_of_days'] = math.ceil(ts_sheet.total_attendance/unit_amount)
 
-            
-            # a = str(ts_sheet.total_difference).split('.')
-            # b = float('0.'+a[1])*60
-            # f = int(a[0])*-1
-            # c = datetime.time(f,int(b))
-            # d = str(c).split(':')
-            # e = float(d[0]+'.'+(d[1]))
-            # if ts_sheet.total_difference < 0:
-            #     e = e * -1
-
+            # Diferencia de tiempo
             worked_days[1][ts_sheet.id] = {
                 'name': _('Diferencia'),
                 'number_of_hours': ts_sheet.total_difference,
@@ -97,6 +91,7 @@ class hr_payslip(orm.Model):
                 'imported_from_timesheet': True,
             }
 
+            # Dias del mes
             actual = datetime.datetime.now()
             month = monthrange(actual.year, actual.month)[1]
 
@@ -108,10 +103,17 @@ class hr_payslip(orm.Model):
                 'imported_from_timesheet': True,
             }
 
+            # Dias de descanso AAAA/MM/DD
+            final_mes = date_to[8:10]
+            if final_mes > 15:
+                DD = int(final_mes) - 15
+            else:   
+                DD = 15                
+
             worked_days[3][ts_sheet.id] = {
                 'name': _('Dias de descanso'),
                 'number_of_hours': 0,
-                'number_of_days': 0,
+                'number_of_days': final_mes,
                 'contract_id': payslip.contract_id.id,
                 'code': 'DD',
                 'imported_from_timesheet': True,
@@ -127,7 +129,7 @@ class hr_payslip(orm.Model):
             }
 
             worked_days[5][ts_sheet.id] = {
-                'name': _('Total de horas'),
+                'name': _('Total en horas'),
                 'number_of_hours': ts_sheet.total_timesheet,
                 'contract_id': payslip.contract_id.id,
                 'code': 'TH',
@@ -225,14 +227,16 @@ Sorry, but there is no approved Timesheets for the entire Payslip period"""),
             date_format,
             context=context,
         )
+        
         #Total Servicio
-        worked_daysA = [(0, 0, wd) for key, wd in worked_days[0].items()]
+        # worked_daysA = [(0, 0, wd) for key, wd in worked_days[0].items()]
 
-        self.write(
-            cr, uid, payslip_id,
-            {'worked_days_line_ids': worked_daysA},
-            context=context
-        )
+        # self.write(
+        #     cr, uid, payslip_id,
+        #     {'worked_days_line_ids': worked_daysA},
+        #     context=context
+        # )
+
         #Tiempo no remunerado
         worked_daysD = [(0, 0, wd) for key, wd in worked_days[1].items()]
 
