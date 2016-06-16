@@ -21,6 +21,7 @@
 from openerp.osv import orm
 from openerp.tools.translate import _
 import datetime
+from datetime import date
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from calendar import monthrange
 import math
@@ -42,7 +43,7 @@ class hr_payslip(orm.Model):
         module and creates a dict of worked days to be created in the payslip.
         """
         worked_days = []
-        worked_days.append({}) # 0 Total servicio
+        worked_days.append({}) # 0 Lunes del mes
         worked_days.append({}) # 1 Tiempo no Remunerado
         worked_days.append({}) # 2 Dias del mes
         worked_days.append({}) # 3 Dias de descanso
@@ -83,6 +84,31 @@ class hr_payslip(orm.Model):
             # worked_days[0][ts_sheet.id]['number_of_days'] = math.ceil(ts_sheet.total_attendance/unit_amount)
 
             # Diferencia de tiempo
+            fulldate = datetime.datetime.now()
+            monthdate = fulldate.month
+            yeardate = fulldate.year
+
+            finaldaymonth = monthrange(yeardate, monthdate)[1]
+            i = 1
+            j = True
+            monday = 0
+            while j:
+                if datetime.date(yeardate, monthdate, i).weekday() == 0:
+                    monday += 1
+                if i == finaldaymonth:
+                    j = False
+                else:
+                    i = i+1
+
+            worked_days[0][ts_sheet.id] = {
+                'name': _('Lunes del mes'),
+                'number_of_days': monday,
+                'contract_id': payslip.contract_id.id,
+                'code': 'CLM',
+                'imported_from_timesheet': True,
+            }
+
+            # Diferencia de tiempo
             worked_days[1][ts_sheet.id] = {
                 'name': _('Diferencia'),
                 'number_of_hours': ts_sheet.total_difference,
@@ -113,7 +139,7 @@ class hr_payslip(orm.Model):
             worked_days[3][ts_sheet.id] = {
                 'name': _('Dias de descanso'),
                 'number_of_hours': 0,
-                'number_of_days': final_mes,
+                'number_of_days': DD,
                 'contract_id': payslip.contract_id.id,
                 'code': 'DD',
                 'imported_from_timesheet': True,
@@ -137,18 +163,25 @@ class hr_payslip(orm.Model):
             }
 
             worked_days[6][ts_sheet.id] = {
-                'name': _('PermisopAviso'),
+                'name': _('Horas extras nocturnas'),
                 'number_of_hours': 0,
                 'contract_id': payslip.contract_id.id,
-                'code': 'PermisopAviso',
+                'code': 'HED',
                 'imported_from_timesheet': True,
             }
 
+            # Dia de Beneficio
+            final_mes = date_to[8:10]
+            if final_mes >= 15:
+                DB = 1
+            else:
+                DB = 2
+
             worked_days[7][ts_sheet.id] = {
-                'name': _('DiaBene'),
-                'number_of_hours': 0,
+                'name': _('Dia de Beneficio'),
+                'number_of_days': DB,
                 'contract_id': payslip.contract_id.id,
-                'code': 'DiaBene',
+                'code': 'DB',
                 'imported_from_timesheet': True,
             }
 
@@ -228,14 +261,14 @@ Sorry, but there is no approved Timesheets for the entire Payslip period"""),
             context=context,
         )
         
-        #Total Servicio
-        # worked_daysA = [(0, 0, wd) for key, wd in worked_days[0].items()]
+        # Lunes del mes
+        worked_daysA = [(0, 0, wd) for key, wd in worked_days[0].items()]
 
-        # self.write(
-        #     cr, uid, payslip_id,
-        #     {'worked_days_line_ids': worked_daysA},
-        #     context=context
-        # )
+        self.write(
+            cr, uid, payslip_id,
+            {'worked_days_line_ids': worked_daysA},
+            context=context
+        )
 
         #Tiempo no remunerado
         worked_daysD = [(0, 0, wd) for key, wd in worked_days[1].items()]
