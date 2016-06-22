@@ -26,11 +26,15 @@ body {
 }
 
 .tablecolor {
-	background: #222857;
+	background: #1F3664;
 }
 
 .textcolor {
 	color: white;
+}
+
+b {
+    color: white;
 }
 
 .colora {

@@ -1,0 +1,85 @@
+<?xml	version="1.0"?>
+<openerp>
+	<data>
+		<!-- Lista de las empresas -->
+		<record id="view_pag_wolf_tree" model="ir.ui.view">
+			<field name="name">pag.wolftrak.tree</field>
+			<field name="model">pag.wolftrak</field>
+			<field name="arch" type="xml">
+				<tree string="Paginas Amarillas">	
+					<field name="empresa"/>
+					<field name="tlf"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- formulario paginas amarillas. -->
+		<record id="view_pag_wolf_form" model="ir.ui.view">
+			<field name="name">pag.wolftrak.form</field>
+			<field name="model">pag.wolftrak</field>
+			<field name="arch" type="xml">
+				<form string="Busqueda">
+					<group colspan="4">
+        				<group colspan="2" col="2">
+							<separator string="Paginas Amarillas" colspan="2"/>
+							<field name="busc"/>
+							<!-- <field name="show"/> -->
+							<field name="empresa"/>
+							<field name="tlf"/>
+						</group>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<!-- Action abrir paginas amarillas -->
+		<record model="ir.actions.act_window" id="act_pag_wolftrak">	
+			<field name="name">Paginas Amarillas</field>
+			<field name="res_model">pag.wolftrak</field>
+			<field name="view_mode">tree,form</field>	
+			<field name="view_id" ref="view_pag_wolf_tree"/>
+		</record>
+
+		<!-- Action abrir formulario (Generar) -->
+		<record model="ir.actions.act_window" id="act_form_pag_wolftrak">
+			<field name="name">Generar</field>
+			<field name="res_model">pag.wolftrak</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_pag_wolf_form"/>
+		</record>
+
+		<!-- Action abrir tree (Lista) -->
+		<record model="ir.actions.act_window" id="act_tree_pag_wolftrak">
+			<field name="name">Lista</field>
+			<field name="res_model">pag.wolftrak</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_pag_wolf_tree"/>
+		</record>
+
+		<!-- Menu Item de paginas-->
+		<menuitem	
+			id="menu_pag_wolftrak"
+			name="Paginas Amarillas"
+			sequence="10"
+			action="act_pag_wolftrak"
+		/>
+
+		<!-- Menu item: Generar -->
+		<menuitem
+			id="form_pag_wolftrak"
+			name="Generar"
+			sequence="11"
+			parent="menu_pag_wolftrak"
+			action="act_form_pag_wolftrak"
+		/>
+
+		<menuitem
+			id="tree_pag_wolftrak"
+			name="Lista"
+			sequence="10"
+			parent="menu_pag_wolftrak"
+			action="act_tree_pag_wolftrak"
+		/>		
+
+	</data>
+</openerp>

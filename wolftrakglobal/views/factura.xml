@@ -32,7 +32,7 @@
                             <td class="colorb">
                                 <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Cedula: </strong>
                                 <strong t-if="o.company_id.name == 'Mytraktech'">RNC: </strong> 
-                                <span t-field="o.partner_id.fax"/>
+                                <span t-field="o.partner_id.ci"/>
                             </td>
                             <td t-if="o.state == 'proforma2'" class="colorb" align="right"><strong>Fecha de Vencimiento:</strong></td>
                             <td t-if="o.state == 'proforma2'" class="colorb"><span t-field="o.date_due"/></td>

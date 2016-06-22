@@ -61,7 +61,7 @@ class wolftrak_new2(osv.Model):
 	_inherit = "res.partner"
 
 	_columns = {
-		'ci': fields.char('Documento de Identificacion', help='Documento de Identificacion', required=True),
+		'ci': fields.char('Documento de Identificacion', help='Documento de Identificacion'),
 		'estado': fields.char(string='Estado')
 	}
 
