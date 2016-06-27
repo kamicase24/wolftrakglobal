@@ -3,7 +3,15 @@
     'name': "WolftrakGlobal",
 
     'description': """
-        Modulo Personalizado para WolftrakGlobal c.a 2016
+  def next_weekday(d, weekday):
+#     days_ahead = weekday - d.weekday()
+#     if days_ahead <= 0: # Target day already happened this week
+#         days_ahead += 7
+#     return d + datetime.timedelta(days_ahead)
+
+# d = datetime.datetime.today()
+# next_monday = next_weekday(d, 0) # 0 = Monday, 1=Tuesday, 2=Wednesday...
+# print(next_monday)      Modulo Personalizado para WolftrakGlobal c.a 2016
     """,
     'summary': """
         Modulo Personalizado para WolftrakGlobal c.a 2016""",
@@ -28,10 +36,12 @@
         'views/layouts.xml',
         'views/factura.xml',
         'views/headerwolftrakglobal.xml',
-        'views/footerwolftrakglobal.xml',
-        # 'views/menubar.xml',
+        #'views/footerwolftrakglobal.xml',
+        #'views/menubar.xml',
         'views/userswolftrak.xml',
-        'views/invoicewolftrakg.xml'
+        'views/invoicewolftrakg.xml',
+        #'views/pagwolftrak.xml',
+        'views/custom_sale_order.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
