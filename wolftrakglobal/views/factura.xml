@@ -51,9 +51,11 @@
                         </tr>
                         <tr>
                             <td class="colorb" colspan="3">
-                                <strong t-if="o.company_id.name == 'Mytraktech'">NCF: </strong>
-                                <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Número de Factura: </strong>
-                                <span t-field="o.name"/>
+                                <span t-if="o.state != 'proforma2'">
+                                    <strong t-if="o.company_id.name == 'Mytraktech'">NCF: </strong>
+                                    <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Número de Factura: </strong>
+                                    <span t-field="o.ncf"/>
+                                </span>
                             </td>
                         </tr>
                     </table>
