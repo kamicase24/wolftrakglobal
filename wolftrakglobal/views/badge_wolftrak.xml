@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+<!-- 		<record id="badge_form_view" model="ir.ui.view">
+			<field name="name">Badge Form custom</field>
+			<field name="model">gamification.badge</field>
+			<field name="inherit_id" ref="gamification.badge_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/group[2]" position="inside">
+					<field name="custom_value"/>
+				</xpath>
+			</field>
+		</record> -->
+<!-- 
+		<record id="badge_kanban_view" model="ir.ui.view">
+			<field name="name">Badge Kanban custom</field>
+			<field name="model">gamification.badge</field>
+			<field name="inherit_id" ref="gamification.badge_kanban_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//kanban" position="inside">
+					<field name="custom_value"/>
+				</xpath>
+				<xpath expr="//kanban/templates/t/div/div[2]/strong" position="inside">
+					<strong>
+						<field name="custom_value"/>
+					</strong>
+				</xpath>
+			</field>
+		</record> -->
+
+		<record id="badge_user_kanban_view" model="ir.ui.view">
+			<field name="name">Badge User Kanban custom</field>
+			<field name="model">gamification.badge.user</field>
+			<field name="inherit_id" ref="gamification.badge_user_kanban_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//kanban" position="inside">
+					<field name="custom_value"/>
+				</xpath>
+				<xpath expr="//kanban/templates/t/div/div" position="inside">
+					<strong>
+						<field name="custom_value"/>
+					</strong>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="view_badge_wizard_grant" model="ir.ui.view">
+			<field name="name">Grant_Badge_User_custom</field>
+			<field name="model">gamification.badge.user.wizard</field>
+			<field name="inherit_id" ref="gamification.view_badge_wizard_grant"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/group" position="inside">
+					<div>
+						<field name="custom_value"/>
+					</div>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>

@@ -37,11 +37,12 @@
         'views/factura.xml',
         'views/headerwolftrakglobal.xml',
         #'views/footerwolftrakglobal.xml',
-        #'views/menubar.xml',
+        'views/badge_wolftrak.xml',
         'views/userswolftrak.xml',
         'views/invoicewolftrakg.xml',
         #'views/pagwolftrak.xml',
-        'views/custom_sale_order.xml'
+        'views/custom_sale_order.xml',
+        'views/presupuesto.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
