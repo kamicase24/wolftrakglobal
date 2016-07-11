@@ -158,34 +158,37 @@
 
                 <table class="table tablenob">
                     <tr>
-                        <td class="tablecolor"  colspan="2">
+                        <td class="tablecolor" colspan="2">
                             <strong class="textcolor text-center tablecolor">Metodos de Pago</strong>
                         </td>
-                        <td>
-                            <strong class="textcolor text-center">Puede ser a través de deposito o transferencia a los siguientes bancos:</strong>
+                        <td class="tablecolor">
+                            <strong class="textcolor text-center">Recuerda que siempre puedes obtener mas informacion de nuestros productos y servicios en:</strong>
                         </td>
                     </tr>
 
                     <tr>
-                        <td t-if="o.company_id.name == 'WOLFTRAK GLOBAL'" aling="center">
-                            <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/bod.png"/>
-                            <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/ven.png"/>
-                            <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/plus.png"/>
-                        </td>
-
                         <td t-if="o.company_id.name == 'Mytraktech'" align="center">
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>
+                        </td>
+                        <td align="left">
+                            <p>Paypal: administracion@wolftrakglobal.com</p>
+                        </td>
+                        <td align="center">
+                            <h3>http://wolftrakglobal.com</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" t-if="o.company_id.name == 'Mytraktech'">
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
                         </td>
-                    
-<!--                     <tr  t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">
-                        <td>
-                            <p>Cuenta No.: 787276476<br/>administracion@wolftrakglobal.com</p>
+                        <td align="left" t-if="o.company_id.name == 'Mytraktech'">
+                        	<p>Cuenta No.: 787276476</p>
                         </td>
-                    </tr> -->
-                    
-                        <td  t-if="o.company_id.name == 'Mytraktech'">
-                            <p>Cuenta No.: 787276476<br/>Paypal: administracion@wolftrakglobal.com</p>
+                        <td align="center">
+                            <img src="wolftrakglobal/static/src/img/fb2.png"/>
+                            <img src="wolftrakglobal/static/src/img/tw2.png"/>
+                            <img src="wolftrakglobal/static/src/img/ins2.png"/>
+                            <p>Wolftrakglobal</p>
                         </td>
                     </tr>
                 </table>
@@ -197,22 +200,6 @@
                     <strong>Fiscal Position Remark:</strong>
                     <span t-field="o.fiscal_position_id.note"/>
                 </p>
-                <footer>
-                    <table class="table" align="center">
-                        <tr align="center">
-                            <td>
-                                <br/><p>Recuerda que siempre puedes obtener mas informacion de nuestros productos y servicios en:<br/> http://wolftrakglobal.com</p>
-                            </td>
-                            <td>
-                                <p>Siguenos en:</p>
-                                <img src="wolftrakglobal/static/src/img/fb2.png"/>
-                                <img src="wolftrakglobal/static/src/img/tw2.png"/>
-                                <img src="wolftrakglobal/static/src/img/ins2.png"/>
-                                <p>Wolftrakglobal</p>
-                            </td>
-                        </tr>
-                    </table>
-                </footer>
             </div>
         </t>
     </template>
