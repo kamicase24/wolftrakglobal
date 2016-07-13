@@ -48,14 +48,14 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="colorb">
+								<td class="colorb" colspan="2">
 									<strong>Vendedor:</strong>
 									<span t-field="doc.user_id"/>
 								</td>
-								<td class="colorb">
+<!-- 								<td class="colorb">
 									<strong>Metodo de Pago:</strong>
 									<span t-field="doc.payment_term_id"/>
-								</td>
+								</td> -->
 							</tr>
 						</table>
 						<div class="oe_structure"/>
