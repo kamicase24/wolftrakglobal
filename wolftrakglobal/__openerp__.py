@@ -31,7 +31,8 @@
         'views/invoicewolftrakg.xml',
         #'views/pagwolftrak.xml',
         'views/custom_sale_order.xml',
-        'views/presupuesto.xml'
+        'views/presupuesto.xml',
+        'views/custom_overdue.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
