@@ -52,6 +52,7 @@ class hr_payslip(orm.Model):
         worked_days.append({}) # 6 Dia de beneficio
         worked_days.append({}) # 7 Permisos de previo aviso
 
+
         # Create one worked days record for each timesheet sheet
         for ts_sheet in timesheet_sheets:
 
@@ -139,7 +140,7 @@ class hr_payslip(orm.Model):
             worked_days[3][ts_sheet.id] = {
                 'name': _('Dias de descanso'),
                 'number_of_hours': 0,
-                'number_of_days': DD,
+                'number_of_days': final_mes,
                 'contract_id': payslip.contract_id.id,
                 'code': 'DD',
                 'imported_from_timesheet': True,
@@ -173,9 +174,9 @@ class hr_payslip(orm.Model):
             # Dia de Beneficio
             final_mes = date_to[8:10]
             if final_mes >= 15:
-                DB = 1
+                DB = 0
             else:
-                DB = 2
+                DB = 1
 
             worked_days[7][ts_sheet.id] = {
                 'name': _('Dia de Beneficio'),
