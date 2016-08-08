@@ -61,8 +61,9 @@ class wolftrak_new2(osv.Model):
 	_inherit = "res.partner"
 
 	_columns = {
-		'ci': fields.char('Documento de Identificacion', help='Documento de Identificacion'),
-		'estado': fields.char(string='Estado')
+		'ci'		   : fields.char('Documento de Identificacion', help='Documento de Identificacion'),
+		'estado'	   : fields.char(string='Estado'),
+		'regimen_pago' : fields.char(string='Regimen de Pago')
 	}
 
 	@api.onchange('ci')
@@ -79,6 +80,7 @@ class wolftrak_new2(osv.Model):
 			rnc_record = get_rnc_record(self.ci)
 			self.name = rnc_record[1]
 			self.estado = rnc_record[5]
+			self.regimen_pago = rnc_record[4]
 		except :
 			pass
 	

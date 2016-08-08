@@ -1,0 +1,62 @@
+<openerp>
+	<data>
+		<record id="form_report_607" model="ir.ui.view">
+			<field name="name">wolftrakglobal.report.form</field>
+			<field name="model">wolftrakglobal.report607</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet string="Ventas de bienes y servicios">
+						<header>
+							<h3>Periodo: <field name="periodo"/></h3>
+						</header>
+						<group>
+							<group>
+								<field name="desde_607"/>
+								<field name="hasta_607"/>
+								<field name="cant_reg"/>
+							</group>
+							<group>
+								<field name="total_cld"/>
+								<field name="total_tax"/>
+							</group>
+						</group>
+						<notebook>
+							<page string="Lineas">
+									<field name="reporte"/>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="tree_report_607" model="ir.ui.view">
+			<field name="name">wolftrakglobal.report.tree</field>
+			<field name="model">wolftrakglobal.report607</field>
+			<field name="arch" type="xml">
+				<tree string="Ventas de vienes y servicios">
+					<field name="periodo"/>
+					<field name="desde_607"/>
+					<field name="hasta_607"/>
+					<field name="cant_reg"/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="act_report_607">
+			<field name="name">Ventas de vienes y servicios</field>
+			<field name="res_model">wolftrakglobal.report607</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="tree_report_607"/>
+		</record>
+
+		<menuitem
+			id="menu_report_607"
+			name="Ventas de bienes y servicios"
+			sequence="10"
+			action="act_report_607"
+			parent="account.menu_finance_reports"
+		/>
+	</data>
+</openerp>

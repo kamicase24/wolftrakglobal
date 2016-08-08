@@ -1,18 +1,39 @@
 # -*- coding: utf-8 -*-
 from openerp import models, fields #importa los objetos models y fields de el Core de Odoo
 from openerp.osv import orm
+from openerp import models, fields, api
+
 class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 	#define el atributo _nombre, identificador que sera usado por Odoo para referises a este modelo 
 	_name = 'account.invoice'
 	_inherit = 'account.invoice'
 
-	ncf = fields.Char(string="NCF")
+	ncf = fields.Char(string="Numero de Comprobante Fiscal")
+	tax_hold = fields.Monetary(string="ITBIS Retenido")
+	type_ci = fields.Char(string="Tipo de Id")
+	type_buy = fields.Selection([('01','01 - Gastos de personal'),
+								('02','02 - Gastos por trabajos suministros y servicios'),
+								('03','03 - Arrendamientos'),
+								('04','04 - Gastos de activos fijo'),
+								('05','05 - Gastos de representación'),
+								('06','06 - Otras deducciones admitisdas'),
+								('07','07 - Gastos financieros'),
+								('08','08 - Gastos Extraordinarios'),
+								('09','09 - Compras y Gastos que formarann parte del costo de venta'),
+								('10','10 - Adquisiciones de activos'),
+								('11','11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados")
 
-	# _default = {
-	# 	'ncf' : "hola"
-	# }
+	@api.onchange('amount_tax')
+	def tax_holding(self):
 
-	# estas ultimas 3 lineas define los campos del modelo
-	# name    = fields.Char('Description', required=True)
-	# is_done = fields.Boolean('Done?')
-	# active  = fields.Boolean('Active?', default=True)
+		p_id = self.partner_id.id
+		partner = self.env['res.partner'].search([('id', '=', p_id)])
+		rnc = partner.ci
+		if type(rnc) != bool:
+			if len(rnc) == 11: 
+				# Es una persona natural
+				self.tax_hold += self.amount_tax*1.0
+				self.type_ci = 2
+			else:
+				self.tax_hold += 0.0
+				self.type_ci = 1

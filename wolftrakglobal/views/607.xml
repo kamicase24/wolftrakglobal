@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<report
+			id="format_607"
+			model="wolftrakglobal.report607"
+			string="Ventas de bienes y servicios"
+			report_type="qweb-pdf"
+			name="wolftrakglobal.report_format_607"
+			file="wolftrakglobal.607"
+		/>
+
+		<template id="report_format_607">
+			<t t-call="report.external_layout">
+				<t t-foreach="docs" t-as="doc">
+					<div class="page">
+						<br/>
+						<table class="table-condensed table-bordered">
+							<tr>
+								<td class="tablecolor textcolor"> RNC </td><td> 131104371 </td>
+							</tr>
+							<tr>
+								<td class="tablecolor textcolor"> Periodo </td><td><span t-field="doc.periodo"/></td>
+							</tr>
+							<tr>
+								<td class="tablecolor textcolor"> Cantidad de Registro </td><td> <span t-field="doc.cant_reg"/> </td>
+							</tr>
+							<tr>
+								<td class="tablecolor textcolor"> Monto Facturado </td><td> <span t-field="doc.total_cld"/> </td>
+							</tr>
+						</table>
+						<br/>
+						<div align="center">
+							<table align="center" class="table-condensed table-bordered">
+								<tr>
+									<th class="tablecolor textcolor">Valor Calculado</th>
+									<th class="tablecolor textcolor">ITBIS Calculado</th>
+								</tr>
+								<tr align="center">
+									<td><span t-field="doc.total_cld"/></td>
+									<td><span t-field="doc.total_tax"/></td>
+								</tr>
+							</table>
+						</div>
+						<br/>
+						<table class="table table-condensed table-bordered">
+							<tr align="center">
+								<th class="tablecolor textcolor">Lineas</th>
+								<th class="tablecolor textcolor">RNC</th>
+								<th class="tablecolor textcolor">Numero de Comprobante Fiscal</th>
+								<th class="tablecolor textcolor">Fecha de Comprobante</th>
+								<th class="tablecolor textcolor">ITBIS Facturado</th>
+								<th class="tablecolor textcolor">Monto Facturado</th>
+							</tr>
+							<t t-set="j" t-value="1"/>
+							<tr align='center' t-foreach="doc.reporte" t-as="i">
+								<td><span t-esc="j"/></td>
+								<td><span t-field="i.partner_id.ci"/></td>
+								<td><span t-field="i.ncf"/></td>
+								<td><span t-field="i.date_invoice"/></td>
+								<td><span t-field="i.amount_tax"/></td>
+								<td><span t-field="i.amount_untaxed"/></td>
+								<t t-set="j" t-value="j+1"/>
+							</tr>
+						</table>
+					</div>
+				</t>
+			</t>
+		</template>
+	</data>
+</openerp>

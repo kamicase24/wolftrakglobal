@@ -14,6 +14,7 @@
                 
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="estado"/>
+                    <field name="regimen_pago"/>
                 </xpath>
                 
             </field>

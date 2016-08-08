@@ -29,10 +29,14 @@
         'views/badge_wolftrak.xml',
         'views/userswolftrak.xml',
         'views/invoicewolftrakg.xml',
-        #'views/pagwolftrak.xml',
+        'views/pagwolftrak.xml',
         'views/custom_sale_order.xml',
         'views/presupuesto.xml',
-        'views/custom_overdue.xml'
+        'views/custom_overdue.xml',
+        'views/607.xml',
+        'views/607_view.xml',
+        'views/606_view.xml',
+        'views/606.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
