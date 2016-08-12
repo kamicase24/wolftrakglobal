@@ -120,3 +120,57 @@ class wolftrakglobal_report_606(osv.osv):
 			self.total_tax += value.amount_tax
 			self.total_rtn += float(value.tax_hold)
 			self.cant_reg = len(self.invoices)
+
+
+class wolftrakglobal_report_608(osv.osv):
+	_name = 'wolftrakglobal.report608'
+
+	_columns = {
+		'invoices'	: fields.many2many('account.invoice', domain=[('type','=','out_refund')], string="Facturas"),
+		'desde_608' : fields.date('Desde:'),
+		'desde_str'	: fields.char(compute='_toma_desde'),
+		'hasta_608' : fields.date('Hasta:'),
+		'hasta_str'	: fields.char(compute='_toma_hasta'),
+		'periodo'	: fields.char(compute='_toma_periodo', readonly=True, string='Periodo'),
+		'cant_reg'	: fields.integer('Cantidad de registros')
+	}
+	_defaults = {
+		'desde_608': lambda *a: time.strftime('%Y-%m-01'),
+		'hasta_608': lambda *a: str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10],
+	}
+
+	@api.onchange('invoices')
+	def _toma_registro(self):
+		for value in self.invoices:
+			self.cant_reg = len(self.invoices)
+
+	@api.depends('hasta_608')
+	def _toma_periodo(self):
+
+		month = str(self.hasta_608[5:7])
+		year = str(self.hasta_608[:4])
+		self.periodo = year+month
+
+	@api.depends('hasta_608')
+	def _toma_periodo(self):
+
+		month = str(self.hasta_608[5:7])
+		year = str(self.hasta_608[:4])
+		self.periodo = year+month
+
+	@api.depends('desde_608')
+	def _toma_desde(self):
+
+		year = str(self.desde_608[:4])
+		month = str(self.desde_608[5:7])
+		day = str(self.desde_608[8:10])
+		self.desde_str = year+month+day
+
+	@api.depends('hasta_608')
+	def _toma_hasta(self):
+
+		year = str(self.hasta_608[:4])
+		month = str(self.hasta_608[5:7])
+		day = str(self.hasta_608[8:10])
+		self.hasta_str = year+month+day
+
