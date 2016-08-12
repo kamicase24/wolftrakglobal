@@ -23,6 +23,16 @@ class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 								('10','10 - Adquisiciones de activos'),
 								('11','11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados")
 
+	type_nul = fields.Selection([('01','01 Deterioro de Factura Pre-Imresa'),
+								('02','02 Errores de Impresión (factura Pre-Impresa)'),
+								('03','03 Impresión Defectuosa'),
+								('04','04 Duplicidad de Factura'),
+								('05','05 Correción de la Información'),
+								('06','06 Cambio de Productos'),
+								('07','07 Devolución de Productos'),
+								('08','08 Omisión de Productos'),
+								('09','09 Errores de Secuencias de NCF')], string="Tipo de Anulación")
+
 	@api.onchange('amount_tax')
 	def tax_holding(self):
 
