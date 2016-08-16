@@ -38,7 +38,9 @@
         'views/606_view.xml',
         'views/606.xml',
         'views/608_view.xml',
-        'views/608.xml'
+        'views/608.xml',
+        'views/609_view.xml',
+        'views/609.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

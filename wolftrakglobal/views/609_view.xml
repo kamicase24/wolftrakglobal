@@ -1,0 +1,62 @@
+<openerp>
+	<data>
+		<record id="form_report_609" model="ir.ui.view">
+			<field name="name">wolftrakglobal.report.form</field>
+			<field name="model">wolftrakglobal.report609</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet string="Pagos al Exterior">
+						<header>
+							<h3>Periodo: <field name="periodo"/></h3>
+						</header>
+						<group>
+							<group>
+								<field name="desde_609"/>
+								<field name="hasta_609"/>
+								<field name="cant_reg"/>
+							</group>
+							<group>
+								<field name="total_cld"/>
+								<field name="total_isr"/>
+							</group>
+						</group>
+						<notebook>
+							<page string="Lineas">
+								<field name="invoices"/>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record> 
+
+		<record id="tree_report_609" model="ir.ui.view">
+			<field name="name">wolftrakglobal.report.tree</field>
+			<field name="model">wolftrakglobal.report609</field>
+			<field name="arch" type="xml">
+				<tree string="Pagos al Exterior">
+					<field name="periodo"/>
+					<field name="desde_609"/>
+					<field name="hasta_609"/>
+					<field name="cant_reg"/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="act_report_609">
+			<field name="name">Pagos al Exterior</field>
+			<field name="res_model">wolftrakglobal.report609</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="tree_report_609"/>
+		</record>
+
+		<menuitem
+			id="menu_report_609"
+			name="Pagos al Exterior"
+			sequence="15"
+			action="act_report_609"
+			parent="account.menu_finance_reports"
+		/>
+	</data>
+</openerp>

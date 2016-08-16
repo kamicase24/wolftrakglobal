@@ -23,11 +23,16 @@
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/notebook/page[2]/group/group[2]" position="inside">
                     <field name="ncf"/>
-                    <field name="tax_hold" attrs="{'invisible': [('tax_hold', '>=', 0)]}"/>
-                    <field name="type_ci" attrs="{'invisible' : [('tax_hold', '>=', 0)]}"/>
+                    <field name="type_comp"/>
+                    <field name="ncf_result"/>
+                    <!-- <field name="tax_hold"/> -->
+                    <!-- <field name="type_ci"/> -->
                 </xpath>
                 <xpath expr="//form/sheet/notebook/page[2]/group/group" position="inside">
                     <field name="type_buy" attrs="{'invisible': [('type', '=', 'out_invoice')]}"/>
+                    <field name="isr"/>
+                    <field name="isr_hold"/>
+                    <field name="isr_date"/>
                 </xpath>
             </field>
         </record>

@@ -1,0 +1,18 @@
+{
+    "url": "http://www.dgii.gov.do/app/WebApps/Consultas/",
+    "web_resource": "NCF/ConsultaNCF.aspx",
+    "request_cookies": {},
+    "request_headers": {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    "request_parameters": {
+        "__EVENTTARGET": "",
+        "__EVENTARGUMENT": "",
+        "__VIEWSTATE": "/wEPDwUJNTg1OTUyMDMyD2QWAgIDD2QWBAIBDw8WAh4EVGV4dAUJMTI0MDAzMDkxFgQeCm9ua2V5cHJlc3MFSE51bWVyaWNCb3hfTlNfQWRkTnVtZXJpY0l0ZW0oZXZlbnQsICd0eHRSTkMnLCBmYWxzZSwgdHJ1ZSwgLTEsICcuJywgLTEpOx4Ib25jaGFuZ2UFG051bWVyaWNCb3hfTlNfdHh0Uk5DKGV2ZW50KWQCCQ9kFgRmD2QWAgIBDw8WBB4HVmlzaWJsZWcfAAVVRWwgTsO6bWVybyBkZSBDb21wcm9iYW50ZSBGaXNjYWwgaW5ncmVzYWRvIG5vIGVzIGNvcnJlY3RvIG8gbm8gY29ycmVzcG9uZGUgYSBlc3RlIFJOQ2RkAgEPZBYEAgEPDxYCHwAFHEtFTlRVQ0tZIEZPT0RTIEdST1VQIExJTUlURURkZAIDDw8WAh8ABTtGQUNUVVJBUyBRVUUgR0VORVJBTiBDUkVESVRPUyBZL08gU1VTVEVOVEFOIENPU1RPUyBZIEdBU1RPU2RkGAEFCk11bHRpVmlldzEPD2QCAWTUC+WGCHkXT+B6dXM7muVJQcFn3w==",
+        "__EVENTVALIDATION": "/wEWBALkkZOiCgKm+57mDAKp+5qgBAKVq7KvCP4fTiVIvdHw0/YKvRLW4PXzm8ua",
+        "btnConsultar": "Consultar"
+    },
+    "not_found_string": "NCF no existe",
+    "http_error_string": "No fue posible conectarse al servicio"
+}
+

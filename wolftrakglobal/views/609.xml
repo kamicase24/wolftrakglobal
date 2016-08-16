@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+<openerp>
+	<data>
+		<report
+			id='format_609'
+			model='wolftrakglobal.report609'
+			string='Compras de bienes y servicios'
+			report_type='qweb-pdf'
+			name='wolftrakglobal.report_format_609'
+			file='wolftrakglobal.609'
+		/>
+
+		<template id='report_format_609'>
+			<t t-call='report.external_layout'>
+				<t t-foreach='docs' t-as='doc'>
+					<div class='page'>
+						<br/>
+						<table class='table-condensed table-bordered'>
+							<tr>
+								<td class='tablecolor textcolor'> RNC </td><td>131104371</td>
+							</tr>
+							<tr>
+								<td class='tablecolor textcolor'> Periodo </td><td><span t-field='doc.periodo'/></td>
+							</tr>
+							<tr>
+								<td class='tablecolor textcolor'>Cantidad de Registro </td><td><span t-field='doc.cant_reg'/></td>
+							</tr>
+							<tr>
+								<td class='tablecolor textcolor'>Total Monto Facturado </td><td> <span t-field='doc.total_cld'/></td>
+							</tr>
+						</table>
+						<br/>
+						<div align="Center">
+							<table align="center" class='table-condensed table-bordered'>
+								<tr>
+									<th class='tablecolor textcolor'> Total Monto Facturado</th>
+									<th class='tablecolor textcolor'> Total ISR Retenido </th>
+								</tr>
+								<tr>
+									<td><span t-field='doc.total_cld'/></td>
+									<td><span t-field='doc.total_isr'/></td>
+								</tr>
+							</table>
+						</div>
+						<br/>
+						<table align='center' class='table table-condensed table-bordered'>
+							<tr>
+								<th class='tablecolor textcolor' align='center'>Lineas</th>
+								<th class='tablecolor textcolor' align='center'>Nombre / Razon Social</th>
+								<th class='tablecolor textcolor' align='center'>Tipo de Servicio comprado</th>
+								<th class='tablecolor textcolor' align='center'>Fecha factura</th>
+								<th class='tablecolor textcolor' align='center'>Fecha Retencion ISR</th>
+								<th class='tablecolor textcolor' align='center'>ISR Retenido</th>
+								<th class='tablecolor textcolor' align='center'>Monto Facturado</th>
+							</tr>
+							<t t-set='j' t-value='1'/>
+							<tr align='center' t-foreach='doc.invoices' t-as='i'>
+								<td><span t-esc='j'/></td>
+								<td><span t-field='i.partner_id.name'/></td>
+								<td><span t-field='i.type_buy'/></td>
+								<td><span t-field='i.date_invoice'/></td>
+								<td><span t-field='i.isr_date'/></td>
+								<td><span t-field='i.isr_hold'/></td>
+								<td><span t-field='i.amount_total'/></td>
+							</tr>
+						</table>
+					</div>
+				</t>
+			</t>
+		</template>
+	</data>
+</openerp>

@@ -151,13 +151,6 @@ class wolftrakglobal_report_608(osv.osv):
 		year = str(self.hasta_608[:4])
 		self.periodo = year+month
 
-	@api.depends('hasta_608')
-	def _toma_periodo(self):
-
-		month = str(self.hasta_608[5:7])
-		year = str(self.hasta_608[:4])
-		self.periodo = year+month
-
 	@api.depends('desde_608')
 	def _toma_desde(self):
 
@@ -174,3 +167,58 @@ class wolftrakglobal_report_608(osv.osv):
 		day = str(self.hasta_608[8:10])
 		self.hasta_str = year+month+day
 
+
+class wolftrak_report_609(osv.osv):
+	_name = 'wolftrakglobal.report609'
+
+	_columns = {
+		'invoices' : fields.many2many('account.invoice', domain=[('type','=','in_invoice')]),
+		'desde_609' : fields.date('Desde:'),
+		'desde_str'	: fields.char(compute='_toma_desde'),
+		'hasta_609' : fields.date('Hasta:'),
+		'hasta_str'	: fields.char(compute='_toma_hasta'),
+		'periodo'	: fields.char(compute='_toma_periodo', readonly=True, string='Periodo'),
+		'cant_reg'	: fields.integer('Cantidad de registros'),
+		'total_cld'	: fields.float('Total monto facturado'),
+		'total_isr' : fields.float('Total ISR Retenido')
+	}
+	_defaults = {
+		'desde_609': lambda *a: time.strftime('%Y-%m-01'),
+		'hasta_609': lambda *a: str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10],
+	}
+
+	@api.onchange('invoices')
+	def _toma_registro(self):
+		for value in self.invoices:
+			self.cant_reg = len(self.invoices)
+
+	@api.depends('hasta_609')
+	def _toma_periodo(self):
+
+		month = str(self.hasta_609[5:7])
+		year = str(self.hasta_609[:4])
+		self.periodo = year+month
+
+	@api.depends('desde_609')
+	def _toma_desde(self):
+
+		year = str(self.desde_609[:4])
+		month = str(self.desde_609[5:7])
+		day = str(self.desde_609[8:10])
+		self.desde_str = year+month+day
+
+	@api.depends('hasta_609')
+	def _toma_hasta(self):	
+
+		year = str(self.hasta_609[:4])
+		month = str(self.hasta_609[5:7])
+		day = str(self.hasta_609[8:10])
+		self.hasta_str = year+month+day
+
+	@api.onchange('invoices')
+	def total_calculado(self):
+		self.total_cld = 0.0
+		self.total_isr = 0.0
+		for value in self.invoices:
+			self.total_cld += value.amount_total
+			self.total_isr += value.isr_hold
