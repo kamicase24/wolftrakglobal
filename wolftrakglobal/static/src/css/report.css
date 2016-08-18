@@ -57,3 +57,13 @@ b {
     display: inline-block;
     vertical-align: top;
 }
+
+.nomina1{
+    border: 1px black solid;
+    padding: 3px;
+}
+
+.total1{
+    background: #161616;
+    border: 1px black solid;
+}
