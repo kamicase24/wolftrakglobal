@@ -1,7 +1,43 @@
 # -*- coding: utf-8 -*-
+import requests, json
+import sys, os
+from bs4 import BeautifulSoup
 from openerp import models, fields #importa los objetos models y fields de el Core de Odoo
 from openerp.osv import orm
 from openerp import models, fields, api
+
+main_base = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE_NAME = 'ncf.json'
+CONFIG_FILE = os.path.join(main_base, CONFIG_FILE_NAME)
+
+def load_config(json_file):
+	with open(json_file, 'r') as file:
+		config_data = json.load(file)
+		return config_data
+
+def get_ncf_record(ncf,rnc, config_data = None):
+	if not config_data:
+		config_data = load_config(CONFIG_FILE)
+	req_headers = config_data['request_headers']
+	req_cookies = config_data['request_cookies']
+	req_params = config_data['request_parameters']
+	uri = ''.join([config_data['url'], config_data['web_resource']])
+
+	req_params['txtNCF'] = ncf
+	req_params['txtRNC'] = rnc
+
+	result = requests.get(uri, params = req_params, headers = req_headers)
+	if result.status_code == requests.codes.ok:
+		soup = BeautifulSoup(result.content)
+		if soup.find('span', attrs={'id': 'lblContribuyente'}):
+			data_rows1 = soup.find('span', attrs={'id': 'lblContribuyente'})
+			data_rows2 = soup.find('span', attrs={'id': 'lblTipoComprobante'})
+			span = []
+			span.append(data_rows1.string)
+			span.append(data_rows2.string)
+			return span
+		else:
+			print soup.find('span', attrs={'id': 'lblErrorWebService'}).string
 
 class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 	#define el atributo _nombre, identificador que sera usado por Odoo para referises a este modelo 
@@ -9,8 +45,18 @@ class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 	_inherit = 'account.invoice'
 
 	ncf = fields.Char(string="Numero de Comprobante Fiscal")
+
 	tax_hold = fields.Monetary(string="ITBIS Retenido")
+
 	type_ci = fields.Char(string="Tipo de Id")
+
+	isr = fields.Selection([('0.3','30%'),
+							('0.27','27%')], string="Impuesto Sobre la Renta")
+
+	isr_hold = fields.Float(string="Total retenido")
+
+	isr_date = fields.Date(string="Fecha de la Retencion")
+
 	type_buy = fields.Selection([('01','01 - Gastos de personal'),
 								('02','02 - Gastos por trabajos suministros y servicios'),
 								('03','03 - Arrendamientos'),
@@ -33,6 +79,15 @@ class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 								('08','08 Omisión de Productos'),
 								('09','09 Errores de Secuencias de NCF')], string="Tipo de Anulación")
 
+	type_comp = fields.Char(string="Tipo de Comprobante", readonly=True, compute='ncf_validation')
+
+	ncf_result = fields.Char(string="Resultado", readonly=True, compute='ncf_validation')
+
+	@api.onchange('isr')
+	def isr_holding(self):
+
+		self.isr_hold = self.amount_total * float(self.isr)
+
 	@api.onchange('amount_tax')
 	def tax_holding(self):
 
@@ -47,3 +102,13 @@ class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 			else:
 				self.tax_hold += 0.0
 				self.type_ci = 1
+
+	@api.depends('ncf')
+	def ncf_validation(self):
+		supplier_rnc = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
+		values = get_ncf_record(self.ncf,supplier_rnc.ci)
+		if values != None:
+			self.type_comp = values[1]
+			self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
+		else:
+			self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
