@@ -59,6 +59,7 @@
 								</tr>
 							</table>
 
+							<div align="center">
 							<table>
 								<tr>
 									<td>
@@ -79,10 +80,10 @@
 														</t>
 													</t>
 													<t t-if="p.code == 'STA'">
-														<td align="right" class="nomina1">
+														<td align="right" class="total1 textcolor">
 															<span t-field="p.name"/>
 														</td>
-														<td class="nomina1">
+														<td class="total1 textcolor">
 															<span t-field="p.total"/>
 														</td>
 													</t>
@@ -100,20 +101,22 @@
 											<tbody>
 												<tr t-foreach="get_payslip_lines(o.line_ids)" t-as="p">
 													<t t-if="p.sequence > 19">
-														<t t-if="p.code != 'ST2'">
-															<td align="right" class="nomina1">
-																<span t-field="p.name"/>
-															</td>
-															<td class="nomina1">
-																<span t-esc="p.total"/>
-															</td>
+														<t t-if="p.sequence != 99">
+															<t t-if="p.code != 'ST2'">
+																<td align="right" class="nomina1">
+																	<span t-field="p.name"/>
+																</td>
+																<td class="nomina1">
+																	<span t-esc="p.total"/>
+																</td>
+															</t>
 														</t>
 													</t>
 													<t t-if="p.code == 'ST2'">
-														<td align="right" class="nomina1">
+														<td align="right" class="total1 textcolor">
 															<span t-field="p.name"/>
 														</td>
-														<td class="nomina1">
+														<td class="total1 textcolor">
 															<span t-field="p.total"/>
 														</td>
 													</t>
@@ -123,10 +126,43 @@
 									</td>
 								</tr>
 							</table>
+							</div>
 							<br/>
-							<p align="center">Yo, Jesus Rojas, titular de la cedula de identidad: 24.115.035, ocupando el cargo de desarrollador declaro que la 
+							<div align="center">
+							<table>
+								<tr colspan="2" t-foreach="get_payslip_lines(o.line_ids)" t-as="p">
+									<t t-if="p.sequence == 99">
+										<td class="total1 textcolor">
+											<span t-field="p.name"/>
+										</td>
+										<td width="50px" class="total1">
+										</td>
+										<td class="total1 textcolor">
+											<span t-field="p.total"/>
+										</td>
+									</t>
+								</tr>
+							</table>
+							</div>
+							<br/>
+							<p align="center">Yo, <span t-field="o.employee_id.name"/>, titular de la cedula de identidad: <span t-field="o.employee_id.identification_id"/>, ocupando el cargo de desarrollador declaro que la 
 empresa nada me adeuda por concepto de pago de nomina  correspondiente al periodo 
 							</p>
+							<br/>
+							<div align="center">
+								<table align="center">
+									<tr align="center">
+										<td align="center"><p>_____________________</p></td>
+										<td width="100px"></td>
+										<td align="center"><p>____________________</p></td>
+									</tr>
+									<tr align="center">
+										<td align="center"><p>Empresa</p></td>
+										<td width="100px"></td>
+										<td align="center"><p>Trabajador</p></td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</t>
 				</t>
