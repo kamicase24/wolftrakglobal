@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<report
+			id="move_report"
+			model="wolftrak.move"
+			string="Libro Diario"
+			report_type="qweb-pdf"
+			name="wolftrakglobal.wolftrak_move_report"
+			file="wolftrakglobal.move_report"
+		/>
+
+		<template id="wolftrak_move_report">
+			<t t-call="report.external_layout">
+				<t t-foreach="docs" t-as="doc">
+					<div class="page">
+						<br/>
+						<h3 align="center">Libro Diario</h3>
+						<br/>
+						<table class="table table-bordered">
+							<tr>
+								<th>Fecha</th>
+								<th>Codigo</th>
+								<th>Detalle</th>
+								<th>Debe</th>
+								<th>Haber</th>
+							</tr>
+							<tr t-foreach="doc.moves_ids" t-as="line">
+								<td><span t-field="line.date"/></td>
+								<td><span t-field="line.name"/></td>
+								<td>
+									<table class="table table-condensed">
+										<tr t-foreach="line.line_ids" t-as="li">
+											<td>
+												<span t-field="li.account_id"/>									
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td>
+									<table class="table table-condensed">
+										<tr t-foreach="line.line_ids" t-as="li">
+											<td>
+												<span t-field="li.debit"/>									
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td>
+									<table class="table table-condensed">
+										<tr t-foreach="line.line_ids" t-as="li">
+											<td>
+												<span t-field="li.credit"/>									
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</t>
+			</t>
+		</template>
+	</data>
+</openerp>
