@@ -1,0 +1,56 @@
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="form_libro_diario">
+			<field name="name">wolftrak.move.form</field>
+			<field name="model">wolftrak.move</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet string="Libro Diario">
+						<group>
+							<group>
+								<field name="date_to"/>
+							</group>
+							<group>
+								<field name="date_from"/>
+							</group>
+						</group>
+						<notebook>
+							<page string="Entradas Libro Diario">
+								<field name="moves_ids"/>
+							</page>
+							<page string="Detalles Libro Diario">
+								<field name="line_ids"/>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="tree_libro_diario" model="ir.ui.view">
+			<field name="name">wolftrak.move.tree</field>
+			<field name="model">wolftrak.move</field>
+			<field name="arch" type="xml">
+				<tree string="Libros Diarios">
+					<field name="date_to"/>
+					<field name="date_from"/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="act_libro_diario">
+			<field name="name">Libro Diario</field>
+			<field name="res_model">wolftrak.move</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem
+			id="libro_diario"
+			name="Libro Diario"
+			sequence="15"
+			action="act_libro_diario"
+			parent="account.menu_finance_legal_statement"
+		/>
+	</data>
+</openerp>
