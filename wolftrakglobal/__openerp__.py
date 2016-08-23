@@ -28,7 +28,7 @@
         #'views/footerwolftrakglobal.xml',
         'views/badge_wolftrak.xml',
         'views/userswolftrak.xml',
-        #'views/invoicewolftrakg.xml',
+        'views/invoicewolftrakg.xml',
         'views/pagwolftrak.xml',
         'views/custom_sale_order.xml',
         'views/presupuesto.xml',
