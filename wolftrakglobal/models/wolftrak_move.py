@@ -23,15 +23,8 @@ class wolftrakMove(models.Model):
 		readonly=True,
 		compute='_default_move')
 
-	line_ids = fields.Many2many('account.move.line', 
-		string='Detalles del libro diario',
-		readonly=True,
-		default=_default_lines)
-
-	test = fields.Char(string='Test Field')
-
 	@api.depends('date_to','date_from')
 	def _default_move(self):
 		date1 = self.date_to
 		date2 = self.date_from
-		self.moves_ids = self.env['account.move'].search([('date','>=',date1),('date','<=',date2)])
+		self.moves_ids = self.env['account.move'].search([('date','>=',date1),('date','<=',date2),('company_id','=',3)])

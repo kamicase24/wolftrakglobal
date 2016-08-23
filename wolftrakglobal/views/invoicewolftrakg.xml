@@ -29,7 +29,7 @@
                     <!-- <field name="type_ci"/> -->
                 </xpath>
                 <xpath expr="//form/sheet/notebook/page[2]/group/group" position="inside">
-                    <field name="type_buy" attrs="{'invisible': [('type', '=', 'out_invoice')]}"/>
+                    <field name="type_buy" attrs="{'invisible': [('type','=','out_invoice')]}"/>
                     <field name="isr"/>
                     <field name="isr_hold"/>
                     <field name="isr_date"/>

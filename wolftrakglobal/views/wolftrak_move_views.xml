@@ -18,9 +18,6 @@
 							<page string="Entradas Libro Diario">
 								<field name="moves_ids"/>
 							</page>
-							<page string="Detalles Libro Diario">
-								<field name="line_ids"/>
-							</page>
 						</notebook>
 					</sheet>
 				</form>
