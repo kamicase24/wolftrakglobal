@@ -40,7 +40,9 @@
         'views/608_view.xml',
         'views/608.xml',
         'views/609_view.xml',
-        'views/609.xml'
+        'views/609.xml',
+        'views/wolftrak_move_report.xml',
+        'views/wolftrak_move_views.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
