@@ -20,7 +20,7 @@ class wolftrakglobal_report(osv.osv):
 		'hasta_str'	: fields.char(compute='_toma_hasta'),
 		'total_cld'	: fields.float('Total Calculado: '),
 		'total_tax'	: fields.float('ITBIS Calculado: '),
-		'reporte'	: fields.many2many('account.invoice', 'name', 'amount_untaxed', 'amount_tax', string='Entradas: ', domain=[('type', '=', 'out_invoice'),('state', '!=', 'draft')]),
+		'reporte'	: fields.many2many('account.invoice', 'name', 'amount_untaxed', 'amount_tax', string='Entradas: ', domain=[('type', '=', 'out_invoice'),('state', '!=', 'draft'),('company_id','=',3)]),
 		'periodo'	: fields.char(compute='_toma_periodo', string='Periodo', readonly=True),
 		'cant_reg'	: fields.integer('Cantidad de registros')
 	}
@@ -68,7 +68,7 @@ class wolftrakglobal_report_606(osv.osv):
 		return self.pool.get('account.payment').search(cr, uid, []) # retorna una lista (importate)
 
 	_columns = {
-		'invoices'  	: fields.many2many('account.invoice', domain=[('type', '=', 'in_invoice'),('state', '!=', 'draft')]),
+		'invoices'  	: fields.many2many('account.invoice', domain=[('type','=','in_invoice'),('state','!=','draft'),('company_id','=',3)]),
 		'payments'		: fields.many2many('account.payment'),
 		'dt_payments'	: fields.selection([('default','Default'),('x','y'),('z','aa')], string="Fecha Pagos"),
 		'desde_606' 	: fields.date('Desde:'),
@@ -126,7 +126,7 @@ class wolftrakglobal_report_608(osv.osv):
 	_name = 'wolftrakglobal.report608'
 
 	_columns = {
-		'invoices'	: fields.many2many('account.invoice', domain=[('type','=','out_refund')], string="Facturas"),
+		'invoices'	: fields.many2many('account.invoice', domain=[('type','=','out_refund'),('company_id','=',3)], string="Facturas"),
 		'desde_608' : fields.date('Desde:'),
 		'desde_str'	: fields.char(compute='_toma_desde'),
 		'hasta_608' : fields.date('Hasta:'),
@@ -172,7 +172,7 @@ class wolftrak_report_609(osv.osv):
 	_name = 'wolftrakglobal.report609'
 
 	_columns = {
-		'invoices' : fields.many2many('account.invoice', domain=[('type','=','in_invoice')]),
+		'invoices' : fields.many2many('account.invoice', domain=[('type','=','in_invoice'),('company_id','=',3)]),
 		'desde_609' : fields.date('Desde:'),
 		'desde_str'	: fields.char(compute='_toma_desde'),
 		'hasta_609' : fields.date('Hasta:'),
