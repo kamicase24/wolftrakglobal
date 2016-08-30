@@ -140,7 +140,7 @@ class hr_payslip(orm.Model):
             worked_days[3][ts_sheet.id] = {
                 'name': _('Dias de descanso'),
                 'number_of_hours': 0,
-                'number_of_days': final_mes,
+                'number_of_days': DD,
                 'contract_id': payslip.contract_id.id,
                 'code': 'DD',
                 'imported_from_timesheet': True,
