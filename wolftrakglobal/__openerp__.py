@@ -42,7 +42,9 @@
         'views/609_view.xml',
         'views/609.xml',
         'views/wolftrak_move_report.xml',
-        'views/wolftrak_move_views.xml'
+        'views/wolftrak_move_views.xml',
+        'views/wolftrak_act_det_view.xml',
+        'views/wolftrak_cesta_ticket.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
