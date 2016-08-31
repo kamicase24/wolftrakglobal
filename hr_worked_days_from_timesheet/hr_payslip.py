@@ -179,7 +179,7 @@ class hr_payslip(orm.Model):
                 DB = 1
 
             worked_days[7][ts_sheet.id] = {
-                'name': _('Dia de Beneficio'),
+                'name': _('Bono por Dia de Beneficio'),
                 'number_of_days': DB,
                 'contract_id': payslip.contract_id.id,
                 'code': 'DB',
