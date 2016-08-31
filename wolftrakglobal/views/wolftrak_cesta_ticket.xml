@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<report
+			id="cesta_ticket_report"
+			model="hr.payslip"
+			string="Cesta Ticket"
+			report_type="qweb-pdf"
+			name="wolftrakglobal.wolftrak_cesta_ticket"
+			file="wolftrakglobal.wolftrak_cesta_ticket"
+		/>
+
+		<template id="wolftrak_cesta_ticket">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<br/>
+							<h3 class="tablecolor textcolor">Bono Alimenticio Basico</h3>
+							<table class="table table-condensed table-bordered">
+								<tr>
+									<td class="tablecolor textcolor">Trabajador</td>
+									<td class="colorb">
+										<span t-field="o.employee_id"/>
+									</td>
+<!-- 									<td class="tablecolor textcolor">Valor del Cesta Ticket</td>
+									<td class="colorb">
+										<t t-foreach="o.line_ids" t-as="p">
+										<t t-if="p.code == 'VCT'">
+											<span t-field="p.total"/>
+										</t>
+										</t>
+									</td> -->
+								</tr>
+							</table>
+							<!-- <div align="center"> -->
+								<table class="table table-condensed">
+									<tr>
+										<td>
+											<table class="table table-condensed">
+												<thead><tr>
+													<td class="tablecolor" colspan="2" align="center"><b>Asignaciones</b></td>
+												</tr></thead>
+												<tbody>
+													<tr t-foreach="o.line_ids" t-as="p">
+														<t t-if="p.sequence > 100">
+															<t t-if="p.sequence &lt; 120">
+																<td class="colorb" align="right">
+																	<span t-field="p.name"/>
+																</td>
+																<td class="colorb">
+																	<span t-esc="p.total"/>
+																</td>
+															</t>
+														</t>
+													</tr>
+												</tbody>
+											</table>
+										</td>
+										<td>
+											<table class="table table-condensed">
+												<thead><tr>
+													<td class="tablecolor" colspan="2" align="center"><b>Deducciones</b></td>
+												</tr></thead>
+												<tbody>
+													<tr t-foreach="o.line_ids" t-as="p">
+														<t t-if="p.sequence > 119">
+															<t t-if="p.sequence &lt; 130">
+																<td class="colorb" align="right">
+																	<span t-field="p.name"/>
+																</td>
+																<td class="colorb">
+																	<span t-esc="p.total"/>
+																</td>
+															</t>
+														</t>
+													</tr>
+												</tbody>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<table class="table table-condensed">
+												<tr colspan="2" t-foreach="o.line_ids" t-as="p">
+													<t t-if="p.sequence == 130">
+														<td class="total1 textcolor" align="right">
+															<span t-field="p.name"/>
+														</td>
+														<td class="total1 textcolor" align="left">
+															<span t-field="p.total"/>
+														</td>
+													</t>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							<!-- </div> -->
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</openerp>
