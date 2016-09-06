@@ -64,7 +64,7 @@
                             <strong>Reference:</strong>
                             <p t-field="o.reference" invisible='1'/>
                         </div>
-                    </div>
+                    </div> 
 
                     <!-- Is there a discount on at least one line? -->
                     <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
@@ -117,6 +117,7 @@
                                     </td>
                                 </tr>
                             </table>
+                            <span t-field="o.taza_cambio"/>
                         </div>
                         <div class="col-xs-4 pull-right">
                             <table class="table table-condensed">
