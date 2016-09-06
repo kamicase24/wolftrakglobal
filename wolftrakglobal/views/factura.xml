@@ -59,22 +59,10 @@
                             </td>
                         </tr>
                     </table>
-                    <div class="row mt32 mb32">
-                        <div class="col-xs-2" t-if="o.date_due and o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
-                            <strong>Due Date:</strong>
-                            <p t-field="o.date_due"/>
-                        </div>
-                        <div class="col-xs-2" t-if="o.origin">
-                            <strong>Source:</strong>
-                            <p t-field="o.origin"/>
-                        </div>
-                        <div class="col-xs-2" t-if="o.partner_id.ref">
-                            <strong>Customer Code:</strong>
-                            <p t-field="o.partner_id.ref"/>
-                        </div>
-                        <div name="reference" class="col-xs-2" t-if="o.reference">
+                    <div class="row mt32 mb32" invisible='1'>
+                        <div name="reference" class="col-xs-2" t-if="o.reference" invisible='1'>
                             <strong>Reference:</strong>
-                            <p t-field="o.reference"/>
+                            <p t-field="o.reference" invisible='1'/>
                         </div>
                     </div>
 
@@ -150,8 +138,8 @@
                                     <td class="colora"><strong>Total</strong></td>
                                     <td class="text-right">
                                      <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                 </td>
-                             </tr>
+                                    </td>
+                                </tr>
                          </table>
                      </div>
                 </div>
@@ -182,7 +170,7 @@
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
                         </td>
                         <td align="left" t-if="o.company_id.name == 'Mytraktech'">
-                        	<p>Cuenta No.: 787276476</p>
+                        	<p>Cuenta Corriente No.: 797197019</p>
                         </td>
                         <td align="center">
                             <img src="wolftrakglobal/static/src/img/fb2.png"/>

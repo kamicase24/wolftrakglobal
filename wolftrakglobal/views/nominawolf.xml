@@ -93,14 +93,16 @@
 											<tbody>
 												<tr t-foreach="get_payslip_lines(o.line_ids)" t-as="p">
 													<t t-if="p.sequence > 19">
-														<t t-if="p.sequence != 99">
-															<t t-if="p.code != 'ST2'">
-																<td align="right" class="nomina1">
-																	<span t-field="p.name"/>
-																</td>
-																<td class="nomina1">
-																	<span t-esc="p.total"/>
-																</td>
+														<t t-if="p.sequence &lt; 100">
+															<t t-if="p.sequence != 99">
+																<t t-if="p.code != 'ST2'">
+																	<td align="right" class="nomina1">
+																		<span t-field="p.name"/>
+																	</td>
+																	<td class="nomina1">
+																		<span t-esc="p.total"/>
+																	</td>
+																</t>
 															</t>
 														</t>
 													</t>

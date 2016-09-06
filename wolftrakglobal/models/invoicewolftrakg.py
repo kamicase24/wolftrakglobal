@@ -83,6 +83,8 @@ class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 
 	ncf_result = fields.Char(string="Resultado", readonly=True, compute='ncf_validation')
 
+	taza_cambio = fields.Float(string='Taza de Cambio')
+
 	@api.onchange('isr')
 	def isr_holding(self):
 

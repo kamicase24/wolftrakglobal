@@ -13,6 +13,9 @@
             		<field name="ncf"/>
                     <field name="tax_hold" attrs="{'invisible': [('tax_hold', '>=', 0)]}"/>
             	</xpath>
+                <xpath expr="//form/sheet/group/group[2]" position="inside">
+                    <field name="taza_cambio"/>
+                </xpath>
             </field>
     	</record>
 
