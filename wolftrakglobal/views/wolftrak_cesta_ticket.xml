@@ -23,14 +23,12 @@
 									<td class="colorb">
 										<span t-field="o.employee_id"/>
 									</td>
-<!-- 									<td class="tablecolor textcolor">Valor del Cesta Ticket</td>
+									<td class="tablecolor textcolor">Mes</td>
 									<td class="colorb">
-										<t t-foreach="o.line_ids" t-as="p">
-										<t t-if="p.code == 'VCT'">
-											<span t-field="p.total"/>
+										<t t-foreach="o.worked_days_line_ids" t-as="p">
+											<t t-if="p.code == 'DM'"><span t-field="p.name"/></t>
 										</t>
-										</t>
-									</td> -->
+									</td>
 								</tr>
 							</table>
 							<!-- <div align="center"> -->

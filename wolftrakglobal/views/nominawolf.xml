@@ -4,7 +4,7 @@
 		<template id="hr_payroll.report_payslip">
 			<t t-call="report.html_container">
 				<t t-foreach="docs" t-as="o">
-					<t t-call="report.external_layout">
+					<!-- <t t-call="report.external_layout"> -->
 						<div class="page">
 							<br/>
 							<h3>
@@ -14,7 +14,9 @@
 								<tr>
 									<td class="tablecolor textcolor">Mes</td>
 									<td class="colorb">
-										<span t-field="o.note"/>
+										<t t-foreach="o.worked_days_line_ids" t-as="p">
+											<t t-if="p.code == 'DM'"><span t-field="p.name"/></t>
+										</t>
 									</td>
 									<td class="tablecolor textcolor">Dias</td>
 									<td class="colorb">
@@ -52,9 +54,9 @@
 									<td class="colorb">
 										<span t-field="o.date_to"/>
 									</td>
-									<td class="tablecolor textcolor">Fecha de transf.</td>
+									<td class="tablecolor textcolor"><!-- fecha de transferencia --></td>
 									<td class="colorb">
-										<!-- feche de transferencia -->
+										<!-- fecha de transferencia -->
 									</td>
 								</tr>
 							</table>
@@ -168,7 +170,7 @@ empresa nada me adeuda por concepto de pago de nomina  correspondiente al period
 								</table>
 							</div>
 						</div>
-					</t>
+					<!-- </t> -->
 				</t>
 			</t>
 		</template>

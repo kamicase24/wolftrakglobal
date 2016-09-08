@@ -121,9 +121,33 @@ class hr_payslip(orm.Model):
             # Dias del mes
             actual = datetime.datetime.now()
             month = monthrange(actual.year, actual.month)[1]
+            if actual.month == 1:
+                month_str = 'Enero'
+            elif actual.month == 2:
+                month_str = 'Febrero'
+            elif actual.month == 3:
+                month_str = 'Marzo'
+            elif actual.month == 4:
+                month_str = 'Abril'
+            elif actual.month == 5:
+                month_str = 'Mayo'
+            elif actual.month == 6:
+                month_str = 'Junio'
+            elif actual.month == 7:
+                month_str = 'Julio'
+            elif actual.month == 8:
+                month_str = 'Agosto'
+            elif actual.month == 9:
+                month_str = 'Septiembre'
+            elif actual.month == 10:
+                month_str = 'Octubre'
+            elif actual.month == 11:
+                month_str = 'Noviembre'
+            elif actual.month == 12:
+                month_str = 'Diciembre'
 
             worked_days[2][ts_sheet.id] = {
-                'name': _('Dias del mes'),
+                'name': month_str,
                 'number_of_days': month,
                 'contract_id': payslip.contract_id.id,
                 'code': 'DM',

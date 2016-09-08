@@ -26,6 +26,7 @@
 				<xpath expr="//kanban/templates/t/div" position="inside">
 					<div>
 					<strong>
+						Valor de la Insignea
 						<field name="custom_value" widget="progressbar"/>%
 					</strong>
 					</div>
@@ -44,7 +45,8 @@
 				</xpath>
 				<xpath expr="//kanban/templates/t/div/div" position="inside">
 					<strong>
-						<field name="custom_value" widget="progressbar" width="80%"/>
+						Insignea ganada al
+						<field name="custom_value" widget="progressbar"/>%
 					</strong>
 				</xpath>
 			</field>
@@ -63,7 +65,7 @@
 					</div>
 				</xpath>
 				<xpath expr="//form/footer" position="replace">
-					<button string="Custom insignea" type="object" name="custom_grant_badge" class="btn-primary"/>
+					<button string="Conseder insignea" type="object" name="custom_grant_badge" class="btn-primary"/>
 					<button string="Cancel" special="cancel" class="btn-default"/>
 				</xpath>
 			</field>

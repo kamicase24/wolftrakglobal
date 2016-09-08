@@ -11,7 +11,7 @@ class gamification_badge_user(osv.Model):
 	_inherit = 'gamification.badge.user'
 
 	_columns = {
-		'custom_value': fields.float(
+		'custom_value': fields.integer(
 		string="Insignea ganada al")
 	}
 
@@ -20,7 +20,7 @@ class gamification_badge_wizard(osv.Model):
 	_inherit = 'gamification.badge.user.wizard'
 
 	_columns = {
-		'custom_value': fields.float(
+		'custom_value': fields.integer(
 		string="Insignea ganada al")
 	}
 
@@ -48,7 +48,7 @@ class gamification_badge(osv.Model):
 	_inherit = 'gamification.badge'
 
 	_columns = {
-		'custom_value': fields.float(
+		'custom_value': fields.integer(
 		string="Valor de la Insignea")
 	}
 
