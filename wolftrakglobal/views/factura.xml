@@ -73,7 +73,7 @@
                         <thead>
                             <tr>
                                 <!-- <th class="tablecolor textcolor">Codigo</th> -->
-                                <th class="tablecolor textcolor">Nombre</th>
+                                <th class="tablecolor textcolor">Descripcion</th>
                                 <th class="text-right tablecolor textcolor">Quantity</th>
                                 <th class="text-right tablecolor textcolor">Unit Price</th>
                                 <th t-if="display_discount" class="text-right tablecolor textcolor" groups="sale.group_discount_per_so_line">Disc.(%)</th>
@@ -117,7 +117,6 @@
                                     </td>
                                 </tr>
                             </table>
-                            <span t-field="o.taza_cambio"/>
                         </div>
                         <div class="col-xs-4 pull-right">
                             <table class="table table-condensed">
@@ -142,6 +141,8 @@
                                     </td>
                                 </tr>
                          </table>
+		 	 <strong>Taza de Cambio: </strong>
+			 <strong><span t-field="o.taza_cambio"/></strong>
                      </div>
                 </div>
 
