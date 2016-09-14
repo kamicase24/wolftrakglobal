@@ -18,8 +18,9 @@ class wolftrakActivity(models.Model):
 	def _default_periodo(self):
 		year = str(time.strftime('%Y-%m-01')[:4])
 		wolftrak_actividades = self.env['wolftrak.actividad'].search([])
+		ids = 0
 		for reg in wolftrak_actividades:
-			ids = reg.id
+			ids = reg.ids
 		pernew = year+'00'+(str(ids+1))
 		return pernew
 

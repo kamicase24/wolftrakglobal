@@ -48,14 +48,18 @@
 								<t t-if="lead.id == msj.res_id">
 							<tr align="center" class="colora textcolor2">
 								<t t-if="msj.subtype_id.id != 7">
+								<t t-if="msj.subtype_id.id != 2">
 								<td class="nomina1" colspan="2" align="center">
 									<b><span t-field="msj.body" class="textcolor2"/></b>
 								</td>
 								</t>
+								</t>
 								<t t-if="msj.subtype_id.id != 7">
+								<t t-if="msj.subtype_id.id != 2">
 								<td class="nomina1" colspan="2" align="center">
 									<span t-field="msj.date"/>
 								</td>
+								</t>
 								</t>
 							</tr>
 								</t>
