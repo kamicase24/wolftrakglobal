@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<report
+			id="act_det_report"
+			model="wolftrak.actividad"
+			string="Actividad Detallada"
+			report_type="qweb-pdf"
+			name="wolftrakglobal.wolftrak_act_det_report"
+			file="wolftrakglobal.wolftrak_act_det_report"
+		/>
+
+		<record id="paperformat_wolftrak" model="report.paperformat">
+			<field name="name">Wolftrak custom paper format</field>
+			<field name="default" eval="True"/>
+			<field name="format">Letter</field>
+<!--		<field name="page_height">80</field> -->
+<!--		<field name="page_width">175</field> -->
+			<field name="orientation">Portrait</field>  <!-- Landscape -->
+			<field name="margin_top">3</field>
+			<field name="margin_bottom">3</field>
+			<field name="margin_left">3</field>
+			<field name="margin_right">3</field>
+			<field name="header_line" eval="False"/>
+<!--		<field name="header_spacing">3</field> -->
+		</record>
+
+		<template id="wolftrak_act_det_report">
+			<!-- <t t-call="report.external_layout"> -->
+				<t t-foreach="docs" t-as="doc">
+					<div class="page" align="center">
+						<h3 align="center">Actividad detallada</h3>
+						<table>
+							<tr>
+								<th class="nomina1">Iniciativa</th>
+								<th class="nomina1">Responsable</th>
+								<th class="nomina1">Fecha de Apertura</th>
+								<th class="nomina1">Clasificación</th>
+							</tr>
+							<t t-foreach="doc.leads" t-as="lead" style="page-break-inside: avoid">
+							<tr class=" tablecolor textcolor">
+								<td class="nomina1"><span t-field="lead.name"/></td>
+								<td class="nomina1"><span t-field="lead.user_id"/></td>
+								<td class="nomina1"><span t-field="lead.date_open"/></td>
+								<td class="nomina1" align="right"><span t-field="lead.priority"/></td>
+							</tr>
+								<t t-foreach="doc.mensaje" t-as="msj">
+								<t t-if="lead.id == msj.res_id">
+							<tr align="center" class="colora textcolor2">
+								<t t-if="msj.subtype_id.id != 7">
+								<td class="nomina1" colspan="2" align="center">
+									<b><span t-field="msj.body" class="textcolor2"/></b>
+								</td>
+								</t>
+								<t t-if="msj.subtype_id.id != 7">
+								<td class="nomina1" colspan="2" align="center">
+									<span t-field="msj.date"/>
+								</td>
+								</t>
+							</tr>
+								</t>
+								</t>
+							</t>
+						</table>
+					</div>
+				</t>
+			<!-- </t> -->
+		</template>
+	</data>
+</openerp>

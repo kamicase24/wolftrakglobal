@@ -4,9 +4,9 @@
 			<field name="name">wolftrak.actividad.form</field>
 			<field name="model">wolftrak.actividad</field>
 			<field name="arch" type="xml">
-				<form>
+				<form string="Actividad Detallada">
 					<sheet string="Actividad Detallada">
-						<h2>Perido <field name="periodo"/></h2>
+						<h2>Periodo <field name="periodo"/></h2>
 						<group>
 							<group>
 								<field name="desde"/>

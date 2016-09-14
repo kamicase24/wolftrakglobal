@@ -51,4 +51,3 @@ class gamification_badge(osv.Model):
 		'custom_value': fields.integer(
 		string="Valor de la Insignea")
 	}
-

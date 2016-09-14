@@ -33,8 +33,8 @@ body {
 	color: white;
 }
 
-b {
-    color: white;
+.textcolor2 {
+    color: black;
 }
 
 .colora {
@@ -66,4 +66,8 @@ b {
 .total1{
     background: #161616;
     border: 1px black solid;
+}
+
+.table-margin{
+    margin: 2px;
 }
