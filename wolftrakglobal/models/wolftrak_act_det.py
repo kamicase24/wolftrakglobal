@@ -21,7 +21,7 @@ class wolftrakActivity(models.Model):
 		ids = 0
 		for reg in wolftrak_actividades:
 			ids = reg.ids
-		pernew = year+'00'+(str(ids+1))
+		pernew = year+'00'+str(ids)
 		return pernew
 
 	periodo = fields.Char(string='Periodo', readonly=True, default=_default_periodo)

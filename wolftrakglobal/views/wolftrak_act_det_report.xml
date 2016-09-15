@@ -2,11 +2,20 @@
 <openerp>
 	<data>
 		<report
-			id="act_det_report"
+			id="act_det_report_1"
 			model="wolftrak.actividad"
-			string="Actividad Detallada"
+			string="Actividad Detallada por Cliente"
 			report_type="qweb-pdf"
-			name="wolftrakglobal.wolftrak_act_det_report"
+			name="wolftrakglobal.wolftrak_act_det_report_1"
+			file="wolftrakglobal.wolftrak_act_det_report"
+		/>
+
+		<report
+			id="act_det_report_2"
+			model="wolftrak.actividad"
+			string="Actividad Detallada por Fecha"
+			report_type="qweb-pdf"
+			name="wolftrakglobal.wolftrak_act_det_report_2"
 			file="wolftrakglobal.wolftrak_act_det_report"
 		/>
 
@@ -25,7 +34,7 @@
 <!--		<field name="header_spacing">3</field> -->
 		</record>
 
-		<template id="wolftrak_act_det_report">
+		<template id="wolftrak_act_det_report_1">
 			<!-- <t t-call="report.external_layout"> -->
 				<t t-foreach="docs" t-as="doc">
 					<div class="page" align="center">
@@ -64,6 +73,59 @@
 							</tr>
 								</t>
 								</t>
+							</t>
+						</table>
+					</div>
+				</t>
+			<!-- </t> -->
+		</template>
+
+		<template id="wolftrak_act_det_report_2">
+			<!-- <t t-call="report.external_layout"> -->
+				<t t-foreach="docs" t-as="doc">
+					<div class="page" align="center">
+					<t t-set="desde" t-value="int(doc.desde[8:12])"/>
+					<t t-set="hasta" t-value="int(doc.hasta[8:12])"/>
+					<t t-set="range_1" t-value="range(desde,hasta+1)"/>
+						<h3 align="center">Actividad detallada</h3>
+						<table>
+							<t t-foreach="range_1" t-as="ran"  style="page-break-inside: avoid">
+							<t t-set="fecha" t-value="doc.hasta[:8]+str(ran)"/>
+							<tr class="textcolor tablecolor">
+								<th class="nomina1" colspan="3">Fecha</th>
+								<th class="nomina1" colspan="3"><span t-esc="fecha"/></th>
+							</tr>
+							<tr>
+								<th class="nomina1">Actividad</th>
+								<th class="nomina1">Fecha de Actividad</th>
+								<th class="nomina1">Cliente</th>
+								<th class="nomina1">Responsable</th>
+								<th class="nomina1">Clasificación</th>
+								<th class="nomina1">Fecha de Apertura</th>
+							</tr>
+							<t t-foreach="doc.leads.sorted(key=lambda r: r.date_open)" t-as="lead" style="page-break-inside: avoid">
+							<t t-if="ran == int(lead.date_open[8:11])">
+							<t t-foreach="doc.mensaje.sorted(key=lambda t: t.date)" t-as="msj">
+							<t t-if="ran == int(msj.date[8:11])">
+							<t t-if="lead.id == msj.res_id">
+							<t t-if="msj.subtype_id.id != 7">
+							<t t-if="msj.subtype_id.id != 2">
+								<tr class="colora textcolor2">
+									<td class="nomina1"><span t-field="msj.body"/></td>
+									<td class="nomina1"><span t-field="msj.date"/></td>
+									<td class="nomina1"><span t-field="lead.name"/></td>
+									<td class="nomina1"><span t-field="lead.user_id"/></td>
+									<td class="nomina1"><span t-field="lead.priority"/></td>
+									<td class="nomina1"><span t-field="lead.date_open"/></td>
+								</tr>
+							</t>
+							</t>
+							</t>
+							</t>
+							</t>
+
+							</t>
+							</t>
 							</t>
 						</table>
 					</div>
