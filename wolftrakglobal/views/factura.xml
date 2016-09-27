@@ -29,7 +29,7 @@
                             <td class="colora"><span t-field="o.date_invoice"/></td>
                         </tr>
                         <tr> 
-                            <td class="colorb">
+                            <td class="colorb text-left" >
                                 <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Cedula: </strong>
                                 <strong t-if="o.company_id.name == 'Mytraktech'">RNC: </strong> 
                                 <span t-field="o.partner_id.ci"/>

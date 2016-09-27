@@ -80,57 +80,57 @@
 			<!-- </t> -->
 		</template>
 
-		<template id="wolftrak_act_det_report_2">
-			<!-- <t t-call="report.external_layout"> -->
-				<t t-foreach="docs" t-as="doc">
-					<div class="page" align="center">
-					<t t-set="desde" t-value="int(doc.desde[8:12])"/>
-					<t t-set="hasta" t-value="int(doc.hasta[8:12])"/>
-					<t t-set="range_1" t-value="range(desde,hasta+1)"/>
-						<h3 align="center">Actividad detallada</h3>
-						<table>
-							<t t-foreach="range_1" t-as="ran"  style="page-break-inside: avoid">
-							<t t-set="fecha" t-value="doc.hasta[:8]+str(ran)"/>
-							<tr class="textcolor tablecolor">
-								<th class="nomina1" colspan="3">Fecha</th>
-								<th class="nomina1" colspan="3"><span t-esc="fecha"/></th>
-							</tr>
-							<tr>
-								<th class="nomina1">Actividad</th>
-								<th class="nomina1">Fecha de Actividad</th>
-								<th class="nomina1">Cliente</th>
-								<th class="nomina1">Responsable</th>
-								<th class="nomina1">Clasificación</th>
-								<th class="nomina1">Fecha de Apertura</th>
-							</tr>
-							<t t-foreach="doc.leads.sorted(key=lambda r: r.date_open)" t-as="lead" style="page-break-inside: avoid">
-							<t t-if="ran == int(lead.date_open[8:11])">
-							<t t-foreach="doc.mensaje.sorted(key=lambda t: t.date)" t-as="msj">
-							<t t-if="ran == int(msj.date[8:11])">
-							<t t-if="lead.id == msj.res_id">
-							<t t-if="msj.subtype_id.id != 7">
-							<t t-if="msj.subtype_id.id != 2">
-								<tr class="colora textcolor2">
-									<td class="nomina1"><span t-field="msj.body"/></td>
-									<td class="nomina1"><span t-field="msj.date"/></td>
-									<td class="nomina1"><span t-field="lead.name"/></td>
-									<td class="nomina1"><span t-field="lead.user_id"/></td>
-									<td class="nomina1"><span t-field="lead.priority"/></td>
-									<td class="nomina1"><span t-field="lead.date_open"/></td>
-								</tr>
-							</t>
-							</t>
-							</t>
-							</t>
-							</t>
-
-							</t>
-							</t>
-							</t>
-						</table>
-					</div>
+	<template id="wolftrak_act_det_report_2">
+		<t t-foreach="docs" t-as="doc">
+			<div class="page" align="center">
+			<t t-set="desde" t-value="int(doc.desde[8:12])"/> <!-- toma el DIA de inicio -->
+			<t t-set="hasta" t-value="int(doc.hasta[8:12])"/> <!-- toma el DIA de final -->
+			<t t-set="range_1" t-value="range(desde,hasta+1)"/> <!-- cuenta cuandos dias entre las fechas -->
+			<h3 align="center">Actividad detallada</h3>
+			<br/>
+			<table>
+<t t-foreach="range_1" t-as="ran" style="page-break-inside: avoid">
+				<t t-set="fecha" t-value="doc.hasta[:8]+str(ran)"/> 
+				<tr class="textcolor tablecolor">
+					<th class="nomina1" colspan="2" align="right">Fecha</th>
+					<th class="nomina1" colspan="2"><span t-esc="fecha"/></th>
+				</tr>
+				<tr>
+					<th class="nomina1">Cliente</th>
+					<th class="nomina1">Responsable</th>
+					<th class="nomina1">Siguiente Actividad</th>
+					<th class="nomina1">Estado</th>
+				</tr>
+	<t t-foreach="doc.leads" t-as="lead" style="page-break-inside: avoid">
+				<t t-if="ran == int(lead.write_date[8:11])">
+				<tr>
+					<td class="nomina1"><span t-field="lead.name"/></td>
+					<td class="nomina1"><span t-field="lead.user_id"/></td>
+					<td class="nomina1"><span t-field="lead.next_activity_id"/></td>
+					<td class="nomina1"><span t-field="lead.stage_id"/></td>
+				</tr>
+				<tr>
+					<td colspan="4" class="nomina1">Actividad</td>
+				</tr>
+				
+		<t t-foreach="doc.mensaje.sorted(key=lambda t: t.date)" t-as="msj">
+				<t t-if="int(msj.date[8:11]) == ran">
+				<t t-if="msj.subtype_id.id != 2">
+				<t t-if="msj.res_id == lead.id">
+				<tr class="colora textcolor2">
+					<t t-if="msj.subtype_id.id == 7"><td colspan="4" class="nomina1">Cambio de estado</td></t>
+					<t t-if="msj.subtype_id.id != 7"><td colspan="4" class="nomina1"><span t-field="msj.body"/></td></t>
+				</tr>
 				</t>
-			<!-- </t> -->
-		</template>
+				</t>
+				</t>
+				</t>
+</t>
+	</t>
+		</t>
+			</table>
+			</div>
+		</t>
+	</template>
 	</data>
 </openerp>

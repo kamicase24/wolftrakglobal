@@ -8,19 +8,21 @@
 					<sheet string="Actividad Detallada">
 						<h2><field name="periodo"/></h2>
 						<group>
-							<group>
+							<group string="Rango de Seguimientos creados">
 								<field name="desde"/>
-							</group>
-							<group>
 								<field name="hasta"/>
 							</group>
+<!-- 							<group string="Rango de Actividades">
+								<field name="desde_msj"/>
+								<field name="hasta_msj"/>
+							</group> -->
 						</group>
 						<group>
 							<group>
 								<field name="responsable" widget="selection"/>
 							</group>
 						</group>
-						<notebook invisible="1">
+						<notebook>
 							<page string="Entrada de ventas">
 								<field name="leads"/>
 							</page>

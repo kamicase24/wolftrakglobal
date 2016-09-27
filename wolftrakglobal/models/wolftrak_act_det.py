@@ -21,14 +21,14 @@ class wolftrakActivity(models.Model):
 		ids = 0
 		for reg in wolftrak_actividades:
 			ids = reg.ids
-		pernew = year+'00'+str(ids)
-		return pernew
+		nuevo_periodo = year+'00'+str(ids)
+		return nuevo_periodo
 
 	periodo = fields.Char(string='Periodo', readonly=True, default=_default_periodo)
 	leads = fields.Many2many('crm.lead', 
 		string='Ventas', 
 		readonly=True,
-		compute='_rango_leads')
+		compute='_toma_leads')
 
 	responsable = fields.Many2one('res.users')
 
@@ -38,20 +38,16 @@ class wolftrakActivity(models.Model):
 		compute='_toma_mensajes')
 
 	@api.depends('desde','hasta','responsable')
-	def _rango_leads(self):
+	def _toma_leads(self):
 		date1 = self.desde
 		date2 = self.hasta
 		resp = self.responsable
 		if not resp:
-			self.leads = self.env['crm.lead'].search([('create_date','>=',date1),
-																	('create_date','<=',date2)])
+			self.leads = self.env['crm.lead'].search([])
 		else:
-			self.leads = self.env['crm.lead'].search([('create_date','>=',date1),
-																	('create_date','<=',date2),
-																	('user_id', '=', resp.id)])
+			self.leads = self.env['crm.lead'].search([('user_id', '=', resp.id)])
 
 	@api.depends('leads')
 	def _toma_mensajes(self):
 		for name in self.leads:
-			self.mensaje += self.env['mail.message'].search([('model','=','crm.lead'),
-																			('res_id', '=', name.id)])
+			self.mensaje += self.env['mail.message'].search([('model','=','crm.lead'),('res_id', '=', name.id)])
