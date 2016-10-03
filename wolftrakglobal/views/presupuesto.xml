@@ -192,7 +192,44 @@
 								</table>
 							</div>
 						</div>
-					
+						
+						<table class="table tablenob">
+							<tr>
+								<td class="tablecolor" colspan="2">
+									<strong class="textcolor text-center tablecolor">Metodos de Pago</strong>
+								</td>
+								<td class="tablecolor">
+									<strong class="textcolor text-center">Recuerda que siempre puedes obtener mas informacion de nuestros productos y servicios en:</strong>
+								</td>
+							</tr>
+
+							<tr>
+								<td t-if="doc.company_id.name == 'Mytraktech'" align="center">
+									<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>
+								</td>
+								<td align="left">
+									<p>Paypal: administracion@wolftrakglobal.com</p>
+								</td>
+								<td align="center">
+									<h3>http://wolftrakglobal.com</h3>
+								</td>
+							</tr>
+							<tr>
+								<td align="center" t-if="doc.company_id.name == 'Mytraktech'">
+									<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
+								</td>
+								<td align="left" t-if="doc.company_id.name == 'Mytraktech'">
+									<p>Cuenta Corriente No.: 797197019</p>
+								</td>
+								<td align="center">
+									<img src="wolftrakglobal/static/src/img/fb2.png"/>
+									<img src="wolftrakglobal/static/src/img/tw2.png"/>
+									<img src="wolftrakglobal/static/src/img/ins2.png"/>
+									<p>Wolftrakglobal</p>
+								</td>
+							</tr>
+						</table>
+						
 						<p t-field="doc.note" />
 						<p t-if="doc.payment_term_id.note">
 							<span t-field="doc.payment_term_id.note"/>

@@ -141,7 +141,7 @@
                                     </td>
                                 </tr>
                          </table>
-		 	 <strong>Taza de Cambio: </strong>
+		 	 <strong>Tasa de Cambio: </strong>
 			 <strong><span t-field="o.taza_cambio"/></strong>
                      </div>
                 </div>
