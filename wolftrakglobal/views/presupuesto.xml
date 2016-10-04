@@ -190,6 +190,8 @@
 										</td>
 									</tr>
 								</table>
+								<strong>Tasa de Cambio al dia: </strong>
+								<strong><span t-field="doc.tasa_cambio"/></strong>
 							</div>
 						</div>
 						
