@@ -3,7 +3,6 @@
 	<data>
 		
 		<!-- formulario paginas amarillas. -->
-		
 		<record id="view_pag_wolf_form" model="ir.ui.view">
 			<field name="name">pag.wolftrak.form</field>
 			<field name="model">pag.wolftrak.search</field>
@@ -14,6 +13,9 @@
 							<separator string="Paginas Amarillas" colspan="2"/>
 							<field name="fh_busc"/>
 							<field name="busc"/>
+						</group>
+						<group>
+							<button name="searching" string="Buscar" type="object"/>
 						</group>
 						<notebook colspan="2">
 							<page mode="tree,kanban">
@@ -41,6 +43,19 @@
 			</field>
 		</record>
 
+		<record id="pag_line_form" model="ir.ui.view">
+			<field name="name">pag.wolftrak.line.form</field>
+			<field name="model">pag.wolftrak.line</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="empresa"/>
+						<field name="tlf"/>
+					</group>
+				</form>
+			</field>
+		</record>
+
 		<!-- Action abrir paginas amarillas -->
 		<record model="ir.actions.act_window" id="act_pag_wolftrak">	
 			<field name="name">Paginas Amarillas</field>
@@ -55,6 +70,28 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
 		</record>
+
+		<!-- wizard pag -->
+		<record model="ir.ui.view" id="wizard_pag_form">
+			<field name="name">wizard.pag.form</field>
+			<field name="model">pag.wizard</field>
+			<field name="arch" type="xml">
+				<form string="test">
+					<group>
+						<field name="pag_id"/>
+						<field name="string"/>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<!-- action para el wizard -->
+		<act_window id="disparar_wizard_pag"
+						name="Convertir en oportunidad"
+						src_model="pag.wolftrak.search"
+						res_model="pag.wizard"
+						view_mode="form"
+						target="new"/>
 
 		<!-- Menu Item de paginas-->
 		<menuitem	

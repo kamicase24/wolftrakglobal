@@ -15,7 +15,7 @@
 						</tr>
 						<tr> 
 							<td colspan="2" class="colorb"><strong>Cedula / RNC: </strong></td>
-							<td class="colorb" align="right"><span t-field="o.ci"/></td>
+							<td class="colorb" align="left"><span t-field="o.ci"/></td>
 						</tr>
 						<tr>
 							<td class="colora" colspan="3">
