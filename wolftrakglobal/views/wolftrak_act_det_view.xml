@@ -8,25 +8,21 @@
 					<sheet string="Actividad Detallada">
 						<h2><field name="periodo"/></h2>
 						<group>
-							<group string="Rango de Seguimientos creados">
+							<group string="Rango para la Fecha de Seguimiento">
 								<field name="desde"/>
 								<field name="hasta"/>
 							</group>
-<!-- 							<group string="Rango de Actividades">
-								<field name="desde_msj"/>
-								<field name="hasta_msj"/>
-							</group> -->
 						</group>
 						<group>
 							<group>
 								<field name="responsable" widget="selection"/>
 							</group>
 						</group>
-						<notebook>
-							<page string="Entrada de ventas">
+						<notebook invisible="1">
+							<page invisible="1" string="Entrada de ventas">
 								<field name="leads"/>
 							</page>
-							<page string="Mensajes">
+							<page invisible="1" string="Mensajes">
 								<field name="mensaje"/>
 							</page>
 						</notebook>
@@ -43,6 +39,7 @@
 					<field name="periodo"/>
 					<field name="desde"/>
 					<field name="hasta"/>
+					<field name="create_uid"/>
 				</tree>
 			</field>
 		</record>

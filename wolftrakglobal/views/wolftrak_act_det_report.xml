@@ -45,6 +45,7 @@
 								<th class="nomina1">Responsable</th>
 								<th class="nomina1">Fecha de Apertura</th>
 								<th class="nomina1">Clasificación</th>
+								<th class="nomina1">Duración de la llamada</th>
 							</tr>
 							<t t-foreach="doc.leads" t-as="lead" style="page-break-inside: avoid">
 							<tr class=" tablecolor textcolor">
@@ -52,6 +53,7 @@
 								<td class="nomina1"><span t-field="lead.user_id"/></td>
 								<td class="nomina1"><span t-field="lead.date_open"/></td>
 								<td class="nomina1" align="right"><span t-field="lead.priority"/></td>
+								<td class="nomina1"><span t-field="lead.call_duration"/></td>
 							</tr>
 								<t t-foreach="doc.mensaje" t-as="msj">
 								<t t-if="lead.id == msj.res_id">
@@ -93,13 +95,14 @@
 				<t t-set="fecha" t-value="doc.hasta[:8]+str(ran)"/> 
 				<tr class="textcolor tablecolor">
 					<th class="nomina1" colspan="2" align="right">Fecha</th>
-					<th class="nomina1" colspan="2"><span t-esc="fecha"/></th>
+					<th class="nomina1" colspan="3"><span t-esc="fecha"/></th>
 				</tr>
 				<tr>
 					<th class="nomina1">Cliente</th>
 					<th class="nomina1">Responsable</th>
 					<th class="nomina1">Siguiente Actividad</th>
 					<th class="nomina1">Estado</th>
+					<th class="nomina1">Duración de la Llamada</th>
 				</tr>
 	<t t-foreach="doc.leads" t-as="lead" style="page-break-inside: avoid">
 				<t t-if="ran == int(lead.write_date[8:11])">
@@ -108,9 +111,10 @@
 					<td class="nomina1"><span t-field="lead.user_id"/></td>
 					<td class="nomina1"><span t-field="lead.next_activity_id"/></td>
 					<td class="nomina1"><span t-field="lead.stage_id"/></td>
+					<td class="nomina1"><span t-field="lead.call_duration"/></td>
 				</tr>
 				<tr>
-					<td colspan="4" class="nomina1">Actividad</td>
+					<td colspan="5" class="nomina1">Actividad</td>
 				</tr>
 				
 		<t t-foreach="doc.mensaje.sorted(key=lambda t: t.date)" t-as="msj">
@@ -118,8 +122,8 @@
 				<t t-if="msj.subtype_id.id != 2">
 				<t t-if="msj.res_id == lead.id">
 				<tr class="colora textcolor2">
-					<t t-if="msj.subtype_id.id == 7"><td colspan="4" class="nomina1">Cambio de estado</td></t>
-					<t t-if="msj.subtype_id.id != 7"><td colspan="4" class="nomina1"><span t-field="msj.body"/></td></t>
+					<t t-if="msj.subtype_id.id == 7"><td colspan="5" class="nomina1">Cambio de estado</td></t>
+					<t t-if="msj.subtype_id.id != 7"><td colspan="5" class="nomina1"><span t-field="msj.body"/></td></t>
 				</tr>
 				</t>
 				</t>

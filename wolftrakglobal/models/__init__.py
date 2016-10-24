@@ -7,3 +7,5 @@ from . import report_wolftrak
 from . import wolftrak_move
 from . import wolftrak_act_det
 from . import wolftrak_sale
+# from . import res_currency_rate_wolftrak
+from . import wolftrak_crm_lead
