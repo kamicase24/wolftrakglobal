@@ -1,9 +1,15 @@
-from datetime import datetime, timedelta
-from openerp import SUPERUSER_ID
-from openerp import api, fields, models, _
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError
-from openerp.tools import float_is_zero, float_compare, DEFAULT_SERVER_DATETIME_FORMAT
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
+import re
+import time
+import math
+
+from openerp import api, fields as fields2
+from openerp import tools
+from openerp.osv import fields, osv
+from openerp.tools import float_round, float_is_zero, float_compare
+import json
 
 from bs4 import BeautifulSoup
 from lxml import etree
@@ -30,8 +36,10 @@ solo_compra = compra[compra.find('$')+1:]
 float_venta = float(venta[venta.find('$')+1:])
 float_compra = float(compra[compra.find('$')+1:])
 
-class wolftraksale(models.Model):
-	_name = "sale.order"
-	_inherit = "sale.order"
+class res_currency_rate(osv.osv):
+	_name = "res.currency.rate"
+	_inherit = "res.currency.rate"
 
-	tasa_cambio = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=float_venta)
+	_defaults = {
+	'rate' : float_venta
+	}

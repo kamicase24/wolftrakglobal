@@ -6,6 +6,31 @@ from openerp import models, fields #importa los objetos models y fields de el Co
 from openerp.osv import orm
 from openerp import models, fields, api
 
+from bs4 import BeautifulSoup
+from lxml import etree
+from io import StringIO, BytesIO
+import string
+import requests
+import lxml
+
+page = requests.get('http://www.promerica.com.do/?p=1014')
+content = page.content
+soup = BeautifulSoup(content, 'lxml')
+form_1 = soup.body
+
+result_2 = form_1.find_all(href='http://www.promerica.com.do/?p=1014')
+
+link_2 = result_2[1]
+
+str_final = link_2['title'].encode('utf-8')
+
+compra = str_final[str_final.find('V'):]
+venta = str_final[str_final.find('C'):str_final.find('/')-1]
+solo_venta = venta[venta.find('$')+1:]
+solo_compra = compra[compra.find('$')+1:]
+float_venta = float(venta[venta.find('$')+1:])
+float_compra = float(compra[compra.find('$')+1:])
+
 main_base = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE_NAME = 'ncf.json'
 CONFIG_FILE = os.path.join(main_base, CONFIG_FILE_NAME)
@@ -83,7 +108,7 @@ class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 
 	ncf_result = fields.Char(string="Resultado", readonly=True, compute='ncf_validation')
 
-	taza_cambio = fields.Float(string='Tasa de Cambio', digits=(1,4))
+	taza_cambio = fields.Float(string='Tasa de Cambio', digits=(1,4), default=float_venta)
 
 	@api.onchange('isr')
 	def isr_holding(self):
