@@ -15,7 +15,8 @@ class pag_wolftrak(models.Model):
 
 	busc 	 = fields.Char(string='Busqueda')
 	fh_busc  = fields.Date(string='Fecha de Busqueda', default=time.strftime('%Y-%m-%d'))
-	pag_line = fields.Many2many('pag.wolftrak.line', 'empresa', 'tlf', compute='searching')
+	pag_line = fields.One2many('pag.wolftrak.line', compute='searching')
+# 	pag_line = fields.Many2many('pag.wolftrak.line', 'empresa', 'tlf', compute='searching')
 
 	# @api.onchange('busc')
 	@api.depends('busc')
@@ -74,8 +75,8 @@ class pag_line(models.Model):
 	empresa = fields.Char(string="Empresa")
 	tlf 	= fields.Char(string="Telefono")
 
-class pag_wizard(models.TransientModel):
-	_name = 'pag.wizard'
+# class pag_wizard(models.TransientModel):
+# 	_name = 'pag.wizard'
 
-	pag_id = fields.Many2one('pag.wolftrak.search', string='paginas amarillas busquedas')
-	string = fields.Char(string='test wizard')
+# 	pag_id = fields.Many2one('pag.wolftrak.search', string='paginas amarillas busquedas')
+# 	string = fields.Char(string='test wizard')

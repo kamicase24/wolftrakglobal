@@ -14,9 +14,9 @@
 							<field name="fh_busc"/>
 							<field name="busc"/>
 						</group>
-						<group>
+<!-- 						<group>
 							<button name="searching" string="Buscar" type="object"/>
-						</group>
+						</group> -->
 						<notebook colspan="2">
 							<page mode="tree,kanban">
 								<field name="pag_line">
@@ -43,6 +43,7 @@
 			</field>
 		</record>
 
+		<!-- vista formulario de los resultados de busqueda-->
 		<record id="pag_line_form" model="ir.ui.view">
 			<field name="name">pag.wolftrak.line.form</field>
 			<field name="model">pag.wolftrak.line</field>
@@ -53,6 +54,18 @@
 						<field name="tlf"/>
 					</group>
 				</form>
+			</field>
+		</record>
+
+		<!-- lista de los resultados de busqueda -->
+		<record id="pag_line_tree" model="ir.ui.view">
+			<field name="name">pag.wolftrak.line.tree</field>
+			<field name="model">pag.wolftrak.line</field>
+			<field name="arch" type="xml">
+				<tree string="Resultado">
+					<field name="empresa"/>
+					<field name="tlf"/>
+				</tree>
 			</field>
 		</record>
 
@@ -72,7 +85,7 @@
 		</record>
 
 		<!-- wizard pag -->
-		<record model="ir.ui.view" id="wizard_pag_form">
+<!-- 		<record model="ir.ui.view" id="wizard_pag_form">
 			<field name="name">wizard.pag.form</field>
 			<field name="model">pag.wizard</field>
 			<field name="arch" type="xml">
@@ -83,15 +96,15 @@
 					</group>
 				</form>
 			</field>
-		</record>
+		</record> -->
 
 		<!-- action para el wizard -->
-		<act_window id="disparar_wizard_pag"
+<!-- 		<act_window id="disparar_wizard_pag"
 						name="Convertir en oportunidad"
 						src_model="pag.wolftrak.search"
 						res_model="pag.wizard"
 						view_mode="form"
-						target="new"/>
+						target="new"/> -->
 
 		<!-- Menu Item de paginas-->
 		<menuitem	
