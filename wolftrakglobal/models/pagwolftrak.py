@@ -15,14 +15,13 @@ class pag_wolftrak(models.Model):
 
 	busc 	 = fields.Char(string='Busqueda')
 	fh_busc  = fields.Date(string='Fecha de Busqueda', default=time.strftime('%Y-%m-%d'))
+	# pag_line = fields.One2many('pag.wolftrak.line', compute='searching')
 	pag_line = fields.One2many('pag.wolftrak.line', compute='searching')
-# 	pag_line = fields.Many2many('pag.wolftrak.line', 'empresa', 'tlf', compute='searching')
+	# pag_line = fields.Many2many('pag.wolftrak.line', 'empresa', 'tlf', compute='searching')
 
 	# @api.onchange('busc')
 	@api.depends('busc')
-	@api.multi
 	def searching(self):
-
 		keyword = self.busc
 		if type(keyword) != bool:
 			keyword = keyword.replace(' ','-')
@@ -50,6 +49,7 @@ class pag_wolftrak(models.Model):
 					emplist.append(n[0])
 					tlflist.append(n[1])
 				k+=1
+
 			# funciona...
 			mayorlist = []
 			for n in emplist:
@@ -64,6 +64,7 @@ class pag_wolftrak(models.Model):
 				i += 1
 			emplist = []
 			tlflist = []
+
 		else:
 			self.empresa = ''
 			self.tlf = ''
@@ -71,12 +72,18 @@ class pag_wolftrak(models.Model):
 class pag_line(models.Model):
 	_name = 'pag.wolftrak.line'
 
-	srch_id	= fields.Many2one('pag.wolftrak.search') 
 	empresa = fields.Char(string="Empresa")
 	tlf 	= fields.Char(string="Telefono")
+	estatus = fields.Boolean(string="Completado", default=False)
 
-# class pag_wizard(models.TransientModel):
-# 	_name = 'pag.wizard'
-
-# 	pag_id = fields.Many2one('pag.wolftrak.search', string='paginas amarillas busquedas')
-# 	string = fields.Char(string='test wizard')
+	@api.one
+	def to_lead(self):
+		return {
+		'name' : ('crm.lead'),
+		'view_type' : 'form',
+		'view_mode' : 'form',
+		'res_model' : 'crm.lead',
+		'view_id' : False,
+		'type' : 'ir.actions.act_window',
+		'target' : 'new'
+		}

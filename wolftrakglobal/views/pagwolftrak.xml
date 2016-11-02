@@ -14,15 +14,14 @@
 							<field name="fh_busc"/>
 							<field name="busc"/>
 						</group>
-<!-- 						<group>
-							<button name="searching" string="Buscar" type="object"/>
-						</group> -->
 						<notebook colspan="2">
-							<page mode="tree,kanban">
+							<page string="Resultado" mode="tree,kanban">
 								<field name="pag_line">
 									<tree string="Resultado">
+										<field name="id"/>
 										<field name="empresa"/>
 										<field name="tlf"/>
+										<field name="estatus"/>
 									</tree>
 								</field>
 							</page>
@@ -52,6 +51,10 @@
 					<group>
 						<field name="empresa"/>
 						<field name="tlf"/>
+						<field name="estatus"/>
+					</group>
+					<group>
+						<button string="Convertir a Oportunidad" name="to_lead" type="object" status="draft"/> 
 					</group>
 				</form>
 			</field>
