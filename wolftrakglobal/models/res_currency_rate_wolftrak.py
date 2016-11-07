@@ -33,13 +33,13 @@ compra = str_final[str_final.find('V'):]
 venta = str_final[str_final.find('C'):str_final.find('/')-1]
 solo_venta = venta[venta.find('$')+1:]
 solo_compra = compra[compra.find('$')+1:]
-float_venta = float(venta[venta.find('$')+1:])
-float_compra = float(compra[compra.find('$')+1:])
+float_compra = float(venta[venta.find('$')+1:])
+float_venta = float(compra[compra.find('$')+1:])
 
 class res_currency_rate(osv.osv):
 	_name = "res.currency.rate"
 	_inherit = "res.currency.rate"
 
 	_defaults = {
-	'rate' : float_venta
+	'rate' : float_compra
 	}

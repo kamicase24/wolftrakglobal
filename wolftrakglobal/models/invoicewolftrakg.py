@@ -13,23 +13,26 @@ import string
 import requests
 import lxml
 
-page = requests.get('http://www.promerica.com.do/?p=1014')
-content = page.content
-soup = BeautifulSoup(content, 'lxml')
-form_1 = soup.body
+def taza_de_cambio(aja):
+	eje = aja
+	page = requests.get('http://www.promerica.com.do/?p=1014')
+	content = page.content
+	soup = BeautifulSoup(content, 'lxml')
+	form_1 = soup.body
 
-result_2 = form_1.find_all(href='http://www.promerica.com.do/?p=1014')
+	result_2 = form_1.find_all(href='http://www.promerica.com.do/?p=1014')
 
-link_2 = result_2[1]
+	link_2 = result_2[1]
 
-str_final = link_2['title'].encode('utf-8')
+	str_final = link_2['title'].encode('utf-8')
 
-compra = str_final[str_final.find('V'):]
-venta = str_final[str_final.find('C'):str_final.find('/')-1]
-solo_venta = venta[venta.find('$')+1:]
-solo_compra = compra[compra.find('$')+1:]
-float_venta = float(venta[venta.find('$')+1:])
-float_compra = float(compra[compra.find('$')+1:])
+	compra = str_final[str_final.find('V'):]
+	venta = str_final[str_final.find('C'):str_final.find('/')-1]
+	solo_venta = venta[venta.find('$')+1:]
+	solo_compra = compra[compra.find('$')+1:]
+	float_venta = float(venta[venta.find('$')+1:])
+	float_compra = float(compra[compra.find('$')+1:])
+	return float_venta
 
 main_base = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE_NAME = 'ncf.json'
@@ -108,7 +111,7 @@ class wolftraknew(orm.Model): #declara un nuevo modelo. Deriva de models.Model
 
 	ncf_result = fields.Char(string="Resultado", readonly=True, compute='ncf_validation')
 
-	taza_cambio = fields.Float(string='Tasa de Cambio', digits=(1,4), default=float_venta)
+	taza_cambio = fields.Float(string='Tasa de Cambio', digits=(1,4), default=taza_de_cambio)
 
 	@api.onchange('isr')
 	def isr_holding(self):
