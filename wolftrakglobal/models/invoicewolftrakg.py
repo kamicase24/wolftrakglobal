@@ -30,8 +30,8 @@ def taza_de_cambio(aja):
 	venta = str_final[str_final.find('C'):str_final.find('/')-1]
 	solo_venta = venta[venta.find('$')+1:]
 	solo_compra = compra[compra.find('$')+1:]
-	float_venta = float(venta[venta.find('$')+1:])
-	float_compra = float(compra[compra.find('$')+1:])
+	float_compra = float(venta[venta.find('$')+1:])
+	float_venta = float(compra[compra.find('$')+1:])
 	return float_venta
 
 main_base = os.path.dirname(os.path.abspath(__file__))

@@ -12,26 +12,29 @@ import string
 import requests
 import lxml
 
-page = requests.get('http://www.promerica.com.do/?p=1014')
-content = page.content
-soup = BeautifulSoup(content, 'lxml')
-form_1 = soup.body
+def taza_de_cambio(aja):
+	eje = aja
+	page = requests.get('http://www.promerica.com.do/?p=1014')
+	content = page.content
+	soup = BeautifulSoup(content, 'lxml')
+	form_1 = soup.body
 
-result_2 = form_1.find_all(href='http://www.promerica.com.do/?p=1014')
+	result_2 = form_1.find_all(href='http://www.promerica.com.do/?p=1014')
 
-link_2 = result_2[1]
+	link_2 = result_2[1]
 
-str_final = link_2['title'].encode('utf-8')
+	str_final = link_2['title'].encode('utf-8')
 
-compra = str_final[str_final.find('V'):]
-venta = str_final[str_final.find('C'):str_final.find('/')-1]
-solo_venta = venta[venta.find('$')+1:]
-solo_compra = compra[compra.find('$')+1:]
-float_venta = float(venta[venta.find('$')+1:])
-float_compra = float(compra[compra.find('$')+1:])
-
+	compra = str_final[str_final.find('V'):]
+	venta = str_final[str_final.find('C'):str_final.find('/')-1]
+	solo_venta = venta[venta.find('$')+1:]
+	solo_compra = compra[compra.find('$')+1:]
+	float_compra = float(venta[venta.find('$')+1:])
+	float_venta = float(compra[compra.find('$')+1:])
+	return float_venta
+	
 class wolftraksale(models.Model):
 	_name = "sale.order"
 	_inherit = "sale.order"
 
-	tasa_cambio = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=float_venta)
+	tasa_cambio = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=taza_de_cambio)

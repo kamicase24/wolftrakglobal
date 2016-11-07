@@ -41,5 +41,5 @@ class res_currency_rate(osv.osv):
 	_inherit = "res.currency.rate"
 
 	_defaults = {
-	'rate' : float_compra
+	'rate' : float_venta
 	}
