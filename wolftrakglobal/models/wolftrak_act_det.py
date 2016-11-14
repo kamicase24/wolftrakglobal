@@ -25,17 +25,22 @@ class wolftrakActivity(models.Model):
 		return nuevo_periodo
 
 	periodo = fields.Char(string='Periodo', readonly=True, default=_default_periodo)
-	leads = fields.Many2many('crm.lead', 
-		string='Ventas', 
-		readonly=True,
-		compute='_toma_leads')
+
+
+	tipo_reporte = fields.Selection([
+		('cliente','Por cliente'),
+		('fecha','Por Fecha'),
+		('total','Totalizado')], string="Tipo de Reporte")
 
 	responsable = fields.Many2one('res.users')
 
-	mensaje = fields.Many2many('mail.message',
-		string='Mensajes',
-		readonly='True',
-		compute='_toma_mensajes')
+	leads = fields.Many2many('crm.lead', string='Ventas', readonly=True, compute='_toma_leads')
+
+	mensaje = fields.Many2many('mail.message', string='Mensajes', readonly='True', compute='_toma_mensajes')
+
+	actividad = fields.Many2many('mail.message.subtype', string='Actividades', readonly='True', compute='_toma_actividad')
+
+	act_report = fields.Many2many('crm.activity.report', string='Reporte de activiade', readonly='True', compute='_toma_actividad')
 
 	@api.depends('desde','hasta','responsable')
 	def _toma_leads(self):
@@ -50,4 +55,13 @@ class wolftrakActivity(models.Model):
 	@api.depends('leads')
 	def _toma_mensajes(self):
 		for name in self.leads:
-			self.mensaje += self.env['mail.message'].search([('model','=','crm.lead'),('res_id', '=', name.id)])
+			self.mensaje += self.env['mail.message'].search([('model','=','crm.lead'),('res_id', '=', name.id),('date','<',self.hasta),('date','>=',self.desde)])
+
+	@api.depends('leads','hasta','desde')
+	def _toma_actividad(self):
+		resp = self.responsable
+		self.actividad =  self.env['mail.message.subtype'].search([('res_model','=','crm.lead')])
+		if not resp:
+			self.act_report = self.env['crm.activity.report'].search([('date','<', self.hasta),('date','>=',self.desde)])
+		else:
+			self.act_report = self.env['crm.activity.report'].search([('date','<', self.hasta),('date','>=',self.desde),('user_id','=',resp.id)])

@@ -19,6 +19,15 @@
 			file="wolftrakglobal.wolftrak_act_det_report"
 		/>
 
+		<report
+			id="act_det_report_3"
+			model="wolftrak.actividad"
+			string="Actividad Totalizada"
+			report_type="qweb-pdf"
+			name="wolftrakglobal.wolftrak_act_det_report_3"
+			file="wolftrakglobal.wolftrak_act_det_report"
+		/>
+
 		<record id="paperformat_wolftrak" model="report.paperformat">
 			<field name="name">Wolftrak custom paper format</field>
 			<field name="default" eval="True"/>
@@ -133,6 +142,81 @@
 							</t>
 						</t>
 					</t>
+				</table>
+			</div>
+		</t>
+	</template>
+
+	<template id="wolftrak_act_det_report_3">
+		<t t-foreach="docs" t-as="doc">
+			<div class="page">
+				<h3 align="center">Totalizado</h3>
+				<br/>
+				<table class="table table-bordered table-condensed">
+					<tr class="textcolor tablecolor">
+						<td colspan="2">Responsable</td>
+						<t t-foreach="doc.actividad" t-as="act" style="page-break-inside: avoid">
+							<td><span t-field="act.name"/></td>
+						</t>
+						<td>Duración total de llamadas</td>
+					</tr>
+					<tr>
+						<td class="nomina1" colspan="2"><strong><span t-field="doc.responsable"/></strong></td>
+						<t t-foreach="doc.actividad" t-as="act">
+							<t t-set="cont" t-value="0"/> <!-- contador en cero -->
+							<t t-foreach="doc.act_report" t-as="act_r">
+								<t t-if="act.id == act_r.subtype_id.id">
+									<t t-set="cont" t-value="cont+1"/>
+								</t>
+							</t>
+							<td><strong><span t-esc="cont"/></strong></td>
+						</t>
+						<t t-set="cont_mins" t-value="0"/>
+						<t t-foreach="doc.mensaje" t-as="msj">
+							<t t-set="cont_mins" t-value="cont_mins+msj.call_duration"/>
+						</t>
+						<td><strong><span t-esc="cont_mins"/></strong></td>
+					</tr>
+
+					<t t-foreach="doc.act_report.sorted(key=lambda t: t.partner_id.name)" t-as="act_r"  style="page-break-inside: avoid">
+						<t t-if="partner != act_r.partner_id.id">
+							<tr class="textcolor total1">
+								<td colspan="2"><span t-field="act_r.partner_id"/></td>
+								<t t-foreach="doc.actividad" t-as="act">
+									<t t-set="cont1" t-value="0"/>
+									<t t-foreach="doc.act_report" t-as="act_r2">
+										<t t-if="act_r.partner_id.id == act_r2.partner_id.id">
+											<t t-if="act.id == act_r2.subtype_id.id">
+												<t t-set="cont1" t-value="cont1+1"/>
+											</t>
+										</t>
+									</t>
+									<td><span t-esc="cont1"/></td>
+								</t>
+							</tr>
+							<tr align="right" class="tablecolor textcolor">
+								<td colspan="3">Duración de las llamadas</td>
+							</tr>
+						</t>
+
+						<t t-if="partner != act_r.partner_id.id">
+							<t t-set="duration" t-value="0"/>
+						</t>
+
+						<tr align="right">
+							<t t-foreach="doc.mensaje" t-as="msj">
+								<t t-if="msj.id == act_r.id">
+									<t t-set="duration" t-value="duration+msj.call_duration"/>
+									<td colspan="3"><span t-esc="msj.call_duration"/></td>
+								</t>
+							</t>
+						</tr>
+
+						<t t-set="partner" t-value="act_r.partner_id.id"/>
+					</t>
+					<!-- <t t-foreach="doc.act_report.sorted(key=lambda t: t.partner_id.name)" t-as="act_r"  style="page-break-inside: avoid"> -->
+
+					<!-- </t> -->
 				</table>
 			</div>
 		</t>

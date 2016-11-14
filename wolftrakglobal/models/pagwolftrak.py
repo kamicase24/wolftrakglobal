@@ -15,12 +15,11 @@ class pag_wolftrak(models.Model):
 
 	busc 	 = fields.Char(string='Busqueda')
 	fh_busc  = fields.Date(string='Fecha de Busqueda', default=time.strftime('%Y-%m-%d'))
-	# pag_line = fields.One2many('pag.wolftrak.line', compute='searching')
-	pag_line = fields.One2many('pag.wolftrak.line', compute='searching')
-	# pag_line = fields.Many2many('pag.wolftrak.line', 'empresa', 'tlf', compute='searching')
+	pag_line = fields.One2many('pag.wolftrak.line', 'empresa', 'tlf')
 
 	# @api.onchange('busc')
-	@api.depends('busc')
+	# @api.depends('busc')
+	@api.one
 	def searching(self):
 		keyword = self.busc
 		if type(keyword) != bool:
@@ -48,22 +47,24 @@ class pag_wolftrak(models.Model):
 				for n in meta:
 					emplist.append(n[0])
 					tlflist.append(n[1])
+					line_result = self.pag_line.create({'empresa': n[0], 'tlf': n[1]})
+					self.busc = line_result
 				k+=1
-
+			
 			# funciona...
-			mayorlist = []
-			for n in emplist:
-				result={}
-				result.update({'srch_id':n})
-				mayorlist.append(result)
-			self.pag_line = mayorlist
-			i = 0
-			for m in self.pag_line:
-				m.empresa = emplist[i]
-				m.tlf = tlflist[i]
-				i += 1
-			emplist = []
-			tlflist = []
+			# mayorlist = []
+			# for n in emplist:
+			# 	result={}
+			# 	result.update({'srch_id':n})
+			# 	mayorlist.append(result)
+			# self.pag_line = mayorlist
+			# i = 0
+			# for m in self.pag_line:
+			# 	m.empresa = emplist[i]
+			# 	m.tlf = tlflist[i]
+			# 	i += 1
+			# emplist = []
+			# tlflist = []
 
 		else:
 			self.empresa = ''
@@ -74,6 +75,7 @@ class pag_line(models.Model):
 
 	empresa = fields.Char(string="Empresa")
 	tlf 	= fields.Char(string="Telefono")
+	search_id = fields.Many2one('pag.wolftrak.search')
 	estatus = fields.Boolean(string="Completado", default=False)
 
 	@api.one

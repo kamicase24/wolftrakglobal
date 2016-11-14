@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="badge_form_view" model="ir.ui.view">
+			<field name="name">Badge Form</field>
+			<field name="model">gamification.badge</field>
+			<field name="arch" type="xml">
+				<xpath expr="//form/sheet/group[4]/group[2]" position="inside">
+					<field name="custom_value"/>
+				</xpath>
+			</field>
+	</data>
+</openerp>

@@ -18,12 +18,18 @@
 								<field name="responsable" widget="selection"/>
 							</group>
 						</group>
-						<notebook invisible="1">
-							<page invisible="1" string="Entrada de ventas">
+						<notebook>
+							<page string="Entrada de ventas">
 								<field name="leads"/>
 							</page>
-							<page invisible="1" string="Mensajes">
+							<page string="Mensajes">
 								<field name="mensaje"/>
+							</page>
+							<page string="Actividades">
+								<field name="actividad"/>
+							</page>
+							<page string="Actividad reporte">
+								<field name="act_report"/>
 							</page>
 						</notebook>
 					</sheet>
@@ -40,6 +46,7 @@
 					<field name="desde"/>
 					<field name="hasta"/>
 					<field name="create_uid"/>
+					<field name="responsable"/>
 				</tree>
 			</field>
 		</record>

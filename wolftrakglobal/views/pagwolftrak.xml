@@ -13,6 +13,7 @@
 							<separator string="Paginas Amarillas" colspan="2"/>
 							<field name="fh_busc"/>
 							<field name="busc"/>
+							<button string="Buscar" name="searching" type="object"/>
 						</group>
 						<notebook colspan="2">
 							<page string="Resultado" mode="tree,kanban">
@@ -54,7 +55,7 @@
 						<field name="estatus"/>
 					</group>
 					<group>
-						<button string="Convertir a Oportunidad" name="to_lead" type="object" status="draft"/> 
+						<button string="Convertir a Oportunidad" name="to_lead" type="action" status="draft"/> 
 					</group>
 				</form>
 			</field>
