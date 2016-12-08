@@ -70,5 +70,24 @@
 				</xpath>
 			</field>
 		</record>
+
+		<record id="view_badge_wizard_reward" model="ir.ui.view">
+            <field name="name">Reward Employee Badge Form</field>
+            <field name="model">gamification.badge.user.wizard</field>
+			<field name="inherit_id" ref="hr_gamification.view_badge_wizard_reward"/>
+            <field name="arch" type="xml">
+				<xpath expr="//form/group" position="inside">
+					<div class="col-md-12">
+						Insignea ganada al
+						<field name="custom_value" widget="progressbar" width="80%"/>
+					</div>
+				</xpath>
+				<xpath expr="//form/footer" position="replace">
+					<button string="Conseder insignea" type="object" name="custom_grant_badge" class="btn-primary"/>
+					<button string="Cancel" special="cancel" class="btn-default"/>
+				</xpath>
+            </field>
+        </record>
+
 	</data>
 </openerp>
