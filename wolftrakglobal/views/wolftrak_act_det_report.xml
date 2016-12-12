@@ -194,23 +194,7 @@
 									<td><span t-esc="cont1"/></td>
 								</t>
 							</tr>
-							<tr align="right" class="tablecolor textcolor">
-								<td colspan="3">Duración de las llamadas</td>
-							</tr>
 						</t>
-
-						<t t-if="partner != act_r.partner_id.id">
-							<t t-set="duration" t-value="0"/>
-						</t>
-
-						<tr align="right">
-							<t t-foreach="doc.mensaje" t-as="msj">
-								<t t-if="msj.id == act_r.id">
-									<t t-set="duration" t-value="duration+msj.call_duration"/>
-									<td colspan="3"><span t-esc="msj.call_duration"/></td>
-								</t>
-							</t>
-						</tr>
 
 						<t t-set="partner" t-value="act_r.partner_id.id"/>
 					</t>
