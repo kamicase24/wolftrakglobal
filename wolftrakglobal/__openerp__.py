@@ -48,7 +48,6 @@
         'views/wolftrak_act_det_report.xml',
         'views/wolftrak_crm_lead.xml',
         'views/wolftrak_res_partner.xml'
-
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -158,7 +158,7 @@
 						<t t-foreach="doc.actividad" t-as="act" style="page-break-inside: avoid">
 							<td><span t-field="act.name"/></td>
 						</t>
-						<td>Duración total de llamadas</td>
+						<td>Duración de llamadas (Minutos)</td>
 					</tr>
 					<tr>
 						<td class="nomina1" colspan="2"><strong><span t-field="doc.responsable"/></strong></td>
@@ -180,7 +180,7 @@
 
 					<t t-foreach="doc.act_report.sorted(key=lambda t: t.partner_id.name)" t-as="act_r"  style="page-break-inside: avoid">
 						<t t-if="partner != act_r.partner_id.id">
-							<tr class="textcolor total1">
+							<tr>
 								<td colspan="2"><span t-field="act_r.partner_id"/></td>
 								<t t-foreach="doc.actividad" t-as="act">
 									<t t-set="cont1" t-value="0"/>
