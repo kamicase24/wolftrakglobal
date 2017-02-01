@@ -25,4 +25,4 @@ class Rnc:
             'Nombre_Comercial: {nombre_comercial}\n' \
             'Regimen_Pago: {regimen_de_pago}\n' \
             'Estado: {estado}\n' \
-            ).format(**local_data)  
+            ).format(**local_data)
