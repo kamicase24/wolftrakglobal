@@ -1,12 +1,4 @@
-from openerp import api, fields, models, _
-from openerp.osv import expression
 from openerp import models, fields, api
-
-import time
-from datetime import date
-from datetime import datetime
-from datetime import timedelta
-from dateutil import relativedelta
 
 class wolftrakMove(models.Model):
 	_name = 'wolftrak.move'

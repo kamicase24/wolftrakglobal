@@ -1,0 +1,41 @@
+<openerp>
+	<data>
+
+		<!-- CRM Lead Form custom -->
+		<!--<record model="ir.ui.view" id="crm_case_form_view_leads">-->
+			<!--<field name="name">CRM Leads Form custom</field>-->
+			<!--<field name="model">crm.lead</field>-->
+			<!--<field name="inherit_id" ref="crm.crm_case_form_view_leads"/>-->
+			<!--<field name="arch" type="xml">-->
+				<!--<xpath expr="//form/sheet/group/group[4]" position="inside">-->
+					<!--<field name="call_duration" widget="float_time"/>-->
+				<!--</xpath>-->
+			<!--</field>-->
+		<!--</record>-->
+
+		<!-- Opportunities Form custom -->
+		<!--<record model="ir.ui.view" id="crm_case_form_view_oppor">-->
+			<!--<field name="name">Opportunities</field>-->
+			<!--<field name="model">crm.lead</field>-->
+			<!--<field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>-->
+			<!--<field name="arch" type="xml">-->
+				<!--<xpath expr="//form/sheet/group/group[2]/div/div" position="inside">-->
+					<!--<br/><field name="call_duration" widget="float_time" attrs="{'invisible': [('next_activity_id', '=', False)]}"/>-->
+				<!--</xpath>-->
+			<!--</field>-->
+		<!--</record>-->
+
+		<!-- custom search Phone for Opportunities and leads -->
+		<record model="ir.ui.view" id="	view_crm_case_opportunities_filter">
+			<field name="name">CRM - Opportunities custom Search</field>
+			<field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+			<field name="arch" type="xml">
+				<xpath expr="//search" position="inside">
+					<field name="phone"/>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</openerp>

@@ -27,9 +27,8 @@
 							</tr>
 							<tr> 
 								<td class="colorb">
-									<strong t-if="doc.company_id.name == 'WOLFTRAK GLOBAL'">Cedula: </strong>
-									<strong t-if="doc.company_id.name == 'Mytraktech'">RNC: </strong>
-									<span t-field="doc.partner_id.ci"/>
+									<strong>Documento de Identidad: </strong>
+									<span t-field="doc.partner_id.doc_ident"/>
 								</td>
 								<td class="colorb" align="right">
 									<strong>Fecha de Vencimiento:</strong>
@@ -191,7 +190,7 @@
 									</tr>
 								</table>
 								<strong>Tasa de Cambio al dia: </strong>
-								<strong><span t-field="doc.tasa_cambio"/></strong>
+								<strong><span t-field="doc.ex_rate"/></strong>
 							</div>
 						</div>
 						
@@ -201,26 +200,26 @@
 									<strong class="textcolor text-center tablecolor">Metodos de Pago</strong>
 								</td>
 								<td class="tablecolor">
-									<strong class="textcolor text-center">Recuerda que siempre puedes obtener mas informacion de nuestros productos y servicios en:</strong>
+									<strong class="textcolor text-center">Para mas informacion de nuestros productos y servicios visita:</strong>
 								</td>
 							</tr>
 
 							<tr>
-								<td t-if="doc.company_id.name == 'Mytraktech'" align="center">
+								<td align="center">
 									<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>
 								</td>
 								<td align="left">
 									<p>Paypal: administracion@wolftrakglobal.com</p>
 								</td>
 								<td align="center">
-									<h3>http://wolftrakglobal.com</h3>
+									<p>http://wolftrakglobal.com</p>
 								</td>
 							</tr>
 							<tr>
-								<td align="center" t-if="doc.company_id.name == 'Mytraktech'">
+								<td align="center">
 									<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
 								</td>
-								<td align="left" t-if="doc.company_id.name == 'Mytraktech'">
+								<td align="left">
 									<p>Cuenta Corriente No.: 797197019</p>
 								</td>
 								<td align="center">

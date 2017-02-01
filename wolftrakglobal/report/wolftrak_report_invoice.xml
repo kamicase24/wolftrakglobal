@@ -30,9 +30,8 @@
                         </tr>
                         <tr> 
                             <td class="colorb text-left" >
-                                <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Cedula: </strong>
-                                <strong t-if="o.company_id.name == 'Mytraktech'">RNC: </strong> 
-                                <span t-field="o.partner_id.ci"/>
+                                <strong>Documento de Identidad: </strong>
+                                <span t-field="o.partner_id.doc_ident"/>
                             </td>
                             <td t-if="o.state == 'proforma2'" class="colorb" align="right"><strong>Fecha de Vencimiento:</strong></td>
                             <td t-if="o.state == 'proforma2'" class="colorb"><span t-field="o.date_due"/></td>
@@ -142,7 +141,7 @@
                                 </tr>
                          </table>
 		 	 <strong>Tasa de Cambio: </strong>
-			 <strong><span t-field="o.taza_cambio"/></strong>
+			 <strong><span t-field="o.ex_rate"/></strong>
                      </div>
                 </div>
 
@@ -152,26 +151,26 @@
                             <strong class="textcolor text-center tablecolor">Metodos de Pago</strong>
                         </td>
                         <td class="tablecolor">
-                            <strong class="textcolor text-center">Recuerda que siempre puedes obtener mas informacion de nuestros productos y servicios en:</strong>
+                            <p class="textcolor text-center">Para mas informacion de nuestros productos y servicios visita:</p>
                         </td>
                     </tr>
 
                     <tr>
-                        <td t-if="o.company_id.name == 'Mytraktech'" align="center">
+                        <td align="center">
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>
                         </td>
                         <td align="left">
                             <p>Paypal: administracion@wolftrakglobal.com</p>
                         </td>
                         <td align="center">
-                            <h3>http://wolftrakglobal.com</h3>
+                            <strong>http://wolftrakglobal.com</strong>
                         </td>
                     </tr>
                     <tr>
-                        <td align="center" t-if="o.company_id.name == 'Mytraktech'">
+                        <td align="center">
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
                         </td>
-                        <td align="left" t-if="o.company_id.name == 'Mytraktech'">
+                        <td align="left">
                         	<p>Cuenta Corriente No.: 797197019</p>
                         </td>
                         <td align="center">

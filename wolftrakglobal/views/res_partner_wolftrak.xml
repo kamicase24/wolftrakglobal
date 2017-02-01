@@ -8,15 +8,14 @@
             <field name="arch" type="xml">
             	<xpath expr="//form/sheet/div[2]" position="inside">
                     <h3>
-                        <field name="ci" placeholder="Documento de Identificacion"/>
+                        <field name="doc_ident" placeholder="Documento de Identificación"/>
                     </h3>
                 </xpath>
-                
+
                 <xpath expr="//form/sheet/group/group" position="inside">
-                    <field name="estado"/>
-                    <field name="regimen_pago"/>
+                    <field name="dgii_state"/>
+                    <field name="pay_reg"/>
                 </xpath>
-                
             </field>
     	</record>
     </data>

@@ -1,40 +1,25 @@
-from datetime import datetime, timedelta
-from openerp import SUPERUSER_ID
-from openerp import api, fields, models, _
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError
-from openerp.tools import float_is_zero, float_compare, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import api, fields, models, _
 
 from bs4 import BeautifulSoup
-from lxml import etree
-from io import StringIO, BytesIO
-import string
 import requests
-import lxml
 
-def taza_de_cambio(aja):
-	eje = aja
-	page = requests.get('http://www.promerica.com.do/?p=1014')
-	content = page.content
-	soup = BeautifulSoup(content, 'lxml')
-	form_1 = soup.body
+class WolftrakSaleOrder(models.Model):
+    _name = "sale.order"
+    _inherit = "sale.order"
 
-	result_2 = form_1.find_all(href='http://www.promerica.com.do/?p=1014')
+    def default_ex_rate(self):
+        page = requests.get('http://promerica.com.do/?d=1014')
+        soup = BeautifulSoup(page.content, 'lxml')
+        form = soup.body
+        result = form.find_all(href='http://www.promerica.com.do/?p=1014')
+        link = result[0]
+        str_final = link.string
+        venta = str_final[str_final.find('V'):].encode('utf-8')
+        rate = float(venta[venta.find('$') + 1:venta.find('$') + 6])
+        user = self.env.user
+        if user.company_id.name == 'Mytraktech':
+            return rate
+        else:
+            return 0.0
 
-	link_2 = result_2[1]
-
-	str_final = link_2['title'].encode('utf-8')
-
-	compra = str_final[str_final.find('V'):]
-	venta = str_final[str_final.find('C'):str_final.find('/')-1]
-	solo_venta = venta[venta.find('$')+1:]
-	solo_compra = compra[compra.find('$')+1:]
-	float_compra = float(venta[venta.find('$')+1:])
-	float_venta = float(compra[compra.find('$')+1:])
-	return float_venta
-	
-class wolftraksale(models.Model):
-	_name = "sale.order"
-	_inherit = "sale.order"
-
-	tasa_cambio = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=taza_de_cambio)
+    ex_rate = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=default_ex_rate)
