@@ -28,7 +28,7 @@
                             <td class="colora" align="right"><strong>Fecha de Emision: </strong></td>
                             <td class="colora"><span t-field="o.date_invoice"/></td>
                         </tr>
-                        <tr> 
+                        <tr>
                             <td class="colorb text-left" >
                                 <strong>Documento de Identidad: </strong>
                                 <span t-field="o.partner_id.doc_ident"/>
@@ -40,7 +40,7 @@
                         <tr>
                             <td class="colora" colspan="3">
                                 <strong>Direccion: </strong>
-                                <span t-field="o.partner_id.street"/>, 
+                                <span t-field="o.partner_id.street"/>,
                                 <span t-field="o.partner_id.street2"/>
                                 <span t-field="o.partner_id.city"/>
                                 <span t-field="o.partner_id.state_id"/>
@@ -63,7 +63,7 @@
                             <strong>Reference:</strong>
                             <p t-field="o.reference" invisible='1'/>
                         </div>
-                    </div> 
+                    </div>
 
                     <!-- Is there a discount on at least one line? -->
                     <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>

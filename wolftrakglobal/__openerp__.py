@@ -45,7 +45,7 @@
         # 'views/wolftrak_act_det_view.xml',
         # 'views/wolftrak_cesta_ticket.xml',
         # 'views/wolftrak_act_det_report.xml',
-        'views/layouts.xml',
+        # 'views/layouts.xml',
         # data
         'data/base_action_wolftrak.xml',
         # wizards

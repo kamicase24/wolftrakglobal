@@ -2,7 +2,7 @@
 <openerp>
   <data>
     <template id="report.external_layout_header">
-      <div class="header">
+ <div class="header">
         <div class="row">
           <div class="col-xs-12">
             <div style="border-bottom: 1px solid black;"/>
@@ -10,10 +10,10 @@
         </div>
         <div class="row">
 	        <span> Mytraktech Technology SLR </span>
-          <span> 131104371 </span>         
-          <span t-field="company.partner_id.street"/> 
-          <span t-field="company.partner_id.street2"/> 
-          <span t-field="company.partner_id.city"/> 
+          <span> 131104371 </span>
+          <span t-field="company.partner_id.street"/>
+          <span t-field="company.partner_id.street2"/>
+          <span t-field="company.partner_id.city"/>
           <span t-field="company.partner_id.state_id"/>
           <span t-field="company.partner_id.zip"/>
           <span t-field="company.partner_id.country_id"/>
@@ -23,22 +23,22 @@
                 <img t-if="company.partner_id.name == 'WOLFTRAK GLOBAL'" class="img img-responsive" src="wolftrakglobal/static/src/img/lobo3.png"/>
                 <img t-if="company.partner_id.name == 'Mytraktech'" class="img img-responsive" src="wolftrakglobal/static/src/img/mtt.png"/>
               </td>
-              <td> 
+              <td>
                 <img class="img img-responsive  text-center" src="wolftrakglobal/static/src/img/send2.png"/>
                 <h6 class="text-center">info@wolftrakglobal.com</h6>
               </td>
-              <td  align="center"> 
+              <td  align="center">
                 <img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/logotype.png"/>
                 <h6 class="text-center">soporte@wolftrakglobal.com</h6>
               </td>
-              <td> 
+              <td>
                 <img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/call2.png"/>
                 <h6 class="text-center">+1 829 956 5565</h6>
               </td>
             </tr>
           </table>
         </div>
-      </div>
+</div>
     </template>
   </data>
 </openerp>
