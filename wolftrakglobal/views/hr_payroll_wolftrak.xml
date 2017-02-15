@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payroll_report_form" model="ir.ui.view">
+        <field name="name">payroll.report.form</field>
+        <field name="model">hr.payroll.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Generar Reporte" name="#" type="#" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <field name="name"/>
+                        <group>
+                            <group>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="employee_id">
+                                <tree>
+                                    <field name="id"/>
+                                    <field name="name_related"/>
+                                    <field name="identification_id"/>
+                                    <field name="job_id"/>
+                                </tree>
+                            </field>
+                            <field name="payslip_id">
+                                <tree>
+                                    <field name="id"/>
+                                </tree>
+                            </field>
+                            <field name="payslip_lines"/>
+                        </group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="payroll_report_tree" model="ir.ui.view">
+        <field name="name">payroll.report.tree</field>
+        <field name="model">hr.payroll.report</field>
+        <field name="arch" type="xml">
+            <tree string="Quincenas">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="payroll_report_action" model="ir.actions.act_window">
+        <field name="name">Lista de Nomina</field>
+        <field name="res_model">hr.payroll.report</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="payroll_report_tree"/>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="payroll_report_list"
+        name="Lista de Nómina"
+        parent="hr_payroll.menu_hr_payroll_root"
+        action="payroll_report_action"
+        />
+</odoo>

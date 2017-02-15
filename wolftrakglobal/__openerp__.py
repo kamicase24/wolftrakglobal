@@ -28,13 +28,16 @@
         # 'views/609_view.xml',
         # 'views/609.xml',
         # reports
-        # 'report/wolfttrak_report_payroll.xml',
+        # 'report/wolftrak_report_cesta_ticket.xml',
         # 'report/wolftrak_report_footer.xml', dejar comentado 4 ever
         # 'report/wolftrak_report_overdue.xml', # pagos pendientes / estado de cuenta temporal
+        'report/wolftrak_report_payslip.xml',
         'report/wolftrak_report_header.xml',
         'report/wolftrak_report_invoice.xml', # factura
         'report/wolftrak_report_saleorder.xml', # presupuesto
+        'report/wolftrak_report_payroll_list.xml',
         # views
+        'views/hr_payroll_wolftrak.xml',
         'views/gamification_badge_wolftrak.xml',
         'views/res_partner_wolftrak.xml',
         'views/invoice_wolftrak.xml',
@@ -43,7 +46,6 @@
         # 'views/wolftrak_move_report.xml',
         # 'views/wolftrak_move_views.xml',
         # 'views/wolftrak_act_det_view.xml',
-        # 'views/wolftrak_cesta_ticket.xml',
         # 'views/wolftrak_act_det_report.xml',
         # 'views/layouts.xml',
         # data

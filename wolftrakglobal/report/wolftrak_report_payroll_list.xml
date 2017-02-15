@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <report
+            id="report_list_payroll"
+            model="hr.payroll.report"
+            string="Lista-nomina"
+            report_type="qweb-html"
+            name="wolftrakglobal.template_report_payroll_list"
+            file="wolftrakglobal.wolftrak_report_payroll_list"
+        />
+
+        <template id="template_report_payroll_list">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <h2>Report title</h2>
+                            <p>This object's name is <span t-field="o.name"/></p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+</odoo>
