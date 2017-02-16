@@ -13,12 +13,15 @@
                                     <strong>
                                         <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
                                         <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
-                                        <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
+                                        <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Invoice</span>
                                         <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
                                         <span t-if="o.type == 'out_refund'">Refund</span>
                                         <span t-if="o.type == 'in_refund'">Vendor Refund</span>
                                         <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
                                         <span t-field="o.number"/>
+                                        <t t-if="o.type == 'out_invoice' and o.state == 'draft'">
+                                            FACTURA/2017/
+                                        </t>
                                     </strong>
                                 </h3>
                             </td>
