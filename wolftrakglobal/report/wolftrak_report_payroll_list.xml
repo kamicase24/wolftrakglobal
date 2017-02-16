@@ -12,8 +12,8 @@
         <record id="paperformat_wolftrak" model="report.paperformat">
             <field name="name">Custom paper wolftrak</field>
             <field name="orientation">Landscape</field>
-            <field name="page_height">40</field> <!-- altura -->
-            <field name="page_width">900</field> <!--  ancho -->
+            <!--<field name="page_height">40</field>-->
+            <!--<field name="page_width">900</field>-->
             <field name="margin_top">40</field>
             <field name="margin_bottom">20</field>
             <field name="margin_left">5</field>
