@@ -27,11 +27,14 @@ class WolftrakPayrollReport(models.Model):
         for ps in payslips:
             self.payslip_lines += all_ps_lines.search([('slip_id','=',ps.id)])
 
-    name = fields.Char(String="Quincena")
+    @api.depends('date_from','date_to')
+    def _set_name(self):
+        self.name = "Quincena/"+str(self.date_from)+"/"+str(self.date_to)
+
+    name = fields.Char(compute=_set_name)
     date_from = fields.Date(string="Desde", default=time.strftime('%Y-%m-01'))
     date_to = fields.Date(string="Hasta", default=str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10])
 
     employee_id = fields.Many2many('hr.employee', string='Empleado', compute=_get_employees)
     payslip_id = fields.Many2many('hr.payslip', string='Nómina', compute=_get_payslips)
     payslip_lines = fields.Many2many('hr.payslip.line', string='Lineas de Nómina', compute=_get_payslip_lines)
-    contract_id = fields.Many2many('hr.contract', string='Contrato')

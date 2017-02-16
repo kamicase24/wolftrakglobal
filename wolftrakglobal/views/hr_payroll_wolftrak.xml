@@ -11,7 +11,7 @@
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <field name="name"/>
+                        <h1><field name="name"/></h1>
                         <group>
                             <group>
                                 <field name="date_from"/>
@@ -19,7 +19,7 @@
                             </group>
                         </group>
                         <group>
-                            <field name="employee_id">
+                            <field name="employee_id" readonly="1">
                                 <tree>
                                     <field name="id"/>
                                     <field name="name_related"/>
@@ -27,12 +27,12 @@
                                     <field name="job_id"/>
                                 </tree>
                             </field>
-                            <field name="payslip_id">
+                            <field name="payslip_id" invisible="1">
                                 <tree>
                                     <field name="id"/>
                                 </tree>
                             </field>
-                            <field name="payslip_lines"/>
+                            <field name="payslip_lines" invisible="1"/>
                         </group>
                     </div>
                 </sheet>
@@ -48,6 +48,7 @@
                 <field name="name"/>
                 <field name="date_from"/>
                 <field name="date_to"/>
+                <field name="create_uid"/>
             </tree>
         </field>
     </record>
