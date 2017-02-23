@@ -28,8 +28,8 @@
         # 'views/609_view.xml',
         # 'views/609.xml',
         # reports
-        # 'report/wolftrak_report_cesta_ticket.xml',
         # 'report/wolftrak_report_footer.xml', dejar comentado 4 ever
+        'report/wolftrak_report_cesta_ticket.xml', # cesta ticket
         'report/wolftrak_report_act_det.xml',
         'report/wolftrak_report_statement.xml', # estado de cuenta
         'report/wolftrak_report_payslip.xml', # nómina

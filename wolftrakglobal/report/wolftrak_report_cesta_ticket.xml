@@ -25,9 +25,7 @@
 									</td>
 									<td class="tablecolor textcolor">Mes</td>
 									<td class="colorb">
-										<t t-foreach="o.worked_days_line_ids" t-as="p">
-											<t t-if="p.code == 'DM'"><span t-field="p.name"/></t>
-										</t>
+										<span t-field="o.month"/>
 									</td>
 								</tr>
 							</table>
