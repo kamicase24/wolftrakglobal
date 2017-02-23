@@ -32,9 +32,15 @@
                             <td class="colora"><span t-field="o.date_invoice"/></td>
                         </tr>
                         <tr>
-                            <td class="colorb text-left" >
-                                <strong>Documento de Identidad: </strong>
+                            <td class="colorb text-left">
+                                <t t-if="o.company_id.name == 'Mytraktech'">
+                                <strong>RNC/Cédula: </strong>
                                 <span t-field="o.partner_id.doc_ident"/>
+                                </t>
+                                <t t-elif="o.company_id.name == 'Wolftrak Global'">
+                                    <strong>RIF/Cédula: </strong>
+                                    <span t-field="o.partner_id.doc_ident"/>
+                                </t>
                             </td>
                             <td t-if="o.state == 'proforma2'" class="colorb" align="right"><strong>Fecha de Vencimiento:</strong></td>
                             <td t-if="o.state == 'proforma2'" class="colorb"><span t-field="o.date_due"/></td>

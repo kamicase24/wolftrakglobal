@@ -23,7 +23,8 @@ class WolftrakActivityLog(models.TransientModel):
                 'note': log.note or '',
                 'call_duration': str(log.call_duration)
             }
-            log.lead_id.message_post(body_html, subject=log.title_action, subtype_id=log.next_activity_id.subtype_id.id)
+            log.lead_id.message_post(body_html, subject=log.title_action, subtype_id=log.next_activity_id.subtype_id.id,
+                                     call_duration=log.call_duration)
             log.lead_id.write({
                 'date_deadline': log.date_deadline,
                 'planned_revenue': log.planned_revenue,
@@ -33,3 +34,8 @@ class WolftrakActivityLog(models.TransientModel):
                 'call_duration' : log.call_duration
             })
         return True
+
+class WolftrakMailMessage(models.Model):
+    _inherit = "mail.message"
+
+    call_duration = fields.Float(string="Duración de la llamada", digits=(2,2))

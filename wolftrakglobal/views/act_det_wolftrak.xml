@@ -2,34 +2,37 @@
 	<data>
 		<record id="form_actividad_det" model="ir.ui.view">
 			<field name="name">wolftrak.actividad.form</field>
-			<field name="model">wolftrak.actividad</field>
+			<field name="model">wolftrak.activity</field>
 			<field name="arch" type="xml">
 				<form string="Actividad Detallada">
 					<sheet string="Actividad Detallada">
-						<h2><field name="periodo"/></h2>
-						<group>
-							<group string="Rango para la Fecha de Seguimiento">
-								<field name="desde"/>
-								<field name="hasta"/>
-							</group>
-						</group>
+						<h2><field name="name"/></h2>
 						<group>
 							<group>
-								<field name="responsable" widget="selection"/>
+								<field name="date_from"/>
+								<field name="date_to"/>
+								<field name="order"/>
+							</group>
+							<group>
+								<field name="responsable" widget="many2many_tags"/>
+								<field name="activity" widget="many2many_tags"/>
+								<field name="leads" widget="many2many_tags"/>
 							</group>
 						</group>
+						<group>
+							<field name="total_act"/>
+						</group>
 						<notebook>
-							<page string="Entrada de ventas">
-								<field name="leads"/>
-							</page>
 							<page string="Mensajes">
-								<field name="mensaje"/>
-							</page>
-							<page string="Actividades">
-								<field name="actividad"/>
-							</page>
-							<page string="Actividad reporte">
-								<field name="act_report"/>
+								<field name="message">
+									<tree>
+										<field name="date"/>
+										<field name="subtype_id"/>
+										<field name="parent_id"/>
+										<field name="create_uid"/>
+										<field name="call_duration" widget="float_time" sum="Tiempo de llamadas"/>
+									</tree>
+								</field>
 							</page>
 						</notebook>
 					</sheet>
@@ -39,12 +42,12 @@
 
 		<record id="tree_activdad_det" model="ir.ui.view">
 			<field name="name">wolftrak.actividad.tree</field>
-			<field name="model">wolftrak.actividad</field>
+			<field name="model">wolftrak.activity</field>
 			<field name="arch" type="xml">
 				<tree>
-					<field name="periodo"/>
-					<field name="desde"/>
-					<field name="hasta"/>
+					<field name="name"/>
+					<field name="date_from"/>
+					<field name="date_to"/>
 					<field name="create_uid"/>
 					<field name="responsable"/>
 				</tree>
@@ -53,7 +56,7 @@
 
 		<record model="ir.actions.act_window" id="act_actividad_det">
 			<field name="name">Actividad Detallada</field>
-			<field name="res_model">wolftrak.actividad</field>
+			<field name="res_model">wolftrak.activity</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 		</record>
@@ -63,7 +66,7 @@
 			name="Actividad Detallada"
 			sequence="1"
 			action="act_actividad_det"
-			parent="base.menu_sale_report"
+			parent="sales_team.menu_sale_report"
 		/>
 	</data>
 </openerp>

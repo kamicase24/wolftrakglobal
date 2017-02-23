@@ -44,6 +44,19 @@ class WolftrakPartner(models.Model):
 	dgii_state = fields.Char(string='Estado')
 	pay_reg = fields.Char(string='Regimen de Pago')
 
+	def _get_partner_invoices(self):
+		invoices = self.env['account.invoice']
+		par_inv = invoices.search([])
+		return par_inv
+
+	def _get_invoices(self):
+		invoices = self.env['account.invoice']
+		par_inv = invoices.search([])
+		for partner in self:
+			partner.partner_inv += par_inv.search([('partner_id','=',partner.id)])
+
+	partner_inv = fields.Many2many('account.invoice', default=_get_partner_invoices, compute=_get_invoices)
+
 	@api.onchange('doc_ident')
 	def user_validation(self):
 		db_doc_ident = self.search([('doc_ident', '=', self.doc_ident)])

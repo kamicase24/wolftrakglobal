@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<report
+			id="act_det_report_1"
+			model="wolftrak.activity"
+			string="Actividad Detallada"
+			report_type="qweb-pdf"
+			name="wolftrakglobal.wolftrak_act_det_report_1"
+			file="wolftrakglobal.wolftrak_act_det_report"
+		/>
+
+		<template id="wolftrak_act_det_report_1">
+			<t t-foreach="docs" t-as="doc">
+				<div class="page">
+					<h3 align="center">Actividad detallada</h3>
+					<table class="table table-bordered table-condensed">
+						<tr>
+							<td><b>Vendedor/a</b></td>
+							<t t-foreach="doc.responsable" t-as="resp">
+								<td><span t-field="resp.name"/></td>
+							</t>
+						</tr>
+						<tr>
+							<td><b>Cliente</b></td>
+							<t t-foreach="doc.leads" t-as="lead">
+								<td><span t-field="lead.partner_id"/></td>
+							</t>
+						</tr>
+					</table>
+
+					<table class="table table-bordered table-condensed">
+						<tr>
+							<td><b>Total de Activdades</b></td>
+							<td><span t-esc="len(doc.message)"/></td>
+						</tr>
+						<t t-set="msg_subtypes" t-value="[]"/>
+						<t t-foreach="doc.message" t-as="msg">
+							<t t-set="msg_subtypes" t-value="msg_subtypes+[msg.subtype_id.id]"/>
+						</t>
+						<tr t-foreach="doc.activity" t-as="act">
+							<t t-set="total_act" t-value="msg_subtypes.count(act.id)"/>
+							<td><b><span t-field="act.name"/></b></td>
+							<td><span t-esc="total_act"/></td>
+						</tr>
+						<t t-set="total_call_time" t-value="0.0"/>
+						<tr>
+							<td><b>Duracion de Llamadas</b></td>
+							<t t-foreach="doc.message" t-as="msg"><t t-set="total_call_time" t-value="total_call_time + msg.call_duration"/></t>
+							<td><span t-esc="total_call_time"/></td>
+						</tr>
+					</table>
+
+					<table class="table table-bordered table-condensed">
+						<t t-if="doc.order == 'date'">
+						<tr>
+							<td><b>Fecha</b></td>
+							<td><b>Actividad</b></td>
+							<td><b>Oportunidad/Cliente</b></td>
+							<td><b>Responsable</b></td>
+							<td><b>Duración de la Llamada</b></td>
+						</tr>
+						<tr t-foreach="doc.message.sorted(key=lambda b: b.date)" t-as="msg">
+							<td><span t-field="msg.date"/></td>
+							<td><span t-field="msg.subtype_id"/></td>
+							<td><span t-field="msg.parent_id"/></td>
+							<td><span t-field="msg.create_uid"/></td>
+							<td><span t-field="msg.call_duration"/></td>
+						</tr>
+						</t>
+						<t t-if="doc.order == 'activity'">
+						<tr>
+							<td><b>Actividad</b></td>
+							<td><b>Fecha</b></td>
+							<td><b>Oportunidad/Cliente</b></td>
+							<td><b>Responsable</b></td>
+							<td><b>Duración de la Llamada</b></td>
+						</tr>
+						<tr t-foreach="doc.message.sorted(key=lambda b: b.subtype_id)" t-as="msg">
+							<td><span t-field="msg.subtype_id"/></td>
+							<td><span t-field="msg.date"/></td>
+							<td><span t-field="msg.parent_id"/></td>
+							<td><span t-field="msg.create_uid"/></td>
+							<td><span t-field="msg.call_duration"/></td>
+						</tr>
+						</t>
+						<t t-if="doc.order == 'user'">
+						<tr>
+							<td><b>Responsable</b></td>
+							<td><b>Fecha</b></td>
+							<td><b>Actividad</b></td>
+							<td><b>Oportunidad/Cliente</b></td>
+							<td><b>Duración de la Llamada</b></td>
+						</tr>
+						<tr t-foreach="doc.message.sorted(key=lambda b: b.create_uid)" t-as="msg">
+							<td><span t-field="msg.create_uid"/></td>
+							<td><span t-field="msg.date"/></td>
+							<td><span t-field="msg.subtype_id"/></td>
+							<td><span t-field="msg.parent_id"/></td>
+							<td><span t-field="msg.call_duration"/></td>
+						</tr>
+						</t>
+						<t t-if="doc.order == 'lead'">
+						<tr>
+							<td><b>Oportunidad/Cliente</b></td>
+							<td><b>Fecha</b></td>
+							<td><b>Actividad</b></td>
+							<td><b>Responsable</b></td>
+							<td><b>Duración de la Llamada</b></td>
+						</tr>
+						<tr t-foreach="doc.message.sorted(key=lambda b: b.parent_id)" t-as="msg">
+							<td><span t-field="msg.parent_id"/></td>
+							<td><span t-field="msg.date"/></td>
+							<td><span t-field="msg.subtype_id"/></td>
+							<td><span t-field="msg.create_uid"/></td>
+							<td><span t-field="msg.call_duration"/></td>
+						</tr>
+						</t>
+					</table>
+				</div>
+			</t>
+		</template>
+
+	</data>
+</openerp>

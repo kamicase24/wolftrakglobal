@@ -30,12 +30,13 @@
         # reports
         # 'report/wolftrak_report_cesta_ticket.xml',
         # 'report/wolftrak_report_footer.xml', dejar comentado 4 ever
-        # 'report/wolftrak_report_overdue.xml', # pagos pendientes / estado de cuenta temporal
-        'report/wolftrak_report_payslip.xml',
+        'report/wolftrak_report_act_det.xml',
+        'report/wolftrak_report_statement.xml', # estado de cuenta
+        'report/wolftrak_report_payslip.xml', # nómina
         'report/wolftrak_report_header.xml',
         'report/wolftrak_report_invoice.xml', # factura
         'report/wolftrak_report_saleorder.xml', # presupuesto
-        'report/wolftrak_report_payroll_list.xml',
+        'report/wolftrak_report_payroll_list.xml', # lista de nómina
         # views
         'views/hr_payroll_wolftrak.xml',
         'views/gamification_badge_wolftrak.xml',
@@ -43,10 +44,9 @@
         'views/invoice_wolftrak.xml',
         'views/sale_order_wolftrak.xml',
         'views/crm_lead_wolftrak.xml',
+        'views/act_det_wolftrak.xml',
         # 'views/wolftrak_move_report.xml',
         # 'views/wolftrak_move_views.xml',
-        # 'views/wolftrak_act_det_view.xml',
-        # 'views/wolftrak_act_det_report.xml',
         # 'views/layouts.xml',
         # data
         'data/base_action_wolftrak.xml',

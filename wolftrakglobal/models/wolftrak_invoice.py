@@ -123,3 +123,6 @@ class WolftrakInvoice(models.Model):
             self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
         else:
             self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
+
+
+

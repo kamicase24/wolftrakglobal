@@ -15,8 +15,11 @@
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="dgii_state"/>
                     <field name="pay_reg"/>
+                    <field name="partner_inv"/>
                 </xpath>
             </field>
     	</record>
+
+
     </data>
 </openerp>
