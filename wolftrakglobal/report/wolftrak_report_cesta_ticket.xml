@@ -16,7 +16,7 @@
 					<t t-call="report.external_layout">
 						<div class="page">
 							<br/>
-							<h3 class="tablecolor textcolor">Bono Alimenticio Basico</h3>
+							<h3 class="tablecolor textcolor">CESTATICKET SOCIALISTA</h3>
 							<table class="table table-condensed table-bordered">
 								<tr>
 									<td class="tablecolor textcolor">Trabajador</td>
