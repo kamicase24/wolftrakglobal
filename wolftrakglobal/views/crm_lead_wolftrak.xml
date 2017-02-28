@@ -26,13 +26,30 @@
 		<!--</record>-->
 
 		<!-- custom search Phone for Opportunities and leads -->
-		<record model="ir.ui.view" id="	view_crm_case_opportunities_filter">
+		<record model="ir.ui.view" id="view_crm_case_opportunities_filter">
 			<field name="name">CRM - Opportunities custom Search</field>
 			<field name="model">crm.lead</field>
 			<field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
 			<field name="arch" type="xml">
 				<xpath expr="//search" position="inside">
 					<field name="phone"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="crm_case_kanban_view_leads">
+			<field name="name">crm.lead.kanban.lead</field>
+			<field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+			<field name="arch" type="xml">
+				<xpath expr="//kanban" position="inside">
+					<field name="next_activity_id"/>
+				</xpath>
+				<xpath expr="//kanban/templates/t/div/div[2]" position="inside">
+					<div>
+						<field name="next_activity_id"/>
+						<field name="date_action"/>
+					</div>
 				</xpath>
 			</field>
 		</record>

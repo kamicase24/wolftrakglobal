@@ -9,8 +9,8 @@
           </div>
         </div>
         <div class="row">
-	        <span> Mytraktech Technology SLR </span>
-          <span> 131104371 </span>
+          <span> Mytraktech Technology SRL |</span>
+          <span> RNC 131104371 </span>
           <span t-field="company.partner_id.street"/>
           <span t-field="company.partner_id.street2"/>
           <span t-field="company.partner_id.city"/>
