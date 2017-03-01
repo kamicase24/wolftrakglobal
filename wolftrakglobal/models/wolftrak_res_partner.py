@@ -43,6 +43,7 @@ class WolftrakPartner(models.Model):
 	doc_ident = fields.Char(string='Documento de Identificación')
 	dgii_state = fields.Char(string='Estado')
 	pay_reg = fields.Char(string='Regimen de Pago')
+	doc_ident_type = fields.Integer(string='Tipoe de Documento')
 
 	def _get_partner_invoices(self):
 		invoices = self.env['account.invoice']
@@ -59,6 +60,11 @@ class WolftrakPartner(models.Model):
 
 	@api.onchange('doc_ident')
 	def user_validation(self):
+
+		if self.doc_ident:
+			if len(self.doc_ident) == 11: self.doc_ident_type = 2
+			elif len(self.doc_ident) == 9: self.doc_ident_type = 1
+
 		db_doc_ident = self.search([('doc_ident', '=', self.doc_ident)])
 		if db_doc_ident and self.doc_ident:
 			self.doc_ident = ''

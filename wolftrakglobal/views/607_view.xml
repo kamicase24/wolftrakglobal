@@ -7,22 +7,22 @@
 				<form>
 					<sheet string="Ventas de bienes y servicios">
 						<header>
-							<h3>Periodo: <field name="periodo"/></h3>
+							<h3>Periodo <field name="period"/></h3>
 						</header>
 						<group>
 							<group>
-								<field name="desde_607"/>
-								<field name="hasta_607"/>
-								<field name="cant_reg"/>
+								<field name="from_607"/>
+								<field name="to_607"/>
+								<field name="number_reg"/>
 							</group>
 							<group>
-								<field name="total_cld"/>
+								<field name="total_inv"/>
 								<field name="total_tax"/>
 							</group>
 						</group>
 						<notebook>
 							<page string="Lineas">
-									<field name="reporte"/>
+									<field name="invoices"/>
 							</page>
 						</notebook>
 					</sheet>
@@ -35,10 +35,10 @@
 			<field name="model">wolftrakglobal.report607</field>
 			<field name="arch" type="xml">
 				<tree string="Ventas de vienes y servicios">
-					<field name="periodo"/>
-					<field name="desde_607"/>
-					<field name="hasta_607"/>
-					<field name="cant_reg"/>
+					<field name="period"/>
+					<field name="from_607"/>
+					<field name="to_607"/>
+					<field name="number_reg"/>
 				</tree>
 			</field>
 		</record>
@@ -48,7 +48,7 @@
 			<field name="res_model">wolftrakglobal.report607</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
-			<field name="view_id" ref="tree_report_607"/>
+			<!--<field name="view_id" ref="tree_report_607"/>-->
 		</record>
 
 		<menuitem

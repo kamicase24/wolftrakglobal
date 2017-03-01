@@ -7,25 +7,25 @@
 				<form>
 					<sheet string="Compras de bienes y servicios">
 						<header>
-							<h3>Periodo: <field name="periodo"/></h3>
+							<h3>Periodo: <field name="period"/></h3>
 						</header>
 						<group>
 							<group>
-								<field name="desde_606"/>
-								<field name="hasta_606"/>
-								<field name="cant_reg"/>
+								<field name="from_606"/>
+								<field name="to_606"/>
+								<field name="number_reg"/>
 							</group>
 							<group>
-								<field name="total_cld"/>
+								<field name="total_inv"/>
 								<field name="total_tax"/>
-								<field name="total_rtn"/>
+								<field name="total_tax_hold"/>
 							</group>
 						</group>
 						<notebook>
 							<page string="Lineas" mode="tree,kanban">
 								<field name="invoices"/>
 							</page>
-							<page attrs="{'invisible': [('total_cld', '!=', 'x')]}">
+							<page>
 								<field name="payments"/>
 							</page>
 						</notebook>
@@ -39,10 +39,10 @@
 			<field name="model">wolftrakglobal.report606</field>
 			<field name="arch" type="xml">
 				<tree string="Compras de vienes y servicios">
-					<field name="periodo"/>
-					<field name="desde_606"/>
-					<field name="hasta_606"/>
-					<field name="cant_reg"/>
+					<field name="period"/>
+					<field name="from_606"/>
+					<field name="to_606"/>
+					<field name="number_reg"/>
 				</tree>
 			</field>
 		</record>

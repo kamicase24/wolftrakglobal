@@ -14,76 +14,9 @@
 			<t t-call="report.external_layout">
 				<t t-foreach="docs" t-as="doc">
 					<div class="page">
-						<br/>
-						<table class="table-condensed table-bordered">
-							<tr>
-								<td class="tablecolor textcolor"> RNC </td><td> 131104371 </td>
-							</tr>
-							<tr>
-								<td class="tablecolor textcolor"> Periodo </td><td><span t-field="doc.periodo"/></td>
-							</tr>
-							<tr>
-								<td class="tablecolor textcolor"> Cantidad de Registro </td><td> <span t-field="doc.cant_reg"/> </td>
-							</tr>
-							<tr>
-								<td class="tablecolor textcolor"> Total Monto Facturado </td><td> <span t-field="doc.total_cld"/> </td>
-							</tr>
-						</table>
-						<br/>
-						<div align="center">
-							<table align="center" class="table-condensed table-bordered">
-								<tr>
-									<th class="tablecolor textcolor">Total Monto Facturado</th>
-									<th class="tablecolor textcolor">ITBIS Facturado</th>
-									<th class="tablecolor textcolor">ITBIS Retenido</th>
-									<th class="tablecolor textcolor">Retencion Renta</th>
-								</tr>
-								<tr align="center">
-									<td><span t-field="doc.total_cld"/></td>
-									<td><span t-field="doc.total_tax"/></td>
-									<td><span t-field="doc.total_rtn"/></td>
-									<td>0.00</td>
-								</tr>
-							</table>
-						</div>
-						<br/>
-						<table align="center" class="table table-condensed table-bordered">
-							<tr>
-								<th class="tablecolor textcolor" align="center">Lineas</th>
-								<th class="tablecolor textcolor" align="center">RNC</th>
-								<th class="tablecolor textcolor" align="center">Tipo Id</th>
-								<th class="tablecolor textcolor" align="center">Tipo de Bienes y Servicios Comprados</th>
-								<th class="tablecolor textcolor" align="center">Numero de Comprobante Fiscal</th>
-								<th class="tablecolor textcolor" align="center">Fecha de Comprobante</th>
-								<th class="tablecolor textcolor" align="center">Fecha de Pago</th>
-								<th class="tablecolor textcolor" align="center">ITBIS Facturado</th>
-								<th class="tablecolor textcolor" align="center">ITBIS Retenido</th>
-								<th class="tablecolor textcolor" align="center">Monto Facturado</th>
-							</tr>
-							<t t-set="j" t-value="1"/><t t-set="comm" t-value="azul"/>
-							<tr align='center' t-foreach="doc.invoices" t-as="i">
-								<td><span t-esc="j"/></td>
-								<td><span t-field="i.partner_id.ci"/></td>
-								<td><span t-field="i.type_ci"/></td>
-								<td><span t-field="i.type_buy"/></td>
-								<td><span t-field="i.ncf"/></td>
-								<td><span t-field="i.date_invoice"/></td>
-
-								<td><t t-foreach="doc.payments" t-as="y">
-									<t t-if="i.number==y.communication">
-										<t t-if="comm!=y.communication">
-											<span t-field="y.payment_date"/>
-										</t>
-										<t t-set="comm" t-value="y.communication"/>
-									</t>
-								</t></td>
-
-								<td><span t-field="i.amount_tax"/></td>
-								<td><span t-field="i.tax_hold"/></td>
-								<td><span t-field="i.amount_untaxed"/></td>
-								<t t-set="j" t-value="j+1"/>
-							</tr>
-						</table>
+						<p>
+							606  131104371<field name="period"/><field name="number_reg"/>
+						</p>
 					</div>
 				</t>
 			</t>

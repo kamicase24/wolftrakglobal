@@ -15,11 +15,21 @@
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="dgii_state"/>
                     <field name="pay_reg"/>
-                    <field name="partner_inv"/>
+                    <field name="doc_ident_type"/>
+                    <field name="partner_inv" invisible="1"/>
                 </xpath>
             </field>
     	</record>
 
-
+        <record id="view_res_partner_filter" model="ir.ui.view">
+            <field name="name">res.partner.select.custom</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <field name="phone"/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </openerp>
