@@ -53,6 +53,7 @@ class wolftrakglobal_report(models.Model):
     period = fields.Char(string='Periodo')
     number_reg = fields.Char('Cantidad de registros')
 
+
 class wolftrakglobal_report_606(models.Model):
     _name = 'wolftrakglobal.report606'
 

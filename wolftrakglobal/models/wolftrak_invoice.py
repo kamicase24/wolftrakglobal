@@ -117,12 +117,20 @@ class WolftrakInvoice(models.Model):
     @api.depends('ncf')
     def ncf_validation(self):
         supplier_rnc = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
-        values = get_ncf_record(self.ncf,supplier_rnc.doc_ident)
-        if values != None:
-            self.type_comp = values[1]
-            self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
+        values_in_inv = get_ncf_record(self.ncf,supplier_rnc.doc_ident)
+        values_out_inv = get_ncf_record(self.ncf,'131104371')
+        if self.type == 'out_invoice':
+            if values_out_inv != None:
+                self.type_comp = values_out_inv[1]
+                self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
+            else:
+                self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
         else:
-            self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
+            if values_in_inv != None:
+                self.type_comp = values_in_inv[1]
+                self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
+            else:
+                self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
 
 
 
