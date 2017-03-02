@@ -7,6 +7,9 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//form/sheet/h1/label" position="replace">
+                    <field name="draft_number" attrs="{'invisible': ['|',('state','not in',('draft',))]}"/>
+                </xpath>
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="type_nul"/>
                     <field name="ex_rate"/>

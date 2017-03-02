@@ -65,11 +65,11 @@ class WolftrakPartner(models.Model):
 			if len(self.doc_ident) == 11: self.doc_ident_type = 2
 			elif len(self.doc_ident) == 9: self.doc_ident_type = 1
 
-		db_doc_ident = self.search([('doc_ident', '=', self.doc_ident)])
-		if db_doc_ident and self.doc_ident:
-			self.doc_ident = ''
-			self.name = ''
-			self.dgii_state = ''
+		# db_doc_ident = self.search([('doc_ident', '=', self.doc_ident)])
+		# if db_doc_ident and self.doc_ident:
+		# 	self.doc_ident = ''
+		# 	self.name = ''
+		# 	self.dgii_state = ''
 
 		try:
 			rnc_record = get_rnc_record(self.doc_ident)

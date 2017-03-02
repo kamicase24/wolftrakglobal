@@ -5,20 +5,18 @@
 			id="format_606"
 			model="wolftrakglobal.report606"
 			string="Compras de bienes y servicios"
-			report_type="qweb-pdf"
+			report_type="qweb-html"
 			name="wolftrakglobal.report_format_606"
 			file="wolftrakglobal.606"
 		/>
 
 		<template id="report_format_606">
-			<t t-call="report.external_layout">
-				<t t-foreach="docs" t-as="doc">
-					<div class="page">
-						<p>
-							606  131104371<field name="period"/><field name="number_reg"/>
-						</p>
-					</div>
-				</t>
+			<t t-foreach="docs" t-as="doc">
+				<div class="page">
+					<p>
+						606&#160;&#160;131104371<span t-field="doc.period"/><span t-field="doc.number_reg"/>
+					</p>
+				</div>
 			</t>
 		</template>
 	</data>

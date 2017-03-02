@@ -62,7 +62,6 @@ class wolftrakglobal_report_606(models.Model):
 
     @api.depends('from_606')
     def _set_period(self):
-
         month = str(self.to_606[5:7])
         year = str(self.to_606[:4])
         self.period = year+month
@@ -83,14 +82,21 @@ class wolftrakglobal_report_606(models.Model):
 
     @api.onchange('invoices')
     def total_calculated(self):
-        self.total_inv = 0.0
-        self.total_tax = 0.0
-        self.total_tax_hold = 0.0
+        total_inv = 0.0
+        total_tax = 0.0
+        total_tax_hold = 0.0
+        digit_reg = '000000000000'
         for value in self.invoices:
-            self.total_inv += value.amount_untaxed
-            self.total_tax += value.amount_tax
-            self.total_tax_hold += float(value.tax_hold)
-            self.number_reg = len(self.invoices)
+            total_inv += value.amount_untaxed
+            total_tax += value.amount_tax
+            total_tax_hold += value.tax_hold
+
+        self.total_inv = str('%.2f'%total_inv)
+        self.total_tax = str('%.2f'%total_tax)
+        self.total_tax_hold = str('%.2f'%total_tax_hold)
+
+        regs = str(len(self.invoices))
+        self.number_reg = digit_reg[len(regs):]+regs
 
     invoices = fields.Many2many('account.invoice', domain=[('type','=','in_invoice'),('state','=','paid')])
     payments = fields.Many2many('account.payment', default=_default_payment)
@@ -99,11 +105,11 @@ class wolftrakglobal_report_606(models.Model):
     from_str = fields.Char(compute=_set_from)
     to_606 = fields.Date('Hasta', default=str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10])
     to_str = fields.Char(compute=_set_to)
-    period = fields.Char(compute=_set_period, string='Periodo', readonly=True)
-    number_reg = fields.Integer('Cantidad de registros')
-    total_tax_hold = fields.Float('ITBIS Retenido')
-    total_tax = fields.Float('ITBIS Calculado')
-    total_inv = fields.Float('Total Calculado')
+    period = fields.Char(compute=_set_period, string='Periodo')
+    number_reg = fields.Char('Cantidad de registros')
+    total_tax_hold = fields.Char('ITBIS Retenido')
+    total_tax = fields.Char('ITBIS Calculado')
+    total_inv = fields.Char('Total Calculado')
 
 
 

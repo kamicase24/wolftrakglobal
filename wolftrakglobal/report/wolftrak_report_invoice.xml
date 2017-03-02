@@ -19,7 +19,8 @@
                                         <span t-if="o.type == 'out_refund'">Refund</span>
                                         <span t-if="o.type == 'in_refund'">Vendor Refund</span>
                                         <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
-                                        <span t-field="o.number"/>
+                                        <t t-if="o.state != 'draft'"><span t-field="o.number"/></t>
+                                        <t t-if="o.state == 'draft'"><span t-field="o.draft_number"/></t>
                                     </strong>
                                 </h3>
                             </td>

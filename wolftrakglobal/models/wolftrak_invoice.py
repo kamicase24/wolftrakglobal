@@ -4,7 +4,7 @@ import sys, os
 from odoo import api, fields, models, _
 from bs4 import BeautifulSoup
 import requests
-
+from datetime import date
 main_base = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE_NAME = 'ncf.json'
 CONFIG_FILE = os.path.join(main_base, CONFIG_FILE_NAME)
@@ -41,19 +41,30 @@ class WolftrakInvoice(models.Model):
     _inherit = 'account.invoice'
 
     def default_ex_rate(self):
-        page = requests.get('http://promerica.com.do/?d=1014')
-        soup = BeautifulSoup(page.content, 'lxml')
-        form = soup.body
-        result = form.find_all(href='http://www.promerica.com.do/?p=1014')
-        link = result[0]
-        str_final = link.string
-        venta = str_final[str_final.find('V'):].encode('utf-8')
-        rate = float(venta[venta.find('$')+1:venta.find('$')+6])
-        user = self.env.user
-        if user.company_id.name == 'Mytraktech':
-            return rate
+        # page = requests.get('http://promerica.com.do/?d=1014')
+        # soup = BeautifulSoup(page.content, 'lxml')
+        # form = soup.body
+        # result = form.find_all(href='http://www.promerica.com.do/?p=1014')
+        # link = result[0]
+        # str_final = link.string
+        # venta = str_final[str_final.find('V'):].encode('utf-8')
+        # rate = float(venta[venta.find('$')+1:venta.find('$')+6])
+        # user = self.env.user
+        # if user.company_id.name == 'Mytraktech':
+        #     return rate
+        # else:
+        return 0.0
+
+    def default_draft_number(self):
+        invoices = self.env['account.invoice'].search([], limit=1, order='id desc')
+        last_id = invoices and max(invoices)
+        date_str = str(date.today().year)+str(date.today().month)
+        if not last_id.draft_number: return 'OP/'+date_str+'/0001'
         else:
-            return 0.0
+            number = int(''.join(last_id.draft_number[9:]))+1
+            return 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
+
+    draft_number = fields.Char(readonly=False, default=default_draft_number)
 
     ncf = fields.Char(string="Número de Comprobante Fiscal")
 
@@ -96,6 +107,16 @@ class WolftrakInvoice(models.Model):
 
     ex_rate = fields.Float(string='Tasa de Cambio', digits=(1,4),default=default_ex_rate)
 
+    @api.onchange('date_invoice')
+    def compute_draft_number(self):
+        invoices = self.env['account.invoice'].search([], limit=1, order='id desc')
+        last_id = invoices and max(invoices)
+        date_str = str(date.today().year)+str(date.today().month)
+        if not last_id.draft_number: self.draft_number = 'OP/'+date_str+'/0001'
+        else:
+            number = int(''.join(last_id.draft_number[9:]))+1
+            self.draft_number = 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
+
     @api.onchange('isr')
     def isr_holding(self):
         self.isr_hold = self.amount_total * float(self.isr)
@@ -131,6 +152,4 @@ class WolftrakInvoice(models.Model):
                 self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
             else:
                 self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
-
-
 

@@ -35,12 +35,12 @@
                             <td><b>Monto</b></td>
                             <td><b>Abono</b></td>
                             <td><b>Fecha del abono</b></td>
-                            <td><b>monto + abono</b></td>
+                            <td><b>Saldo pendiente</b></td>
                         </tr>
                         <t t-foreach="o.partner_inv" t-as="inv">
                             <tr>
                                 <t t-if="inv.state == 'draft'">
-                                    <td>FACTURA/2017/</td>
+                                    <td><span t-field="inv.draft_number"/></td>
                                     <td><span t-field="inv.date_invoice"/></td>
                                 </t>
                                 <t t-if="inv.state != 'draft'">
@@ -57,7 +57,8 @@
                                     </td>
                                 </t>
                                 <t t-else=""><td></td></t>
-                                <td><span t-field="inv.residual"/></td>
+                                <td t-if="inv.state == 'draft'"><span t-field="inv.amount_total"/></td>
+                                <td t-if="inv.state != 'draft"><span t-field="inv.residual"/></td>
                             </tr>
                         </t>
                     </table>
@@ -75,7 +76,7 @@
                                     <t t-set="residual" t-value="inv.residual"/>
 
                                     <t t-set="balance" t-value="a_total+(residual * -1)"/>
-                                    <t t-set="favor" t-value="favor + balance"/>
+                                    <t t-set="favor" t-value="favor + residual"/>
                                 </t>
                                 <t t-if="favor > 0">
                                     <td></td>
