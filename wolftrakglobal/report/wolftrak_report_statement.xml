@@ -58,7 +58,7 @@
                                 </t>
                                 <t t-else=""><td></td></t>
                                 <td t-if="inv.state == 'draft'"><span t-field="inv.amount_total"/></td>
-                                <td t-if="inv.state != 'draft"><span t-field="inv.residual"/></td>
+                                <td t-if="inv.state != 'draft'"><span t-field="inv.residual"/></td>
                             </tr>
                         </t>
                     </table>
