@@ -5,6 +5,7 @@ from odoo import api, fields, models, _
 from bs4 import BeautifulSoup
 import requests
 from datetime import date
+
 main_base = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE_NAME = 'ncf.json'
 CONFIG_FILE = os.path.join(main_base, CONFIG_FILE_NAME)
@@ -56,7 +57,7 @@ class WolftrakInvoice(models.Model):
         return 0.0
 
     def default_draft_number(self):
-        invoices = self.env['account.invoice'].search([], limit=1, order='id desc')
+        invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
         last_id = invoices and max(invoices)
         date_str = str(date.today().year)+str(date.today().month)
         if not last_id.draft_number: return 'OP/'+date_str+'/0001'
@@ -109,13 +110,14 @@ class WolftrakInvoice(models.Model):
 
     @api.onchange('date_invoice')
     def compute_draft_number(self):
-        invoices = self.env['account.invoice'].search([], limit=1, order='id desc')
+        invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
         last_id = invoices and max(invoices)
         date_str = str(date.today().year)+str(date.today().month)
         if not last_id.draft_number: self.draft_number = 'OP/'+date_str+'/0001'
         else:
-            number = int(''.join(last_id.draft_number[9:]))+1
-            self.draft_number = 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
+            if self.draft_number != last_id.draft_number:
+                number = int(''.join(last_id.draft_number[9:]))+1
+                self.draft_number = 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
 
     @api.onchange('isr')
     def isr_holding(self):

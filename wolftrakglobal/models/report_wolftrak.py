@@ -60,7 +60,7 @@ class wolftrakglobal_report_606(models.Model):
     def _default_payment(self):
         return self.env['account.payment'].search(([])) # retorna una lista (importate)
 
-    @api.depends('from_606')
+    @api.onchange('to_606','invoices')
     def _set_period(self):
         month = str(self.to_606[5:7])
         year = str(self.to_606[:4])
@@ -91,7 +91,7 @@ class wolftrakglobal_report_606(models.Model):
             total_tax += value.amount_tax
             total_tax_hold += value.tax_hold
 
-        self.total_inv = str('%.2f'%total_inv)
+        self.total_inv = digit_reg+str('%.2f'%total_inv)
         self.total_tax = str('%.2f'%total_tax)
         self.total_tax_hold = str('%.2f'%total_tax_hold)
 
@@ -99,6 +99,7 @@ class wolftrakglobal_report_606(models.Model):
         self.number_reg = digit_reg[len(regs):]+regs
 
     invoices = fields.Many2many('account.invoice', domain=[('type','=','in_invoice'),('state','=','paid')])
+
     payments = fields.Many2many('account.payment', default=_default_payment)
     date_payments = fields.Selection([('default','Default'),('x','y'),('z','aa')], string="Fecha Pagos")
     from_606 = fields.Date('Desde', default=time.strftime('%Y-%m-01'))
@@ -110,7 +111,6 @@ class wolftrakglobal_report_606(models.Model):
     total_tax_hold = fields.Char('ITBIS Retenido')
     total_tax = fields.Char('ITBIS Calculado')
     total_inv = fields.Char('Total Calculado')
-
 
 
 
