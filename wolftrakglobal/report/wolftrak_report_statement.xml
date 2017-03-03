@@ -78,16 +78,21 @@
                             <tr t-if="inv.state != 'draft'">
                                 <t t-call="wolftrakglobal.draft_line"/>
                                 <td><span t-field="inv.date_due"/></td>
-                                <td>$<span t-field="inv.ex_rate"/></td>
-                                <td><span t-field="inv.amount_total"/></td>
-                                <td><t t-foreach="inv.payment_move_line_ids" t-as="pm"><span t-field="pm.credit"/><br/></t></td>
+                                <td>$ <span t-field="inv.ex_rate"/></td>
+                                <t t-set="change_value" t-value="inv.amount_total/inv.ex_rate"/>
+                                <td>$ <span t-esc="'%.2f'%change_value"/></td>
+                                <td><t t-foreach="inv.payment_move_line_ids" t-as="pm">
+                                    <t t-set="credit_change" t-value="pm.credit/inv.ex_rate"/>
+                                    $ <span t-esc="'%.2f'%credit_change"/><br/>
+                                </t></td>
                                 <t t-if="inv.payment_move_line_ids">
                                     <td>
                                         <t t-foreach="inv.payment_move_line_ids" t-as="pm"><span t-field="pm.date"/><br/></t>
                                     </td>
                                 </t>
                                 <t t-else=""><td></td></t>
-                                <td> <span t-field="inv.residual"/> </td>
+                                <t t-set="residual_change" t-value="inv.residual/inv.ex_rate"/>
+                                <td>$ <span t-esc="'%.2f'%residual_change"/> </td>
                             </tr>
                         </t>
                     </table>
@@ -132,14 +137,15 @@
                 <tr>
                     <t t-set="favor" t-value="0"/>
                     <t t-foreach="o.partner_inv" t-as="inv">
-                        <t t-set="favor" t-value="favor + inv.residual"/>
+                        <t t-set="change_residual" t-value="inv.residual/inv.ex_rate"/>
+                        <t t-set="favor" t-value="favor + change_residual"/>
                     </t>
                     <t t-if="favor > 0">
                         <td></td>
-                        <td><t t-esc="favor" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                        <td><t t-esc="'%.2f'%favor"/></td>
                     </t>
                     <t t-elif="favor &lt; 0">
-                        <td><span t-esc="favor" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                        <td>$ <span t-esc="'%.2f'%favor"/></td>
                         <td></td>
                     </t>
                 </tr>

@@ -1,5 +1,4 @@
 from odoo import api, fields, models, _
-
 from bs4 import BeautifulSoup
 import requests
 
@@ -8,18 +7,16 @@ class WolftrakSaleOrder(models.Model):
     _inherit = "sale.order"
 
     def default_ex_rate(self):
-        # page = requests.get('http://promerica.com.do/?d=1014')
-        # soup = BeautifulSoup(page.content, 'lxml')
-        # form = soup.body
-        # result = form.find_all(href='http://www.promerica.com.do/?p=1014')
-        # link = result[0]
-        # str_final = link.string
-        # venta = str_final[str_final.find('V'):].encode('utf-8')
-        # rate = float(venta[venta.find('$') + 1:venta.find('$') + 6])
-        # user = self.env.user
-        # if user.company_id.name == 'Mytraktech':
-        #     return rate
-        # else:
-        return 0.0
+        page = requests.get('http://promerica.com.do/')
+        soup = BeautifulSoup(page.content, 'lxml')
+        body = soup.body
+        result = body.marquee.string
+        venta = result[result.find('V'):]
+        rate = float(venta[venta.find('$')+1:venta.find('$')+6])
+        user = self.env.user
+        if user.company_id.name == 'Mytraktech':
+            return rate
+        else:
+            return 0.0
 
     ex_rate = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=default_ex_rate)
