@@ -9,19 +9,18 @@ class wolftrakglobal_report(models.Model):
     @api.onchange('invoices')
     def total_calculated(self):
         total_inv = 0.0
-        digit_inv = '0000000000000'
         total_tax = 0.0
-        digit_reg = '000000000000'
         for value in self.invoices:
             total_inv += value.amount_untaxed
             total_tax += value.amount_tax
 
         str_total_inv = str('%.2f'%total_inv)
-        self.total_inv = digit_inv[len(str_total_inv[:str_total_inv.index('.')]):]+str_total_inv
-        self.total_tax = str('%.2f'%total_tax)
+        str_total_tax = str('%.2f'%total_tax)
+        self.total_inv = ''.zfill(13)[len(str_total_inv[:str_total_inv.index('.')]):]+str_total_inv
+        self.total_tax = ''.zfill(9)+str_total_tax
 
         regs = str(len(self.invoices))
-        self.number_reg = digit_reg[len(regs):]+regs
+        self.number_reg = ''.zfill(12)[len(regs):]+regs
 
     @api.onchange('to_607','invoices')
     def _set_period(self):
@@ -85,21 +84,22 @@ class wolftrakglobal_report_606(models.Model):
         total_inv = 0.0
         total_tax = 0.0
         total_tax_hold = 0.0
-        digit_reg = '000000000000'
         for value in self.invoices:
             total_inv += value.amount_untaxed
             total_tax += value.amount_tax
             total_tax_hold += value.tax_hold
 
-        self.total_inv = digit_reg+str('%.2f'%total_inv)
-        self.total_tax = str('%.2f'%total_tax)
-        self.total_tax_hold = str('%.2f'%total_tax_hold)
+        str_total_inv = str('%.2f'%total_inv)
+        str_total_tax = str('%.2f'%total_tax)
+        str_total_hold = str('%.2f'%total_tax_hold)
+        self.total_inv = ''.zfill(13)[len(str_total_inv[:str_total_inv.index('.')]):]+str_total_inv
+        self.total_tax = ''.zfill(9)[len(str_total_tax[:str_total_tax.index('.')]):]+str_total_tax
+        self.total_tax_hold = ''.zfill(9)[len(str_total_hold[:str_total_hold.index('.')]):]+str_total_hold
 
         regs = str(len(self.invoices))
-        self.number_reg = digit_reg[len(regs):]+regs
+        self.number_reg = ''.zfill(12)[len(regs):]+regs
 
-    invoices = fields.Many2many('account.invoice', domain=[('type','=','in_invoice'),('state','=','paid')])
-
+    invoices = fields.Many2many('account.invoice', string='Facturas',domain=[('type', '=', 'in_invoice'), ('state', '=', 'paid')])
     payments = fields.Many2many('account.payment', default=_default_payment)
     date_payments = fields.Selection([('default','Default'),('x','y'),('z','aa')], string="Fecha Pagos")
     from_606 = fields.Date('Desde', default=time.strftime('%Y-%m-01'))

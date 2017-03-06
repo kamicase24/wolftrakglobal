@@ -7,7 +7,7 @@
 			string="Ventas de bienes y servicios"
 			report_type="qweb-html"
 			name="wolftrakglobal.report_format_607"
-			file="wolftrakglobal.607"
+			file="wolftrakglobal.wolftrak_report_607"
 		/>
 
 		<template id="report_format_607">
@@ -15,7 +15,7 @@
 				<t t-foreach="docs" t-as="doc">
 					<div class="page">
 						<t t-set="digit" t-value="'000000000'"/>
-						<p background="red">
+						<p>
 							607&#160;&#160;131104371<span t-field="doc.period"/><span t-field="doc.number_reg"/><span t-field="doc.total_inv"/><br/>
 							<t t-foreach="doc.invoices" t-as="inv">
 								<t t-set="year" t-value="inv.date[:inv.date.index('-')]"/><t t-set="rest" t-value="inv.date[inv.date.index('-')+1:]"/>

@@ -21,6 +21,7 @@
 								<field name="total_tax_hold"/>
 							</group>
 						</group>
+
 						<notebook>
 							<page string="Lineas" mode="tree,kanban">
 								<field name="invoices"/>

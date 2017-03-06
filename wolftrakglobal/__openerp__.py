@@ -19,16 +19,14 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'views/607.xml',
-        'views/607_view.xml',
-        'views/606_view.xml',
-        'views/606.xml',
         # 'views/608_view.xml',
         # 'views/608.xml',
         # 'views/609_view.xml',
         # 'views/609.xml',
         # reports
         # 'report/wolftrak_report_footer.xml', dejar comentado 4 ever
+        'report/wolftrak_report_606.xml',
+        'report/wolftrak_report_607.xml',
         'report/wolftrak_report_cesta_ticket.xml', # cesta ticket
         'report/wolftrak_report_act_det.xml',
         'report/wolftrak_report_statement.xml', # estado de cuenta
@@ -38,6 +36,8 @@
         'report/wolftrak_report_saleorder.xml', # presupuesto
         'report/wolftrak_report_payroll_list.xml', # lista de nómina
         # views
+        'views/606_wolftrak.xml',
+        'views/607_wolftrak.xml',
         'views/hr_payroll_wolftrak.xml',
         'views/gamification_badge_wolftrak.xml',
         'views/res_partner_wolftrak.xml',
