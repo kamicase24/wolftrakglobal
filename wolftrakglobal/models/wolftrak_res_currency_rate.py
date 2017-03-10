@@ -21,4 +21,15 @@ class WolftrakCurrencyRate(models.Model):
 		else:
 			return 0.0
 
-	rate = fields.Float(default=default_ex_rate)
+	def default_ex_rate_2(self):
+		page = requests.get('https://www.banreservas.com/calculators/divisas')
+		soup = BeautifulSoup(page.content, 'lxml')
+		body = soup.body
+		rate = body.find_all('span')[1].string
+		user = self.env.user
+		if user.company_id.name == 'Mytraktech':
+			return rate
+		else:
+			return 0.0
+
+	rate = fields.Float(default=default_ex_rate_2)

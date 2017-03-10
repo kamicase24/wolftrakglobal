@@ -54,6 +54,17 @@ class WolftrakInvoice(models.Model):
         else:
             return 0.0
 
+    def default_ex_rate_2(self):
+        page = requests.get('https://www.banreservas.com/calculators/divisas')
+        soup = BeautifulSoup(page.content, 'lxml')
+        body = soup.body
+        rate = body.find_all('span')[1].string
+        user = self.env.user
+        if user.company_id.name == 'Mytraktech':
+            return rate
+        else:
+            return 0.0
+
     def default_draft_number(self):
         invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
         last_id = invoices and max(invoices)
@@ -104,7 +115,7 @@ class WolftrakInvoice(models.Model):
                                 ('08','08 Omisión de Productos'),
                                 ('09','09 Errores de Secuencias de NCF')], string="Tipo de Anulación")
 
-    ex_rate = fields.Float(string='Tasa de Cambio', digits=(1,4),default=default_ex_rate)
+    ex_rate = fields.Float(string='Tasa de Cambio', digits=(1,4),default=default_ex_rate_2)
 
     @api.onchange('date_invoice')
     def compute_draft_number(self):

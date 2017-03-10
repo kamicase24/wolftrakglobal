@@ -19,4 +19,15 @@ class WolftrakSaleOrder(models.Model):
         else:
             return 0.0
 
-    ex_rate = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=default_ex_rate)
+    def default_ex_rate_2(self):
+        page = requests.get('https://www.banreservas.com/calculators/divisas')
+        soup = BeautifulSoup(page.content, 'lxml')
+        body = soup.body
+        rate = body.find_all('span')[1].string
+        user = self.env.user
+        if user.company_id.name == 'Mytraktech':
+            return rate
+        else:
+            return 0.0
+
+    ex_rate = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=default_ex_rate_2)
