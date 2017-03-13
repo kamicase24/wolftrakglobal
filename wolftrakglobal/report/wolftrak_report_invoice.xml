@@ -5,69 +5,57 @@
             <t t-call="report.external_layout">
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
                 <div class="page">
-                    <table>
-                    </table>
-                    <table class="table table-condensed table-bordered">
-                        <tr>
-                            <td class="tablecolor"><h3 class="textcolor text-center"><strong>Cliente: </strong></h3></td>
-                            <td colspan="2" class="tablecolor">
-                                <h3 class="textcolor text-center">
-                                    <strong>
-                                        <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
-                                        <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
-                                        <!--<span t-if="o.type == 'out_invoice' and o.state == 'draft'">Invoice</span>-->
-                                        <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Orden de Pago</span>
-                                        <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
-                                        <span t-if="o.type == 'out_refund'">Refund</span>
-                                        <span t-if="o.type == 'in_refund'">Vendor Refund</span>
-                                        <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
-                                        <t t-if="o.state != 'draft'"><span t-field="o.number"/></t>
-                                        <t t-if="o.state == 'draft'"><span t-field="o.draft_number"/></t>
-                                    </strong>
-                                </h3>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="colora"><strong>Nombre: </strong> <span t-field="o.partner_id.name"/></td>
-                            <td class="colora" align="right"><strong>Fecha de Emision: </strong></td>
-                            <td class="colora"><span t-field="o.date_invoice"/></td>
-                        </tr>
-                        <tr>
-                            <td class="colorb text-left">
-                                <t t-if="o.company_id.name == 'Mytraktech'">
-                                <strong>RNC/Cédula: </strong>
-                                <span t-field="o.partner_id.doc_ident"/>
-                                </t>
-                                <t t-elif="o.company_id.name == 'Wolftrak Global'">
-                                    <strong>RIF/Cédula: </strong>
-                                    <span t-field="o.partner_id.doc_ident"/>
-                                </t>
-                            </td>
-                            <td t-if="o.state == 'proforma2'" class="colorb" align="right"><strong>Fecha de Vencimiento:</strong></td>
-                            <td t-if="o.state == 'proforma2'" class="colorb"><span t-field="o.date_due"/></td>
-                            <td t-if="o.state != 'proforma2'" colspan="2" class="colorb"></td>
-                        </tr>
-                        <tr>
-                            <td class="colora" colspan="3">
-                                <strong>Direccion: </strong>
-                                <span t-field="o.partner_id.street"/>,
-                                <span t-field="o.partner_id.street2"/>
-                                <span t-field="o.partner_id.city"/>
-                                <span t-field="o.partner_id.state_id"/>
-                                <span t-field="o.partner_id.zip"/>
-                                <span t-field="o.partner_id.country_id"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="colorb" colspan="3">
-                                <span t-if="o.state != 'proforma2'">
-                                    <strong t-if="o.company_id.name == 'Mytraktech'">NCF: </strong>
-                                    <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Número de Factura: </strong>
-                                    <span t-field="o.ncf"/>
-                                </span>
-                            </td>
-                        </tr>
-                    </table>
+                    <div>
+                        <h3 class="textcolor text-right" align="right">
+                            <strong>
+                                <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
+                                <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
+                                <!--<span t-if="o.type == 'out_invoice' and o.state == 'draft'">Invoice</span>-->
+                                <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Orden de Pago</span>
+                                <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
+                                <span t-if="o.type == 'out_refund'">Refund</span>
+                                <span t-if="o.type == 'in_refund'">Vendor Refund</span>
+                                <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
+                                <t t-if="o.state != 'draft'"><span t-field="o.number"/></t>
+                                <t t-if="o.state == 'draft'"><span t-field="o.draft_number"/></t>
+                            </strong>
+                        </h3>
+                        <h3 class="textcolor"><strong>Cliente: </strong></h3>
+                    </div>
+                    <div>
+                        <strong>Nombre: </strong> <span t-field="o.partner_id.name"/><br/>
+                        <strong>Fecha de Emision: </strong>
+                        <span t-field="o.date_invoice"/>
+                    </div>
+                    <div>
+                        <t t-if="o.company_id.name == 'Mytraktech'">
+                        <strong>RNC/Cédula: </strong>
+                        <span t-field="o.partner_id.doc_ident"/>
+                        </t>
+                        <t t-elif="o.company_id.name == 'Wolftrak Global'">
+                            <strong>RIF/Cédula: </strong>
+                            <span t-field="o.partner_id.doc_ident"/><br/>
+                            <strong>Fecha de Vencimiento:</strong>
+                            <t t-if="o.state != 'draft'"><span t-field="o.date_due"/></t>
+                            <t t-if="o.state == 'draft'"><span t-field="o.date"/></t>
+                        </t>
+                    </div>
+                    <div>
+                        <strong>Direccion: </strong>
+                        <span t-field="o.partner_id.street"/>,
+                        <span t-field="o.partner_id.street2"/>
+                        <span t-field="o.partner_id.city"/>
+                        <span t-field="o.partner_id.state_id"/>
+                        <span t-field="o.partner_id.zip"/>
+                        <span t-field="o.partner_id.country_id"/>
+                    </div>
+                    <div>
+                        <span t-if="o.state != 'proforma2'">
+                            <strong t-if="o.company_id.name == 'Mytraktech'">NCF: </strong>
+                            <strong t-if="o.company_id.name == 'WOLFTRAK GLOBAL'">Número de Factura: </strong>
+                            <span t-field="o.ncf"/>
+                        </span>
+                    </div>
 
                     <div class="row mt32 mb32" invisible='1'>
                         <div name="reference" class="col-xs-2" t-if="o.reference" invisible='1'>
@@ -79,81 +67,77 @@
                     <!-- Is there a discount on at least one line? -->
                     <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
 
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <!-- <th class="tablecolor textcolor">Codigo</th> -->
-                                <th class="tablecolor textcolor">Descripcion</th>
-                                <th class="text-right tablecolor textcolor">Quantity</th>
-                                <th class="text-right tablecolor textcolor">Unit Price</th>
-                                <th t-if="display_discount" class="text-right tablecolor textcolor" groups="sale.group_discount_per_so_line">Disc.(%)</th>
-                                <!-- <th class="text-right tablecolor textcolor">Taxes</th> -->
-                                <th class="text-right tablecolor textcolor">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody class="invoice_tbody">
-                            <tr t-foreach="o.invoice_line_ids" t-as="l">
-                                <!-- <td><span t-field="l.product_id.default_code"/></td> -->
-                                <td><span t-field="l.product_id.name"/></td>
-                                <td class="text-right">
-                                    <span t-esc="int(l.quantity)"/>
-                                    <!-- <span t-field="l.uom_id" groups="product.group_uom"/> -->
-                                </td>
-                                <td class="text-right">
-                                    <span t-field="l.price_unit"/>
-                                </td>
-                                <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
-                                    <span t-field="l.discount"/>
-                                </td>
-                                <!-- <td>
-                                    <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
-                                </td> -->
-                                <td class="text-right">
-                                    <span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <!--<table class="table table-condensed">-->
+                        <!--<tr>-->
+                            <!--&lt;!&ndash; <th class="tablecolor textcolor">Codigo</th> &ndash;&gt;-->
+                            <!--<th class="tablecolor textcolor">Descripcion</th>-->
+                            <!--<th class="text-right tablecolor textcolor">Quantity</th>-->
+                            <!--<th class="text-right tablecolor textcolor">Unit Price</th>-->
+                            <!--<th t-if="display_discount" class="text-right tablecolor textcolor" groups="sale.group_discount_per_so_line">Disc.(%)</th>-->
+                            <!--&lt;!&ndash; <th class="text-right tablecolor textcolor">Taxes</th> &ndash;&gt;-->
+                            <!--<th class="text-right tablecolor textcolor">Price</th>-->
+                        <!--</tr>-->
+                        <!--<tr t-foreach="o.invoice_line_ids" t-as="l">-->
+                            <!--&lt;!&ndash; <td><span t-field="l.product_id.default_code"/></td> &ndash;&gt;-->
+                            <!--<td><span t-field="l.product_id.name"/></td>-->
+                            <!--<td class="text-right">-->
+                                <!--<span t-esc="int(l.quantity)"/>-->
+                                <!--&lt;!&ndash; <span t-field="l.uom_id" groups="product.group_uom"/> &ndash;&gt;-->
+                            <!--</td>-->
+                            <!--<td class="text-right">-->
+                                <!--<span t-field="l.price_unit"/>-->
+                            <!--</td>-->
+                            <!--<td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">-->
+                                <!--<span t-field="l.discount"/>-->
+                            <!--</td>-->
+                            <!--&lt;!&ndash; <td>-->
+                                <!--<span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>-->
+                            <!--</td> &ndash;&gt;-->
+                            <!--<td class="text-right">-->
+                                <!--<span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                    <!--</table>-->
 
-                    <div class="row">
-                        <div t-if="o.comment" class="col-xs-8 pull-left">
-                            <table class="table">
+                <div class="row">
+                    <div>
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <p>
+                                        <strong>Nota:</strong>
+                                        <span t-field="o.comment"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-4 pull-right">
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td class="colora"><strong>Subtotal</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                </td>
+                            </tr>
+                            <t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
                                 <tr>
-                                    <td>
-                                        <p>
-                                            <strong>Nota:</strong>
-                                            <span t-field="o.comment"/>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-xs-4 pull-right">
-                            <table class="table table-condensed">
-                                <tr class="border-black">
-                                    <td class="colora"><strong>Subtotal</strong></td>
+                                    <td class="colorb"><span t-esc="amount_by_group[0]"/></td>
                                     <td class="text-right">
-                                        <span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        <span t-esc="amount_by_group[1]"/>
                                     </td>
                                 </tr>
-                                <t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
-                                    <tr>
-                                        <td class="colorb"><span t-esc="amount_by_group[0]"/></td>
-                                        <td class="text-right">
-                                            <span t-esc="amount_by_group[1]"/>
-                                        </td>
-                                    </tr>
-                                </t>
-                                <tr>
-                                    <td class="colora"><strong>Total</strong></td>
-                                    <td class="text-right">
-                                     <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                    </td>
-                                </tr>
-                         </table>
-		 	 <strong>Tasa de Cambio: </strong>
-			 <strong><span t-field="o.ex_rate"/></strong>
-                     </div>
+                            </t>
+                            <tr>
+                                <td class="colora"><strong>Total</strong></td>
+                                <td class="text-right">
+                                 <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <strong>Tasa de Cambio: </strong>
+                        <strong><span t-field="o.ex_rate"/></strong>
+                    </div>
                 </div>
 
                 <table class="table tablenob">
