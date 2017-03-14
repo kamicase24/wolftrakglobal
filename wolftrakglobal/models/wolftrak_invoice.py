@@ -5,6 +5,7 @@ from odoo import api, fields, models, _
 from bs4 import BeautifulSoup
 import requests
 from datetime import date
+import calendar
 
 main_base = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE_NAME = 'ncf.json'
@@ -164,3 +165,7 @@ class WolftrakInvoice(models.Model):
             else:
                 self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
 
+class WolftrakInvoiceLine(models.Model):
+    _inherit = "account.invoice.line"
+
+    description = fields.Char(string='Detalle', default="Mes: " + calendar.month_name[date.today().month])

@@ -9,7 +9,7 @@
     'website': "http://www.wolftrakglobal.com",
 
     # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/master/openerp/addons/base/module/module_data.xml
+    # Check https://github.com/odoo/odoo/   blob/master/openerp/addons/base/module/module_data.xml
     # for the full list
     'category': 'Uncategorized',
     'version': '0.1',
@@ -19,10 +19,6 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        # 'views/608_view.xml',
-        # 'views/608.xml',
-        # 'views/609_view.xml',
-        # 'views/609.xml',
         # reports
         # 'report/wolftrak_report_footer.xml', dejar comentado 4 ever
         'report/wolftrak_report_606.xml',
@@ -35,6 +31,7 @@
         'report/wolftrak_report_invoice.xml', # factura
         'report/wolftrak_report_saleorder.xml', # presupuesto
         'report/wolftrak_report_payroll_list.xml', # lista de nómina
+        # 'report/wolftrak_report_daily_journal.xml',
         # views
         'views/606_wolftrak.xml',
         'views/607_wolftrak.xml',
@@ -45,9 +42,10 @@
         'views/sale_order_wolftrak.xml',
         'views/crm_lead_wolftrak.xml',
         'views/act_det_wolftrak.xml',
+        # 'views/daily_journal_wolftrak.xml',
         # 'views/wolftrak_move_report.xml',
         # 'views/wolftrak_move_views.xml',
-        # 'views/layouts.xml',
+        'views/layouts.xml',
         # data
         'data/base_action_wolftrak.xml',
         # wizards

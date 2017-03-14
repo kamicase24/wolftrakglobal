@@ -20,8 +20,67 @@
                     <field name="ncf_result"/>
                     <field name="tax_hold" attrs="{'invisible': [('tax_hold', '>=', 0)]}"/>
             	</xpath>
+
+                <xpath expr="//form/sheet/notebook/page/field" position="replace">
+                    <field name="invoice_line_ids" nolabel="1" widget="one2many_list" mode="tree,kanban" context="{'type': type, 'journal_id': journal_id, 'default_invoice_id': id}">
+                        <tree string="Invoice Lines" editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="product_id"/>
+                            <field name="origin" invisible="1"/>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="account_id" groups="account.group_account_user"
+                                domain="[('company_id', '=', parent.company_id), ('internal_type', '=', 'other')]"/>
+                            <field name="quantity"/>
+                            <field name="uom_id" groups="product.group_uom"/>
+                            <field name="price_unit"/>
+                            <field name="discount" groups="sale.group_discount_per_so_line"/>
+                            <field name="invoice_line_tax_ids" widget="many2many_tags" context="{'type':parent.type}"
+                                domain="[('type_tax_use','=','sale'),('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
+                            <field name="price_subtotal"/>
+                            <field name="currency_id" invisible="1"/>
+                        </tree>
+                        <kanban class="o_kanban_mobile">
+                            <field name="product_id"/>
+                            <field name="price_subtotal"/>
+                            <field name="quantity"/>
+                            <field name="uom_id" groups="product.group_uom"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <strong><span><t t-esc="record.product_id.value or 'None'"/></span></strong>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-8 text-muted">
+                                                <span><t t-esc="record.quantity.value"/> <t t-esc="record.uom_id.value"/></span>
+                                            </div>
+                                            <div class="col-xs-4 text-muted">
+                                                <span class="text-right"><t t-esc="record.price_subtotal.value"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+                    </field>
+                </xpath>
             </field>
     	</record>
+
+        <record id="view_invoice_line_form" model="ir.ui.view">
+            <field name="name">account.invoice.line.form</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account.view_invoice_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <field name="description"/>
+                </xpath>
+            </field>
+        </record>
 
         <record id="invoice_supplier_form" model="ir.ui.view">
             <field name="name">account.invoice.supplier.form</field>
