@@ -20,6 +20,9 @@
                     <field name="ncf_result"/>
                     <field name="tax_hold" attrs="{'invisible': [('tax_hold', '>=', 0)]}"/>
             	</xpath>
+                <xpath expr="//form/sheet/notebook/page/group/group/field[6]" position="replace">
+                    <field name="date_due"/>
+                </xpath>
 
                 <xpath expr="//form/sheet/notebook/page/field" position="replace">
                     <field name="invoice_line_ids" nolabel="1" widget="one2many_list" mode="tree,kanban" context="{'type': type, 'journal_id': journal_id, 'default_invoice_id': id}">
@@ -68,6 +71,7 @@
                         </kanban>
                     </field>
                 </xpath>
+
             </field>
     	</record>
 
