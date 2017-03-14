@@ -153,8 +153,8 @@
                         <strong><span t-field="o.ex_rate"/></strong>
                     </div>
                 </div>
-
-                <table class="table tablenob">
+                    
+                <table class="table">
                     <tr>
                         <td class="tablecolor" colspan="2">
                             <strong class="textcolor text-center tablecolor">Métodos de Pago</strong>
@@ -180,7 +180,7 @@
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
                         </td>
                         <td align="left">
-                        	<p>Cuenta Corriente No.: 797197019</p>
+                            <p>Cuenta Corriente No.: 797197019</p>
                         </td>
                         <td align="center">
                             <img src="wolftrakglobal/static/src/img/fb2.png"/>
@@ -190,7 +190,6 @@
                         </td>
                     </tr>
                 </table>
-
                 <p t-if="o.payment_term_id">
                     <span t-field="o.payment_term_id.note"/>
                 </p>
