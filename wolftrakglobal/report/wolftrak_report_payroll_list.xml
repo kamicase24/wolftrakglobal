@@ -1,145 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <report
-            id="report_list_payroll"
-            model="hr.payroll.report"
-            string="Lista-nomina"
-            report_type="qweb-pdf"
-            name="wolftrakglobal.template_report_payroll_list"
-            file="wolftrakglobal.wolftrak_report_payroll_list"
-        />
+    <report
+        id="report_list_payroll"
+        model="hr.payroll.report"
+        string="Lista-nomina"
+        report_type="qweb-pdf"
+        name="wolftrakglobal.template_report_payroll_list"
+        file="wolftrakglobal.wolftrak_report_payroll_list"
+    />
 
-        <record id="paperformat_wolftrak" model="report.paperformat">
-            <field name="name">Custom paper wolftrak</field>
-            <field name="orientation">Landscape</field>
-            <!--<field name="page_height">40</field>-->
-            <!--<field name="page_width">900</field>-->
-            <field name="margin_top">40</field>
-            <field name="margin_bottom">20</field>
-            <field name="margin_left">5</field>
-            <field name="margin_right">5</field>
-            <field name="header_spacing">40</field>
-            <field name="dpi">100</field>
-        </record>
+    <record id="paperformat_wolftrak" model="report.paperformat">
+        <field name="name">Custom paper wolftrak</field>
+        <field name="orientation">Landscape</field>
+        <!--<field name="page_height">40</field>-->
+        <!--<field name="page_width">900</field>-->
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_spacing">40</field>
+        <field name="dpi">100</field>
+    </record>
 
-        <template id="template_report_payroll_list">
-            <t t-call="report.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="report.external_layout">
-                        <div class="page">
-                            <h2>Nómina</h2>
-                            <table class="table table-bordered table-condensed">
+    <template id="template_report_payroll_list">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <h2>Nómina</h2>
+
+                        <table class="table table-bordered table-condensed">
+                            <tr class="tablecolor textcolor">
+                                <td>Cargo</td>
+                                <td>Salario Base</td>
+                                <td>Sueldo Diario</td>
+                                <td>Valor Hora</td>
+                            </tr>
+                        <t t-foreach="o.employee_id" t-as="emp">
+                            <tr>
+                            <t t-foreach="o.payslip_id" t-as="ps">
+                            <t t-if="emp.id == ps.employee_id.id">
+                                <td><span t-field="emp.job_id"/></td>
+                                <td><span t-field="ps.contract_id.wage"/></td>
+                                <t t-foreach="o.payslip_lines" t-as="ps_line">
+                                <t t-if="ps.id == ps_line.slip_id.id">
+                                <t t-if="ps_line.code == 'SD'">
+                                    <td><span t-field="ps_line.total"/></td>
+                                </t>
+                                <t t-if="ps_line.code == 'VHT'">
+                                    <td><span t-field="ps_line.total"/></td>
+                                </t>
+                                </t>
+                                </t>
+                            </t>
+                            </t>
+                            </tr>
+                        </t>
+                        </table>
+
+                        <table class="table table-bordered table-condensed">
+                            <tr class="tablecolor textcolor">
+                                <td><b>Nombre y Apellido</b></td>
+                                <td><b>Cédula</b></td>
+                                <td><b>Cargo</b></td>
+                                <t t-foreach="o.payslip_id.search([], limit=1, order='id desc')" t-as="ps">
+                                <t t-foreach="o.payslip_lines" t-as="ps_line">
+                                <t t-if="ps_line.code=='SB' or ps_line.code=='TDD' or ps_line.code=='HED' or ps_line.code=='HEN' or
+                                ps_line.code=='HEN' or ps_line.code=='DFL' or ps_line.code=='TDFL' or ps_line.code=='SubAsg' or
+                                ps_line.code=='IVSS' or ps_line.code=='HNR' or ps_line.code=='THNR' or ps_line.code=='PF' or
+                                ps_line.code=='AT' or ps_line.code=='PRE' or ps_line.code=='OD' or ps_line.code=='LPH' or
+                                ps_line.code=='SubDed' or ps_line.code=='NET'">
+                                <t t-if="ps_line.slip_id.id == ps.id">
+                                        <td><b><span t-field="ps_line.name"/></b></td>
+                                </t>
+                                </t>
+                                </t>
+                                </t>
+                            </tr>
+
+                            <t t-foreach="o.employee_id" t-as="emp">
                                 <tr>
-                                    <td><b>Nombre y Apellido</b></td>
-                                    <td><b>Cédula</b></td>
-                                    <td><b>Cargo</b></td>
-                                    <td><b>Salario Base</b></td>
-                                    <t t-foreach="o.payslip_lines" t-as="ps_line">
-                                        <t t-if="ps_line.salary_rule_id.id != 34 and ps_line.salary_rule_id.id != 42 and ps_line.salary_rule_id.id != 43 and ps_line.salary_rule_id.id != 37
-                                        and ps_line.salary_rule_id.id != 18 and ps_line.salary_rule_id.id != 39 and ps_line.salary_rule_id.id != 38 and ps_line.salary_rule_id.id != 4
-                                        and ps_line.salary_rule_id.id != 41 and ps_line.salary_rule_id.id != 44 and ps_line.salary_rule_id.id != 40">
-                                            <t t-if="ps_line.slip_id.id == 5">
-                                                <td><b><span t-field="ps_line.name"/></b></td>
+                                    <td><span t-field="emp.name_related"/></td>
+                                    <td><span t-field="emp.identification_id"/></td>
+                                    <td><span t-field="emp.job_id"/></td>
+                                    <t t-foreach="o.payslip_id" t-as="ps">
+                                        <t t-if="emp.id == ps.employee_id.id">
+                                            <t t-foreach="o.payslip_lines" t-as="ps_line">
+                                                <t t-if="ps.id == ps_line.slip_id.id">
+                                                    <t t-if="ps_line.code=='SB' or ps_line.code=='TDD' or ps_line.code=='HED' or ps_line.code=='HEN' or
+                                                    ps_line.code=='HEN' or ps_line.code=='DFL' or ps_line.code=='TDFL' or ps_line.code=='SubAsg' or
+                                                    ps_line.code=='IVSS' or ps_line.code=='HNR' or ps_line.code=='THNR' or ps_line.code=='PF' or
+                                                    ps_line.code=='AT' or ps_line.code=='PRE' or ps_line.code=='OD' or ps_line.code=='LPH' or
+                                                    ps_line.code=='SubDed' or ps_line.code=='NET'">
+                                                        <td><span t-field="ps_line.total"/></td>
+                                                    </t>
+                                                </t>
                                             </t>
                                         </t>
                                     </t>
-                                    <td><b>Total</b></td>
                                 </tr>
-                                <t t-foreach="o.employee_id" t-as="emp">
-                                    <tr>
-                                        <td><span t-field="emp.name_related"/></td>
-                                        <td><span t-field="emp.identification_id"/></td>
-                                        <td><span t-field="emp.job_id"/></td>
-                                        <t t-foreach="o.payslip_id" t-as="ps">
-                                            <t t-if="emp.id == ps.employee_id.id">
-                                                <td><span t-field="ps.contract_id.wage"/></td>
-                                                <t t-foreach="o.payslip_lines" t-as="ps_line">
-                                                    <t t-if="ps.id == ps_line.slip_id.id">
-                                                        <t t-if="ps_line.salary_rule_id.id != 34 and ps_line.salary_rule_id.id != 42 and ps_line.salary_rule_id.id != 43 and ps_line.salary_rule_id.id != 37
-                                                        and ps_line.salary_rule_id.id != 18 and ps_line.salary_rule_id.id != 39 and ps_line.salary_rule_id.id != 38 and ps_line.salary_rule_id.id != 4
-                                                        and ps_line.salary_rule_id.id != 41 and ps_line.salary_rule_id.id != 44 and ps_line.salary_rule_id.id != 40">
-                                                            <td><span t-field="ps_line.total"/></td>
-                                                        </t>
-                                                        <t t-if="ps_line.salary_rule_id.id == 4"><td><span t-field="ps_line.total"/></td></t>
+                            </t>
+                        </table>
+
+                        <h2>Cesta Ticket</h2>
+                        <table class="table table-bordered table-condensed">
+                            <tr class="tablecolor textcolor">
+                                <td><b>Nombre y Apellido</b></td>
+                                <td><b>Cédula</b></td>
+                                <td><b>Cargo</b></td>
+                                <t t-foreach="o.payslip_id.search([], limit=1, order='id desc')" t-as="ps">
+                                <t t-foreach="o.payslip_lines" t-as="ps_line">
+                                    <t t-if="ps_line.code=='VCT' or ps_line.code=='TOTAL' or ps_line.code=='DDE' or
+                                    ps_line.code=='STD' or ps_line.code=='TCT'">
+                                        <t t-if="ps_line.slip_id.id == ps.id">
+                                            <td><b><span t-field="ps_line.name"/></b></td>
+                                        </t>
+                                    </t>
+                                </t>
+                                </t>
+                            </tr>
+
+
+                            <t t-foreach="o.employee_id" t-as="emp">
+                                <tr>
+                                    <td><span t-field="emp.name_related"/></td>
+                                    <td><span t-field="emp.identification_id"/></td>
+                                    <td><span t-field="emp.job_id"/></td>
+                                    <t t-foreach="o.payslip_id" t-as="ps">
+                                        <t t-if="emp.id == ps.employee_id.id">
+                                            <t t-foreach="o.payslip_lines" t-as="ps_line">
+                                                <t t-if="ps.id == ps_line.slip_id.id">
+                                                    <t t-if="ps_line.code=='VCT' or ps_line.code=='TOTAL' or ps_line.code=='DDE' or
+                                                    ps_line.code=='STD' or ps_line.code=='TCT'">
+                                                        <td><span t-field="ps_line.total"/></td>
                                                     </t>
                                                 </t>
                                             </t>
-                                        </t>
-                                    </tr>
-                                </t>
-                            </table>
-
-                            <h2>Cesta Ticket</h2>
-                            <table class="table table-bordered table-condensed">
-                                <tr>
-                                    <td><b>Nombre y Apellido</b></td>
-                                    <td><b>Cédula</b></td>
-                                    <td><b>Cargo</b></td>
-                                    <t t-foreach="o.payslip_lines" t-as="ps_line">
-                                        <t t-if="ps_line.salary_rule_id.id == 40 or ps_line.salary_rule_id.id == 41 or ps_line.salary_rule_id.id == 42
-                                        or  ps_line.salary_rule_id.id == 43 or ps_line.salary_rule_id.id == 44">
-                                            <t t-if="ps_line.slip_id.id == 5"><td><b><span t-field="ps_line.name"/></b></td></t>
                                         </t>
                                     </t>
                                 </tr>
+                            </t>
+                        </table>
 
+                        <h2>Total Pagado</h2>
+                        <table class="table table-bordered table-condensed">
+                            <tr class="tablecolor textcolor">
+                                <td><b>Nombre y Apellido</b></td>
+                                <td><b>Cédula</b></td>
+                                <td><b>Cargo</b></td>
+                                <td><b>Total</b></td>
+                            </tr>
 
-                                <t t-foreach="o.employee_id" t-as="emp">
-                                    <tr>
-                                        <td><span t-field="emp.name_related"/></td>
-                                        <td><span t-field="emp.identification_id"/></td>
-                                        <td><span t-field="emp.job_id"/></td>
-                                        <t t-foreach="o.payslip_id" t-as="ps">
-                                            <t t-if="emp.id == ps.employee_id.id">
-                                                <t t-foreach="o.payslip_lines" t-as="ps_line">
-                                                    <t t-if="ps.id == ps_line.slip_id.id">
-                                                        <t t-if="ps_line.salary_rule_id.id == 40 or ps_line.salary_rule_id.id == 41 or ps_line.salary_rule_id.id == 42
-                                                        or  ps_line.salary_rule_id.id == 43 or ps_line.salary_rule_id.id == 44">
-                                                            <td><span t-field="ps_line.total"/></td>
-                                                        </t>
-                                                    </t>
-                                                </t>
-                                            </t>
-                                        </t>
-                                    </tr>
-                                </t>
-                            </table>
-
-                            <h2>Total Pagado</h2>
-                            <table class="table table-bordered table-condensed">
+                            <t t-foreach="o.employee_id" t-as="emp">
                                 <tr>
-                                    <td><b>Nombre y Apellido</b></td>
-                                    <td><b>Cédula</b></td>
-                                    <td><b>Cargo</b></td>
-                                    <td><b>Total</b></td>
-                                </tr>
-
-                                <t t-foreach="o.employee_id" t-as="emp">
-                                    <tr>
-                                        <td><span t-field="emp.name_related"/></td>
-                                        <td><span t-field="emp.identification_id"/></td>
-                                        <td><span t-field="emp.job_id"/></td>
-                                        <t t-foreach="o.payslip_id" t-as="ps">
-                                            <t t-set="total" t-value="0"/>
-                                            <t t-if="emp.id == ps.employee_id.id">
-                                                <t t-foreach="o.payslip_lines" t-as="ps_line">
-                                                    <t t-if="ps.id == ps_line.slip_id.id">
-                                                        <t t-if="ps_line.salary_rule_id.id == 4 or ps_line.salary_rule_id.id == 40">
-                                                            <t t-set="total" t-value="total + ps_line.total"/>
-                                                        </t>
-                                                        <t t-if="ps_line.salary_rule_id.id == 40">
-                                                            <td><t t-esc="total"/></td>
-                                                        </t>
+                                    <td><span t-field="emp.name_related"/></td>
+                                    <td><span t-field="emp.identification_id"/></td>
+                                    <td><span t-field="emp.job_id"/></td>
+                                    <t t-foreach="o.payslip_id" t-as="ps">
+                                        <t t-set="total" t-value="0"/>
+                                        <t t-if="emp.id == ps.employee_id.id">
+                                            <t t-foreach="o.payslip_lines" t-as="ps_line">
+                                                <t t-if="ps.id == ps_line.slip_id.id">
+                                                    <t t-if="ps_line.salary_rule_id.id == 4 or ps_line.salary_rule_id.id == 40">
+                                                        <t t-set="total" t-value="total + ps_line.total"/>
+                                                    </t>
+                                                    <t t-if="ps_line.salary_rule_id.id == 40">
+                                                        <td><t t-esc="total"/></td>
                                                     </t>
                                                 </t>
                                             </t>
                                         </t>
-                                    </tr>
-                                </t>
-                            </table>
-                        </div>
-                    </t>
+                                    </t>
+                                </tr>
+                            </t>
+                        </table>
+                    </div>
                 </t>
             </t>
-        </template>
+        </t>
+    </template>
 </odoo>

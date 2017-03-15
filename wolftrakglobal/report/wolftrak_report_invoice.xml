@@ -153,7 +153,6 @@
                         <strong><span t-field="o.ex_rate"/></strong>
                     </div>
                 </div>
-                    
                 <table class="table">
                     <tr>
                         <td class="tablecolor" colspan="2">

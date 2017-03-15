@@ -29,9 +29,9 @@ class WolftrakPayrollReport(models.Model):
 
     @api.depends('date_from','date_to')
     def _set_name(self):
-        self.name = "Quincena/"+str(self.date_from)+"/"+str(self.date_to)
+        self.name = ""+str(self.date_from)+"/"+str(self.date_to)
 
-    name = fields.Char(compute=_set_name)
+    name = fields.Char(string="Quincena", readonly=True, compute=_set_name)
     date_from = fields.Date(string="Desde", default=time.strftime('%Y-%m-01'))
     date_to = fields.Date(string="Hasta", default=str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10])
 

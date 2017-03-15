@@ -57,8 +57,8 @@
         <field name="name">Lista de Nomina</field>
         <field name="res_model">hr.payroll.report</field>
         <field name="view_type">form</field>
-        <field name="view_id" ref="payroll_report_tree"/>
         <field name="view_mode">tree,form</field>
+        <!--<field name="view_id" ref="payroll_report_tree"/>-->
     </record>
 
     <menuitem
