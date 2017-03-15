@@ -68,10 +68,10 @@
                                 <t t-if="ps_line.code=='SB' or ps_line.code=='TDD' or ps_line.code=='HED' or ps_line.code=='HEN' or
                                 ps_line.code=='HEN' or ps_line.code=='DFL' or ps_line.code=='TDFL' or ps_line.code=='SubAsg' or
                                 ps_line.code=='IVSS' or ps_line.code=='HNR' or ps_line.code=='THNR' or ps_line.code=='PF' or
-                                ps_line.code=='AT' or ps_line.code=='PRE' or ps_line.code=='OD' or ps_line.code=='LPH' or
+                                ps_line.code=='PRE' or ps_line.code=='LPH' or
                                 ps_line.code=='SubDed' or ps_line.code=='NET'">
                                 <t t-if="ps_line.slip_id.id == ps.id">
-                                        <td><b><span t-field="ps_line.name"/></b></td>
+                                    <td><b><span t-field="ps_line.name"/></b></td>
                                 </t>
                                 </t>
                                 </t>
@@ -90,7 +90,7 @@
                                                     <t t-if="ps_line.code=='SB' or ps_line.code=='TDD' or ps_line.code=='HED' or ps_line.code=='HEN' or
                                                     ps_line.code=='HEN' or ps_line.code=='DFL' or ps_line.code=='TDFL' or ps_line.code=='SubAsg' or
                                                     ps_line.code=='IVSS' or ps_line.code=='HNR' or ps_line.code=='THNR' or ps_line.code=='PF' or
-                                                    ps_line.code=='AT' or ps_line.code=='PRE' or ps_line.code=='OD' or ps_line.code=='LPH' or
+                                                    ps_line.code=='PRE' or ps_line.code=='LPH' or
                                                     ps_line.code=='SubDed' or ps_line.code=='NET'">
                                                         <td><span t-field="ps_line.total"/></td>
                                                     </t>
