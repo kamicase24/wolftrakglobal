@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <report
+        id="daily_journal_action"
+        model="wolftrak_daily_journal"
+        string="Daily Journal"
+        report_type="qweb-pdf"
+        name="wolftrakglobal.daily_journal"
+        file="wolftrakglobal.wolftrak_reprot_daily_journal"
+        />
+
+    <template id="daily_journal">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="report.internal_layout">
+                    <div class="page" style="font-family: Sans-serif">
+                        <h2 align="center">LIBRO DIARIO</h2>
+                        <p align="center">Del <span t-esc="doc.date_from"/> al <span t-esc="doc.date_to"/></p>
+                        <t t-foreach="doc.move_id" t-as="move" style="page-break-before:always;">
+                            <h4><span t-field="move.date"/></h4>
+                            <h4><span t-field="move.name"/></h4>
+                            <div style="border-bottom: 2px;">
+                            <table>
+                                    <tr style="background: #1F3664; color: white;">
+                                    <strong>
+                                        <td style="padding: 15px 15px 0px 15px">Codigo</td>
+                                        <td style="padding: 15px 15px 0px 15px">Cuenta</td>
+                                        <td style="padding: 15px 15px 0px 15px">Debe</td>
+                                        <td style="padding: 15px 15px 0px 15px">Haber</td>
+                                    </strong>
+                                    </tr>
+                                <t t-foreach="doc.move_line_id" t-as="line">
+                                    <t t-if="line.move_id.id == move.id">
+                                        <tr>
+                                            <td style="padding: 15px 15px 0px 15px"><span t-field="line.account_id.code"/></td>
+                                            <td style="padding: 15px 15px 0px 15px"><span t-field="line.account_id.name"/></td>
+                                            <td style="padding: 15px 15px 0px 15px"><span t-esc="line.debit"/></td>
+                                            <td style="padding: 15px 15px 0px 15px"><span t-esc="line.credit"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </table>
+                            </div>
+                            <p><span t-field="move.narration"/></p>
+                            <hr/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

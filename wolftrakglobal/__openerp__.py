@@ -31,7 +31,7 @@
         'report/wolftrak_report_invoice.xml', # factura
         'report/wolftrak_report_saleorder.xml', # presupuesto
         'report/wolftrak_report_payroll_list.xml', # lista de nómina
-        # 'report/wolftrak_report_daily_journal.xml',
+        'report/wolftrak_report_daily_journal.xml',
         # views
         'views/606_wolftrak.xml',
         'views/607_wolftrak.xml',
@@ -42,7 +42,7 @@
         'views/sale_order_wolftrak.xml',
         'views/crm_lead_wolftrak.xml',
         'views/act_det_wolftrak.xml',
-        # 'views/daily_journal_wolftrak.xml',
+        'views/daily_journal_wolftrak.xml',
         # 'views/wolftrak_move_report.xml',
         # 'views/wolftrak_move_views.xml',
         'views/layouts.xml',

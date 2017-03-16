@@ -118,6 +118,8 @@ class WolftrakInvoice(models.Model):
 
     ex_rate = fields.Float(string='Tasa de Cambio', digits=(1,4),default=default_ex_rate_2)
 
+    comment = fields.Text(string='Additional Information', readonly=False, states={'draft': [('readonly', False)]})
+
     @api.onchange('date_invoice')
     def compute_draft_number(self):
         invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
@@ -164,6 +166,7 @@ class WolftrakInvoice(models.Model):
                 self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
             else:
                 self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
+
 
 class WolftrakInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
