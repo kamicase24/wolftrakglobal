@@ -21,14 +21,16 @@
                             <h4><span t-field="move.name"/></h4>
                             <div style="border-bottom: 2px;">
                             <table>
-                                    <tr style="background: #1F3664; color: white;">
+                                <tr style="background: #1F3664; color: white;">
                                     <strong>
                                         <td style="padding: 15px 15px 0px 15px">Codigo</td>
                                         <td style="padding: 15px 15px 0px 15px">Cuenta</td>
                                         <td style="padding: 15px 15px 0px 15px">Debe</td>
                                         <td style="padding: 15px 15px 0px 15px">Haber</td>
                                     </strong>
-                                    </tr>
+                                </tr>
+                                <t t-set="total_debit" t-value="0"/>
+                                <t t-set="total_credit" t-value="0"/>
                                 <t t-foreach="doc.move_line_id" t-as="line">
                                     <t t-if="line.move_id.id == move.id">
                                         <tr>
@@ -36,9 +38,16 @@
                                             <td style="padding: 15px 15px 0px 15px"><span t-field="line.account_id.name"/></td>
                                             <td style="padding: 15px 15px 0px 15px"><span t-esc="line.debit"/></td>
                                             <td style="padding: 15px 15px 0px 15px"><span t-esc="line.credit"/></td>
+                                            <t t-set="total_debit" t-value="total_debit + line.debit"/>
+                                            <t t-set="total_credit" t-value="total_credit + line.credit"/>
                                         </tr>
                                     </t>
                                 </t>
+                                <tr style="background: #1F3664; color: white;">
+                                    <td colspan="2"></td>
+                                    <td style="padding: 15px 15px 0px 15px"><strong><span t-esc="total_debit"/></strong></td>
+                                    <td style="padding: 15px 15px 0px 15px"><strong><span t-esc="total_credit"/></strong></td>
+                                </tr>
                             </table>
                             </div>
                             <p><span t-field="move.narration"/></p>
