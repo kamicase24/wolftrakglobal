@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend_wolftrak" name="wolftrakglobal assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/wolftrakglobal/static/src/js/timesheet_custom.js"></script>
+            </xpath>
+        </template>
+        <record id="hr_timesheet_sheet_form" model="ir.ui.view">
+            <field name="name">hr.timesheet.sheet.form.custom</field>
+            <field name="model">hr_timesheet_sheet.sheet</field>
+            <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group" position="before">
+                    <div>
+                        <button name="auto_timesheet_1" string="Primera Quincena" type="object" class="oe_highlight"/>\
+                        <button name="auto_timesheet_2" string="Segunda Quincena" type="object" class="oe_highlight"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

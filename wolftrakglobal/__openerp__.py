@@ -45,6 +45,7 @@
         'views/daily_journal_wolftrak.xml',
         # 'views/wolftrak_move_report.xml',
         # 'views/wolftrak_move_views.xml',
+        'views/hr_timesheet_wolftrak.xml',
         'views/layouts.xml',
         # data
         'data/base_action_wolftrak.xml',
