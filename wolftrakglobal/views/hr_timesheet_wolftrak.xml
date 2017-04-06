@@ -13,7 +13,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/group" position="before">
                     <div>
-                        <button name="auto_timesheet_1" string="Primera Quincena" type="object" class="oe_highlight"/>\
+                        <button name="auto_timesheet_1" string="Primera Quincena" type="object" class="oe_highlight"/>
                         <button name="auto_timesheet_2" string="Segunda Quincena" type="object" class="oe_highlight"/>
                     </div>
                 </xpath>
