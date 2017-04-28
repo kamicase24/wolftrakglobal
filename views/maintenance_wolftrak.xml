@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_equipment_view_form_wolftrak" model="ir.ui.view">
+        <field name="name">equipment.form.custom</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group" position="inside">
+                <field name="charger"/>
+                <field name="batery"/>
+                <field name="peripheral" widget="many2many_tags"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[2]/group/group[1]" position="inside">
+                <field name="hard_disc"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[2]/group/group[2]" position="inside">
+                <field name="os"/>
+                <field name="cpu"/>
+                <field name="ram_1"/>
+                <field name="ram_2"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="memory_storage_form" model="ir.ui.view">
+        <field name="name">memory.storage</field>
+        <field name="model">memory.storage</field>
+        <field name="arch" type="xml">
+            <form>
+                <h1><field name="name" placeholder="Memoria Kingston"/></h1>
+                <group>
+                    <group>
+                        <field name="brand"/>
+                        <field name="model"/>
+                        <field name="memory" placeholder="Gb"/>
+                        <field name="serial"/>
+                        <field name="type"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_replacement_form" model="ir.ui.view">
+        <field name="name">equipment.replacement.form</field>
+        <field name="model">equipment.replacement</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1><field name="name" placeholder="Ej. Teclado Microsoft"/></h1>
+                    <group>
+                        <group>
+                            <field name="brand"/>
+                            <field name="model"/>
+                        </group>
+                        <group>
+                            <field name="serial"/>
+                            <field name="category"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_replacement_tree" model="ir.ui.view">
+        <field name="name">equipment.replacement.tree</field>
+        <field name="model">equipment.replacement</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="brand"/>
+                <field name="serial"/>
+                <field name="model"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_replacement_kanban" model="ir.ui.view">
+        <field name="name">equipment.replacement.kanban</field>
+        <field name="model">equipment.replacement</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard">
+                <field name="name"/>
+                <field name="brand"/>
+                <field name="model"/>
+                <field name="category"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary"><field name="name"/></div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content o_visible">
+                                <div class="row">
+                                    <div class="col-xs-6 o_kanban_primary_left">
+                                        <b>Marca</b>
+                                        <span><field name="brand"/></span>
+                                        <b>Modelo</b>
+                                        <span><field name="model"/></span>
+                                    </div>
+                                    <div class="col-xs-6 o_kanban_primary_right">
+                                        <b>Categoria</b>
+                                        <span><field name="category"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="existence_action" model="ir.actions.act_window">
+        <field name="name">Existencia</field>
+        <field name="res_model">equipment.replacement</field>
+        <field name="view_mode">kanban,form,tree</field>
+        <field name="view_type">form</field>
+        <!--<field name="view_id" ref="equipment_replacement_kanban"/>-->
+    </record>
+
+    <menuitem
+        id="menu_equipment_form"
+        name="Existencia"
+        parent="maintenance.menu_maintenance_title"
+        action="existence_action"
+        groups="maintenance.group_equipment_manager"
+        sequence="2" />
+</odoo>

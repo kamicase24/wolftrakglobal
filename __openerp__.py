@@ -18,7 +18,8 @@
     'depends': ['base','account','hr_payroll','gamification'],
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        # secutiry
+        'security/ir.model.access.csv',
         # reports
         # 'report/wolftrak_report_footer.xml', dejar comentado 4 ever
         'report/wolftrak_report_606.xml',
@@ -47,6 +48,7 @@
         # 'views/wolftrak_move_views.xml',
         'views/hr_timesheet_wolftrak.xml',
         'views/layouts.xml',
+        'views/maintenance_wolftrak.xml',
         # data
         'data/base_action_wolftrak.xml',
         # wizards
