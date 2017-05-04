@@ -39,7 +39,7 @@
         'views/hr_payroll_wolftrak.xml',
         'views/gamification_badge_wolftrak.xml',
         'views/res_partner_wolftrak.xml',
-        'views/invoice_wolftrak.xml',
+        'views/account_wolftrak.xml',
         'views/sale_order_wolftrak.xml',
         'views/crm_lead_wolftrak.xml',
         'views/act_det_wolftrak.xml',

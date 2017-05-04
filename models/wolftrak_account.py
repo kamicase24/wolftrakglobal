@@ -172,3 +172,24 @@ class WolftrakInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
     description = fields.Char(string='Detalle', default="Mes: " + calendar.month_name[date.today().month])
+
+class WolftrakMove(models.Model):
+    _inherit = "account.move"
+
+    partner_id = fields.Many2one('res.partner', compute='_compute_partner_id', string="Partner", store=True)
+
+    ncf = fields.Char(string="Número de Comprobante Fiscal")
+
+    type_comp = fields.Char(string="Tipo de Comprobante", readonly=True, compute='ncf_validation')
+
+    ncf_result = fields.Char(string="Resultado", readonly=True, compute='ncf_validation')
+
+    @api.depends('ncf')
+    def ncf_validation(self):
+        supplier_rnc = self.partner_id
+        values_in_inv = get_ncf_record(self.ncf,supplier_rnc.doc_ident)
+        if values_in_inv != None:
+            self.type_comp = values_in_inv[1]
+            self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
+        else:
+            self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"

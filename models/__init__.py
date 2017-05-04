@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from . import wolftrak_invoice
+from . import wolftrak_account
 from . import wolftrak_res_partner
 from . import wolftrak_gamification_badge
 from . import wolftrak_sale
