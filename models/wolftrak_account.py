@@ -184,6 +184,18 @@ class WolftrakMove(models.Model):
 
     ncf_result = fields.Char(string="Resultado", readonly=True, compute='ncf_validation')
 
+    type_buy = fields.Selection([('01','01 - Gastos de personal'),
+                                ('02','02 - Gastos por trabajos suministros y servicios'),
+                                ('03','03 - Arrendamientos'),
+                                ('04','04 - Gastos de activos fijo'),
+                                ('05','05 - Gastos de representación'),
+                                ('06','06 - Otras deducciones admitisdas'),
+                                ('07','07 - Gastos financieros'),
+                                ('08','08 - Gastos Extraordinarios'),
+                                ('09','09 - Compras y Gastos que formarann parte del costo de venta'),
+                                ('10','10 - Adquisiciones de activos'),
+                                ('11','11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados")
+
     @api.depends('ncf')
     def ncf_validation(self):
         supplier_rnc = self.partner_id

@@ -13,6 +13,7 @@
 							<group>
 								<field name="from_607"/>
 								<field name="to_607"/>
+
 								<field name="number_reg"/>
 							</group>
 							<group>
@@ -22,7 +23,7 @@
 						</group>
 						<notebook>
 							<page string="Lineas">
-									<field name="invoices"/>
+								<field name="invoices"/>
 							</page>
 						</notebook>
 					</sheet>
@@ -34,7 +35,7 @@
 			<field name="name">wolftrakglobal.report.tree</field>
 			<field name="model">wolftrakglobal.report607</field>
 			<field name="arch" type="xml">
-				<tree string="Ventas de vienes y servicios">
+				<tree string="Ventas de bienes y servicios">
 					<field name="period"/>
 					<field name="from_607"/>
 					<field name="to_607"/>

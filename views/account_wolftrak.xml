@@ -126,10 +126,12 @@
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="partner_id"/>
                     <field name="type_comp"/>
+                    <field name="amount"/>
                 </xpath>
                 <xpath expr="//form/sheet/group/group[2]" position="inside">
                     <field name="ncf"/>
                     <field name="ncf_result"/>
+                    <field name="type_buy"/>
                 </xpath>
             </field>
         </record>

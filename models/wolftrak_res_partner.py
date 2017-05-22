@@ -43,7 +43,7 @@ class WolftrakPartner(models.Model):
 	doc_ident = fields.Char(string='Documento de Identificación')
 	dgii_state = fields.Char(string='Estado')
 	pay_reg = fields.Char(string='Regimen de Pago')
-	doc_ident_type = fields.Integer(string='Tipoe de Documento')
+	doc_ident_type = fields.Integer(string='Tipo de Documento')
 
 	def _get_partner_invoices(self):
 		invoices = self.env['account.invoice']

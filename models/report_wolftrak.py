@@ -1,7 +1,9 @@
 import time
+import logging
 from datetime import datetime
 from dateutil import relativedelta
 from odoo import models, fields, api
+_logger = logging.getLogger(__name__)
 
 class wolftrakglobal_report(models.Model):
     _name = 'wolftrakglobal.report607'
@@ -53,164 +55,138 @@ class wolftrakglobal_report(models.Model):
     number_reg = fields.Char('Cantidad de registros')
 
 
-class wolftrakglobal_report_606(models.Model):
+class WolftrakReport606(models.Model):
     _name = 'wolftrakglobal.report606'
 
-    def _default_payment(self):
-        return self.env['account.payment'].search(([])) # retorna una lista (importate)
-
-    @api.onchange('to_606','invoices')
+    @api.onchange('to_606','moves')
     def _set_period(self):
         month = str(self.to_606[5:7])
         year = str(self.to_606[:4])
         self.period = year+month
 
-    @api.depends('from_606')
-    def _set_from(self):
-        year = str(self.from_606[:4])
-        month = str(self.from_606[5:7])
-        day = str(self.from_606[8:10])
-        self.form_str = year + month + day
+    @api.depends('from_606','to_606')
+    @api.onchange('from_606','to_606')
+    def _set_dates(self):
+        from_year = str(self.from_606[:4])
+        from_month = str(self.from_606[5:7])
+        from_day = str(self.from_606[8:10])
+        self.form_str = from_year + from_month + from_day
 
-    @api.depends('to_606')
-    def _set_to(self):
-        year = str(self.to_606[:4])
-        month = str(self.to_606[5:7])
-        day = str(self.to_606[8:10])
-        self.to_str = year+month+day
+        to_year = str(self.to_606[:4])
+        to_month = str(self.to_606[5:7])
+        to_day = str(self.to_606[8:10])
+        self.to_str = to_year + to_month + to_day
 
-    @api.onchange('invoices')
+        # return [self.from_606,self.to_606]
+
+    @api.onchange('moves')
     def total_calculated(self):
         total_inv = 0.0
         total_tax = 0.0
-        total_tax_hold = 0.0
-        for value in self.invoices:
-            total_inv += value.amount_untaxed
-            total_tax += value.amount_tax
-            total_tax_hold += value.tax_hold
+        for value in self.moves:
+            for ln in value.line_ids:
+                if ln.account_id.id == 82:
+                    _logger.info(ln.debit)
+                    tax = ln.debit
+                    break
+                else:
+                    tax = 0.0
+            total_tax += tax
+            total_inv += value.amount - tax
 
         str_total_inv = str('%.2f'%total_inv)
         str_total_tax = str('%.2f'%total_tax)
-        str_total_hold = str('%.2f'%total_tax_hold)
         self.total_inv = ''.zfill(13)[len(str_total_inv[:str_total_inv.index('.')]):]+str_total_inv
         self.total_tax = ''.zfill(9)[len(str_total_tax[:str_total_tax.index('.')]):]+str_total_tax
-        self.total_tax_hold = ''.zfill(9)[len(str_total_hold[:str_total_hold.index('.')]):]+str_total_hold
-
-        regs = str(len(self.invoices))
+        regs = str(len(self.moves))
         self.number_reg = ''.zfill(12)[len(regs):]+regs
 
-    invoices = fields.Many2many('account.invoice', string='Facturas',domain=[('type', '=', 'in_invoice'), ('state', '=', 'paid')])
-    payments = fields.Many2many('account.payment', default=_default_payment)
-    date_payments = fields.Selection([('default','Default'),('x','y'),('z','aa')], string="Fecha Pagos")
+    @api.onchange('tax_hold')
+    def _real_tax_hold(self):
+        str_tax_hold = str('%.2f'%self.tax_hold)
+        self.total_tax_hold = ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold
+
+    def _default_moves(self):
+        return self.env['account.move'].search([('journal_id','=',2)])
+
+
     from_606 = fields.Date('Desde', default=time.strftime('%Y-%m-01'))
-    from_str = fields.Char(compute=_set_from)
+    from_str = fields.Char(compute=_set_dates)
     to_606 = fields.Date('Hasta', default=str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10])
-    to_str = fields.Char(compute=_set_to)
-    period = fields.Char(compute=_set_period, string='Periodo')
+    to_str = fields.Char(compute=_set_dates)
+    period = fields.Char(string='Periodo')
     number_reg = fields.Char('Cantidad de registros')
-    total_tax_hold = fields.Char('ITBIS Retenido')
+    tax_hold = fields.Float('ITBIS Retenido')
+    total_tax_hold = fields.Char()
     total_tax = fields.Char('ITBIS Calculado')
     total_inv = fields.Char('Total Calculado')
+    moves = fields.Many2many('account.move', string='Asientos', domain=[('journal_id','=',2)])
+    # report_id = fields.Many2one('wizard.report606')
 
+    def to_wizard(self):
 
+        view_ref = self.env['ir.model.data'].get_object_reference('wolftrakglobal', 'wizard_report606_view')
+        view_id = view_ref[1] if view_ref else False
 
-# class wolftrakglobal_report_608(osv.osv):
-# 	_name = 'wolftrakglobal.report608'
-#
-# 	_columns = {
-# 		'invoices'	: fields.many2many('account.invoice', domain=[('type','=','out_refund'),('company_id','=',3)], string="Facturas"),
-# 		'desde_608' : fields.date('Desde:'),
-# 		'desde_str'	: fields.char(compute='_toma_desde'),
-# 		'hasta_608' : fields.date('Hasta:'),
-# 		'hasta_str'	: fields.char(compute='_toma_hasta'),
-# 		'periodo'	: fields.char(compute='_toma_periodo', readonly=True, string='Periodo'),
-# 		'cant_reg'	: fields.integer('Cantidad de registros')
-# 	}
-# 	_defaults = {
-# 		'desde_608': lambda *a: time.strftime('%Y-%m-01'),
-# 		'hasta_608': lambda *a: str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10],
-# 	}
-#
-# 	@api.onchange('invoices')
-# 	def _toma_registro(self):
-# 		for value in self.invoices:
-# 			self.cant_reg = len(self.invoices)
-#
-# 	@api.depends('hasta_608')
-# 	def _toma_periodo(self):
-#
-# 		month = str(self.hasta_608[5:7])
-# 		year = str(self.hasta_608[:4])
-# 		self.periodo = year+month
-#
-# 	@api.depends('desde_608')
-# 	def _toma_desde(self):
-#
-# 		year = str(self.desde_608[:4])
-# 		month = str(self.desde_608[5:7])
-# 		day = str(self.desde_608[8:10])
-# 		self.desde_str = year+month+day
-#
-# 	@api.depends('hasta_608')
-# 	def _toma_hasta(self):
-#
-# 		year = str(self.hasta_608[:4])
-# 		month = str(self.hasta_608[5:7])
-# 		day = str(self.hasta_608[8:10])
-# 		self.hasta_str = year+month+day
+        _logger.info(self.id)
+        _logger.info(self.env.context)
+        if self.env.context['params']['id']:
+           record_id = self.env.context['params']['id']
+        else:
+            record_id = self.id
+        return {
+            'name' : 'Report 606',
+            'view_type' : 'form',
+            'view_mode' : 'form',
+            'res_model' : 'wizard.report606',
+            'view_id' : view_id,
+            'type' : 'ir.actions.act_window',
+            'target' : 'new',
+            'context' : {'report_id' : record_id}
+        }
 
+class WizardReport606(models.Model):
+    _name = 'wizard.report606'
 
-# class wolftrak_report_609(osv.osv):
-# 	_name = 'wolftrakglobal.report609'
-#
-# 	_columns = {
-# 		'invoices' : fields.many2many('account.invoice', domain=[('type','=','in_invoice'),('company_id','=',3)]),
-# 		'desde_609' : fields.date('Desde:'),
-# 		'desde_str'	: fields.char(compute='_toma_desde'),
-# 		'hasta_609' : fields.date('Hasta:'),
-# 		'hasta_str'	: fields.char(compute='_toma_hasta'),
-# 		'periodo'	: fields.char(compute='_toma_periodo', readonly=True, string='Periodo'),
-# 		'cant_reg'	: fields.integer('Cantidad de registros'),
-# 		'total_inv'	: fields.float('Total monto facturado'),
-# 		'total_isr' : fields.float('Total ISR Retenido')
-# 	}
-# 	_defaults = {
-# 		'desde_609': lambda *a: time.strftime('%Y-%m-01'),
-# 		'hasta_609': lambda *a: str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10],
-# 	}
-#
-# 	@api.onchange('invoices')
-# 	def _toma_registro(self):
-# 		for value in self.invoices:
-# 			self.cant_reg = len(self.invoices)
-#
-# 	@api.depends('hasta_609')
-# 	def _toma_periodo(self):
-#
-# 		month = str(self.hasta_609[5:7])
-# 		year = str(self.hasta_609[:4])
-# 		self.periodo = year+month
-#
-# 	@api.depends('desde_609')
-# 	def _toma_desde(self):
-#
-# 		year = str(self.desde_609[:4])
-# 		month = str(self.desde_609[5:7])
-# 		day = str(self.desde_609[8:10])
-# 		self.desde_str = year+month+day
-#
-# 	@api.depends('hasta_609')
-# 	def _toma_hasta(self):
-#
-# 		year = str(self.hasta_609[:4])
-# 		month = str(self.hasta_609[5:7])
-# 		day = str(self.hasta_609[8:10])
-# 		self.hasta_str = year+month+day
-#
-# 	@api.onchange('invoices')
-# 	def total_calculado(self):
-# 		self.total_inv = 0.0
-# 		self.total_isr = 0.0
-# 		for value in self.invoices:
-# 			self.total_inv += value.amount_total
-# 			self.total_isr += value.isr_hold
+    def _default_report(self):
+        _logger.info("Into Report")
+        _logger.info(self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])]))
+        _logger.info(self.reports)
+        return self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])])
+
+    reports = fields.Many2one('wolftrakglobal.report606', default=_default_report)
+
+    def _default_report_result(self):
+        _logger.info(self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])]))
+        rpt = self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])])
+
+        var1 = "606  131104371"+str(rpt.period)+str(rpt.number_reg)+str(rpt.total_inv)+str(rpt.total_tax_hold)+"\n"
+        for move in rpt.moves:
+            var1 += str(move.partner_id.doc_ident)+"  "+str(move.partner_id.doc_ident_type)+str(move.type_buy)+str(move.ncf)+"                   "
+            date = str(move.date)
+            year = date[:date.index('-')]
+            rest = date[date.index('-')+1:]
+            date_result = year+rest[:rest.index('-')]+rest[rest.index('-')+1:]
+
+            tax = 0.0
+            amount = 0.0
+            for ln in move.line_ids:
+                if ln.account_id.id == 82:
+                    _logger.info(ln.debit)
+                    tax = ln.debit
+                    amount = 0.0
+                    break
+                else:
+                    amount = ln.debit
+                    tax = 0.0
+
+            str_tax = str('%.2f'%tax)
+            str_amount = str('%.2f'%amount)
+            var1 += date_result+date_result+''.zfill(9)[len(str_tax[:str_tax.index('.')]):]+str_tax # itbis factura
+            var1 += '000000000.00' # itbis retenido
+            var1 += ''.zfill(9)[len(str_amount[:str_amount.index('.')]):]+str_amount # monto factura
+            var1 += '000000000.00'+'\n'
+        return var1
+
+    report_result = fields.Text(string="Reporte", default=_default_report_result)
+

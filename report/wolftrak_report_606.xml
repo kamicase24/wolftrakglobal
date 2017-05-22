@@ -17,11 +17,26 @@
 					<p>
 						606&#160;&#160;131104371<span t-field="doc.period"/><span t-field="doc.number_reg"/><span t-field="doc.total_inv"/><span t-field="doc.total_tax_hold"/><br/>
 						<t t-foreach="doc.invoices" t-as="inv">
-							<t t-set="year" t-value="inv.date[:inv.date.index('-')]"/><t t-set="rest" t-value="inv.date[inv.date.index('-')+1:]"/>
-							<t t-if="inv.partner_id.doc_ident_type == 1"><span t-field="inv.partner_id.doc_ident"/>&#160;&#160;<span t-field="inv.partner_id.doc_ident_type"/><span t-esc="inv.type_buy"/><span t-field="inv.ncf"/></t>
-							<t t-if="inv.partner_id.doc_ident_type == 2"><span t-field="inv.partner_id.doc_ident"/><span t-field="inv.partner_id.doc_ident_type"/><span t-field="inv.ncf"/></t>
+							<t t-set="year" t-value="inv.date[:inv.date.index('-')]"/>
+							<t t-set="rest" t-value="inv.date[inv.date.index('-')+1:]"/>
+							<t t-if="inv.partner_id.doc_ident_type == 1">
+								<span t-field="inv.partner_id.doc_ident"/>
+								&#160;&#160;<span t-field="inv.partner_id.doc_ident_type"/>
+								<span t-esc="inv.type_buy"/>
+								<span t-field="inv.ncf"/>
+							</t>
+							<t t-if="inv.partner_id.doc_ident_type == 2">
+								<span t-field="inv.partner_id.doc_ident"/>
+								<span t-field="inv.partner_id.doc_ident_type"/>
+								<span t-field="inv.ncf"/>
+							</t>
 							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-							<span t-esc="year+rest[:rest.index('-')]+rest[rest.index('-')+1:]"/><span t-esc="year+rest[:rest.index('-')]+rest[rest.index('-')+1:]"/><span t-esc="digit[len(str(inv.amount_tax)[:str(inv.amount_tax).index('.')]):]+str('%.2f'%inv.amount_tax)"/><span t-esc="digit[len(str(inv.tax_hold)[:str(inv.tax_hold).index('.')]):]+str('%.2f'%inv.tax_hold)"/><span t-esc="digit[len(str(inv.amount_untaxed)[:str(inv.amount_untaxed).index('.')]):]+str('%.2f'%inv.amount_untaxed)"/><span t-esc="''.zfill(9)+'.00'"/><br/>
+							<span t-esc="year+rest[:rest.index('-')]+rest[rest.index('-')+1:]"/>
+							<span t-esc="year+rest[:rest.index('-')]+rest[rest.index('-')+1:]"/>
+							<span t-esc="digit[len(str(inv.amount_tax)[:str(inv.amount_tax).index('.')]):]+str('%.2f'%inv.amount_tax)"/>
+							<span t-esc="digit[len(str(inv.tax_hold)[:str(inv.tax_hold).index('.')]):]+str('%.2f'%inv.tax_hold)"/>
+							<span t-esc="digit[len(str(inv.amount_untaxed)[:str(inv.amount_untaxed).index('.')]):]+str('%.2f'%inv.amount_untaxed)"/>
+							<span t-esc="''.zfill(9)+'.00'"/><br/>
 						</t>
 					</p>
 				</div>
