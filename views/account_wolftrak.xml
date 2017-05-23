@@ -123,15 +123,24 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//form/sheet/group/group" position="inside">
-                    <field name="partner_id"/>
-                    <field name="type_comp"/>
-                    <field name="amount"/>
+                <xpath expr="//form/sheet/group" position="inside">
+                    <group>
+                        <field name="type_buy"/>
+                        <field name="type_comp"/>
+                    </group>
+                    <group>
+                        <field name="ncf"/>
+                        <field name="ncf_result"/>
+                    </group>
+                    <group>
+                        <field name="rent_hold"/>
+                    </group>
+                    <group>
+                        <field name="tax_hold"/>
+                    </group>
                 </xpath>
                 <xpath expr="//form/sheet/group/group[2]" position="inside">
-                    <field name="ncf"/>
-                    <field name="ncf_result"/>
-                    <field name="type_buy"/>
+                    <field name="partner_id"/>
                 </xpath>
             </field>
         </record>

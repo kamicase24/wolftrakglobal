@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 import json
+import logging
 import sys, os
 from odoo import api, fields, models, _
 from bs4 import BeautifulSoup
 import requests
 from datetime import date
 import calendar
+_logger = logging.getLogger(__name__)
+
 
 main_base = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE_NAME = 'ncf.json'
@@ -99,10 +102,10 @@ class WolftrakInvoice(models.Model):
                                 ('03','03 - Arrendamientos'),
                                 ('04','04 - Gastos de activos fijo'),
                                 ('05','05 - Gastos de representación'),
-                                ('06','06 - Otras deducciones admitisdas'),
+                                ('06','06 - Otras deducciones admitidas'),
                                 ('07','07 - Gastos financieros'),
                                 ('08','08 - Gastos Extraordinarios'),
-                                ('09','09 - Compras y Gastos que formarann parte del costo de venta'),
+                                ('09','09 - Compras y Gastos que formaran parte del costo de venta'),
                                 ('10','10 - Adquisiciones de activos'),
                                 ('11','11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados")
 
@@ -121,15 +124,28 @@ class WolftrakInvoice(models.Model):
     comment = fields.Text(string='Additional Information', readonly=False, states={'draft': [('readonly', False)]})
 
     @api.onchange('date_invoice')
-    def compute_draft_number(self):
+    def _compute_draft_number(self):
         invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
         last_id = invoices and max(invoices)
         date_str = str(date.today().year)+str(date.today().month)
-        if not last_id.draft_number: self.draft_number = 'OP/'+date_str+'/0001'
+        if not last_id.draft_number:
+            self.draft_number = 'OP/'+date_str+'/1'
         else:
-            if self.draft_number != last_id.draft_number:
-                number = int(''.join(last_id.draft_number[9:]))+1
-                self.draft_number = 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
+            inv_chain = self.env['account.invoice'].search([], order='id asc')
+            i = 0
+            for inv in inv_chain:
+                number = int(inv.draft_number[9:])
+                if number > i:
+                    i = number
+            _logger.info("contador: "+str(i))
+            self.draft_number = "OP/"+date_str+"/"+str(i+1)
+            _logger.info(self.draft_number)
+            # if self.draft_number != last_id.draft_number:
+            #     _logger.info(last_id.draft_number)
+            #     number = int(''.join(last_id.draft_number[9:]))+1
+            #     _logger.info(number)
+            #     self.draft_number = 'OP/'+date_str+'/'+str(number)
+            #     _logger.info(self.draft_number)
 
     @api.onchange('isr')
     def isr_holding(self):
@@ -178,7 +194,7 @@ class WolftrakMove(models.Model):
 
     partner_id = fields.Many2one('res.partner', compute='_compute_partner_id', string="Partner", store=True)
 
-    ncf = fields.Char(string="Número de Comprobante Fiscal")
+    ncf = fields.Char(string="Número de Comprobante Fiscal", required=True)
 
     type_comp = fields.Char(string="Tipo de Comprobante", readonly=True, compute='ncf_validation')
 
@@ -189,12 +205,16 @@ class WolftrakMove(models.Model):
                                 ('03','03 - Arrendamientos'),
                                 ('04','04 - Gastos de activos fijo'),
                                 ('05','05 - Gastos de representación'),
-                                ('06','06 - Otras deducciones admitisdas'),
+                                ('06','06 - Otras deducciones admitidas'),
                                 ('07','07 - Gastos financieros'),
                                 ('08','08 - Gastos Extraordinarios'),
-                                ('09','09 - Compras y Gastos que formarann parte del costo de venta'),
+                                ('09','09 - Compras y Gastos que formaran parte del costo de venta'),
                                 ('10','10 - Adquisiciones de activos'),
-                                ('11','11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados")
+                                ('11','11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados", required=True)
+
+    rent_hold = fields.Float(string="Retención de Renta", default=0.00)
+
+    tax_hold = fields.Float(string="ITBIS Retenido", default=0.00)
 
     @api.depends('ncf')
     def ncf_validation(self):

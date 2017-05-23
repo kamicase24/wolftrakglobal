@@ -83,6 +83,7 @@ class WolftrakReport606(models.Model):
     def total_calculated(self):
         total_inv = 0.0
         total_tax = 0.0
+        total_tax_hold = 0.0
         for value in self.moves:
             for ln in value.line_ids:
                 if ln.account_id.id == 82:
@@ -93,11 +94,14 @@ class WolftrakReport606(models.Model):
                     tax = 0.0
             total_tax += tax
             total_inv += value.amount - tax
+            total_tax_hold += value.tax_hold
 
         str_total_inv = str('%.2f'%total_inv)
         str_total_tax = str('%.2f'%total_tax)
+        str_total_tax_hold = str('%.2f'%total_tax_hold)
         self.total_inv = ''.zfill(13)[len(str_total_inv[:str_total_inv.index('.')]):]+str_total_inv
         self.total_tax = ''.zfill(9)[len(str_total_tax[:str_total_tax.index('.')]):]+str_total_tax
+        self.total_tax_hold = ''.zfill(9)[len(str_total_tax_hold[:str_total_tax_hold.index('.')]):]+str_total_tax_hold
         regs = str(len(self.moves))
         self.number_reg = ''.zfill(12)[len(regs):]+regs
 
@@ -116,12 +120,10 @@ class WolftrakReport606(models.Model):
     to_str = fields.Char(compute=_set_dates)
     period = fields.Char(string='Periodo')
     number_reg = fields.Char('Cantidad de registros')
-    tax_hold = fields.Float('ITBIS Retenido')
-    total_tax_hold = fields.Char()
+    total_tax_hold = fields.Char('ITBIS Retenido')
     total_tax = fields.Char('ITBIS Calculado')
     total_inv = fields.Char('Total Calculado')
     moves = fields.Many2many('account.move', string='Asientos', domain=[('journal_id','=',2)])
-    # report_id = fields.Many2one('wizard.report606')
 
     def to_wizard(self):
 
@@ -182,10 +184,12 @@ class WizardReport606(models.Model):
 
             str_tax = str('%.2f'%tax)
             str_amount = str('%.2f'%amount)
-            var1 += date_result+date_result+''.zfill(9)[len(str_tax[:str_tax.index('.')]):]+str_tax # itbis factura
-            var1 += '000000000.00' # itbis retenido
+            str_tax_hold = str('%.2f'%move.tax_hold)
+            str_rent_hold = str('%.2f'%move.rent_hold)
+            var1 += date_result+date_result+''.zfill(9)[len(str_tax[:str_tax.index('.')]):]+str_tax # itbis factura y fechas
+            var1 += ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold # itbis retenido
             var1 += ''.zfill(9)[len(str_amount[:str_amount.index('.')]):]+str_amount # monto factura
-            var1 += '000000000.00'+'\n'
+            var1 += ''.zfill(9)[len(str_rent_hold[:str_rent_hold.index('.')]):]+str_rent_hold+'\n' # retencion renta
         return var1
 
     report_result = fields.Text(string="Reporte", default=_default_report_result)

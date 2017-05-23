@@ -22,7 +22,6 @@
 								<field name="total_inv"/>
 								<field name="total_tax"/>
 								<field name="total_tax_hold"/>
-								<field name="tax_hold"/>
 							</group>
 						</group>
 
