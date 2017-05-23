@@ -35,7 +35,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <t t-if="o.company_id.name == 'Mytraktech'">
+                                <t t-if="o.company_id.name == 'MYTRAK TECHNOLOGY SRL'">
                                     <strong>RNC/Cédula </strong> <span t-field="o.partner_id.doc_ident"/>
                                 </t>
                                 <t t-if="o.company_id.name == 'Wolftrak Global'">
@@ -60,7 +60,7 @@
                         <tr>
                             <td colspan="3">
                                 <h4 t-if="o.state != 'draft'">
-                                    <strong t-if="o.company_id.name == 'Mytraktech'">NCF </strong>
+                                    <strong t-if="o.company_id.name == 'MYTRAK TECHNOLOGY SRL'">NCF </strong>
                                     <strong t-if="o.company_id.name == 'Wolftrak Global'"></strong>
                                     <span t-field="o.ncf"/>
                                 </h4>
