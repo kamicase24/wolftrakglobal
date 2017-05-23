@@ -194,7 +194,7 @@ class WolftrakMove(models.Model):
 
     partner_id = fields.Many2one('res.partner', compute='_compute_partner_id', string="Partner", store=True)
 
-    ncf = fields.Char(string="Número de Comprobante Fiscal", required=True)
+    ncf = fields.Char(string="Número de Comprobante Fiscal")
 
     type_comp = fields.Char(string="Tipo de Comprobante", readonly=True, compute='ncf_validation')
 
@@ -210,7 +210,7 @@ class WolftrakMove(models.Model):
                                 ('08','08 - Gastos Extraordinarios'),
                                 ('09','09 - Compras y Gastos que formaran parte del costo de venta'),
                                 ('10','10 - Adquisiciones de activos'),
-                                ('11','11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados", required=True)
+                                ('11','11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados")
 
     rent_hold = fields.Float(string="Retención de Renta", default=0.00)
 

@@ -37,7 +37,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="report_wolftrak.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="report_wolftrak.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/report_wolftrak.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="421">
@@ -49,11 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wolftrak_account.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="wolftrak_account.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/models/wolftrak_account.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="214" column="13" lean-forward="false" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="13" />
+            <state relative-caret-position="64">
+              <caret line="196" column="59" lean-forward="true" selection-start-line="196" selection-start-column="59" selection-end-line="196" selection-end-column="59" />
               <folding>
                 <element signature="e#24#35#0" expanded="true" />
               </folding>
@@ -188,8 +188,8 @@
         <option value="$PROJECT_DIR$/report/wolftrak_report_606.xml" />
         <option value="$PROJECT_DIR$/views/606_wolftrak.xml" />
         <option value="$PROJECT_DIR$/views/account_wolftrak.xml" />
-        <option value="$PROJECT_DIR$/models/wolftrak_account.py" />
         <option value="$PROJECT_DIR$/models/report_wolftrak.py" />
+        <option value="$PROJECT_DIR$/models/wolftrak_account.py" />
       </list>
     </option>
   </component>
@@ -675,7 +675,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1089,22 +1089,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/wolftrak_account.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="214" column="13" lean-forward="false" selection-start-line="214" selection-start-column="4" selection-end-line="214" selection-end-column="13" />
-          <folding>
-            <element signature="e#24#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/report_wolftrak.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="421">
           <caret line="191" column="94" lean-forward="false" selection-start-line="191" selection-start-column="94" selection-end-line="191" selection-end-column="94" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/wolftrak_account.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="196" column="59" lean-forward="true" selection-start-line="196" selection-start-column="59" selection-end-line="196" selection-end-column="59" />
+          <folding>
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
