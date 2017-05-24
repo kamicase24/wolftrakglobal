@@ -14,7 +14,7 @@ class WolftrakSaleOrder(models.Model):
         venta = result[result.find('V'):]
         rate = float(venta[venta.find('$')+1:venta.find('$')+6])
         user = self.env.user
-        if user.company_id.name == 'Mytraktech':
+        if user.company_id.name == 'MYTRAK TECHNOLOGY SRL':
             return rate
         else:
             return 0.0
