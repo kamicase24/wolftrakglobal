@@ -25,7 +25,7 @@ class WolftrakSaleOrder(models.Model):
         body = soup.body
         rate = body.find_all('span')[1].string
         user = self.env.user
-        if user.company_id.name == 'Mytraktech':
+        if user.company_id.name == 'MYTRAK TECHNOLOGY SRL':
             return rate
         else:
             return 0.0
