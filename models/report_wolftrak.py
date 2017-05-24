@@ -54,6 +54,53 @@ class wolftrakglobal_report(models.Model):
     period = fields.Char(string='Periodo')
     number_reg = fields.Char('Cantidad de registros')
 
+    def to_wizard(self):
+
+        view_ref = self.env['ir.model.data'].get_object_reference('wolftrakglobal', 'wizard_report607_view')
+        view_id = view_ref[1] if view_ref else False
+
+        if 'id' in self.env.context['params']:
+            record_id = self.env.context['params']['id']
+        else:
+            record_id = self.id
+        return {
+            'name': 'Report 607',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'wizard.report607',
+            'view_id': view_id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {'report_id': record_id}
+        }
+
+class WizardReport607(models.Model):
+    _name = 'wizard.report607'
+
+    def _default_report(self):
+        return self.env['wolftrakglobal.report607'].search([('id','=',self.env.context['report_id'])])
+
+    reports = fields.Many2one('wolftrakglobal.report607', default=_default_report)
+
+    def _default_report_result(self):
+
+        rpt = self.env['wolftrakglobal.report607'].search([('id','=',self.env.context['report_id'])])
+        line1 = "607 131104371"+str(rpt.period)+str(rpt.number_reg)+str(rpt.total_inv)+str(rpt.total_tax)+"\n"
+        for inv in rpt.invoices:
+            line2 = "  "+str(inv.partner_id.doc_ident)+str(inv.partner_id.doc_ident_type)+str(inv.ncf)
+            date = str(inv.date)
+            year = date[:date.index('-')]
+            rest = date[date.index('-')+1:]
+            date_result = year+rest[:rest.index('-')]+rest[rest.index('-')+1:]
+            str_amount_tax = str('%.2f'%inv.amount_tax)
+            str_amount_untaxed = str('%.2f'%inv.amount_untaxed)
+            line2 += "                   "+str(date_result)
+            line2 += "".zfill(9)[len(str_amount_tax[:str_amount_tax.index('.')]):]+str_amount_tax
+            line2 += "".zfill(9)[len(str_amount_untaxed[:str_amount_untaxed.index('.')]):]+str_amount_untaxed+"\n"
+            line1 += line2
+        return line1
+
+    report_result = fields.Text(string="Reporte", default=_default_report_result)
 
 class WolftrakReport606(models.Model):
     _name = 'wolftrakglobal.report606'
@@ -76,8 +123,6 @@ class WolftrakReport606(models.Model):
         to_month = str(self.to_606[5:7])
         to_day = str(self.to_606[8:10])
         self.to_str = to_year + to_month + to_day
-
-        # return [self.from_606,self.to_606]
 
     @api.onchange('moves')
     def total_calculated(self):
@@ -130,9 +175,7 @@ class WolftrakReport606(models.Model):
         view_ref = self.env['ir.model.data'].get_object_reference('wolftrakglobal', 'wizard_report606_view')
         view_id = view_ref[1] if view_ref else False
 
-        _logger.info(self.id)
-        _logger.info(self.env.context)
-        if self.env.context['params']['id']:
+        if 'id' in self.env.context['params']:
            record_id = self.env.context['params']['id']
         else:
             record_id = self.id
@@ -151,9 +194,6 @@ class WizardReport606(models.Model):
     _name = 'wizard.report606'
 
     def _default_report(self):
-        _logger.info("Into Report")
-        _logger.info(self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])]))
-        _logger.info(self.reports)
         return self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])])
 
     reports = fields.Many2one('wolftrakglobal.report606', default=_default_report)

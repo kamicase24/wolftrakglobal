@@ -5,6 +5,9 @@
 			<field name="model">wolftrakglobal.report607</field>
 			<field name="arch" type="xml">
 				<form>
+					<header>
+						<button name="to_wizard" type="object" string="Reporte" class="oe_highlight"/>
+					</header>
 					<sheet string="Ventas de bienes y servicios">
 						<header>
 							<h3>Periodo <field name="period"/></h3>
@@ -23,10 +26,26 @@
 						</group>
 						<notebook>
 							<page string="Lineas">
-								<field name="invoices"/>
+								<field name="invoices">
+									<form>
+										
+									</form>
+								</field>
 							</page>
 						</notebook>
 					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="wizard_report607_view" model="ir.ui.view">
+			<field name="name">wizard view report607</field>
+			<field name="model">wizard.report607</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<field name="report_result"/>
+					<field name="reports" invisible="1"/>
 				</form>
 			</field>
 		</record>
@@ -45,7 +64,7 @@
 		</record>
 
 		<record model="ir.actions.act_window" id="act_report_607">
-			<field name="name">Ventas de vienes y servicios</field>
+			<field name="name">Ventas de bienes y servicios</field>
 			<field name="res_model">wolftrakglobal.report607</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>

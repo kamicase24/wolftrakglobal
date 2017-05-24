@@ -24,7 +24,6 @@
 								<field name="total_tax_hold"/>
 							</group>
 						</group>
-
 						<notebook>
 							<page string="Asientos" mode="tree,kanban">
 								<field name="moves"/>
@@ -42,7 +41,7 @@
 			<field name="arch" type="xml">
 				<form>
 					<field name="report_result"/>
-					<field name="reports"/>
+					<field name="reports" invisible="1"/>
 				</form>
 			</field>
 		</record>
@@ -51,7 +50,7 @@
 			<field name="name">wolftrakglobal.report.tree</field>
 			<field name="model">wolftrakglobal.report606</field>
 			<field name="arch" type="xml">
-				<tree string="Compras de vienes y servicios">
+				<tree string="Compras de bienes y servicios">
 					<field name="period"/>
 					<field name="from_606"/>
 					<field name="to_606"/>
