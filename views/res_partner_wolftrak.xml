@@ -15,8 +15,12 @@
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="dgii_state"/>
                     <field name="pay_reg"/>
-                    <field name="doc_ident_type"/>
+                    <field name="doc_ident_type" invisible="1"/>
                     <field name="partner_inv" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//form/sheet/group/group[2]/field[2]" position="replace">
+                    <field name="phone" placeholder="###-#######"/>
                 </xpath>
             </field>
     	</record>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, tools, _
+from odoo.exceptions import ValidationError
 import requests, json
 import sys, os
 from bs4 import BeautifulSoup
@@ -58,19 +59,21 @@ class WolftrakPartner(models.Model):
 
 	partner_inv = fields.Many2many('account.invoice', default=_get_partner_invoices, compute=_get_invoices)
 
-	@api.onchange('doc_ident')
+	@api.onchange('doc_ident','phone')
 	def user_validation(self):
 
 		if self.doc_ident:
 			if len(self.doc_ident) == 11: self.doc_ident_type = 2
 			elif len(self.doc_ident) == 9: self.doc_ident_type = 1
 
-		# db_doc_ident = self.search([('doc_ident', '=', self.doc_ident)])
-		# if db_doc_ident and self.doc_ident:
-		# 	self.doc_ident = ''
-		# 	self.name = ''
-		# 	self.dgii_state = ''
-
+		db_doc_ident = self.search([('doc_ident', '=', self.doc_ident)])
+		if db_doc_ident and self.doc_ident:
+			raise ValidationError(_('Este Cliente ya se encuentra registrado'))
+			self.doc_ident = ''
+		db_user_client = self.search([('phone','=',self.phone)])
+		if db_user_client and self.phone:
+			raise  ValidationError(_('Este Cliente ya se encuentra registrado'))
+			self.phone = ''
 		try:
 			rnc_record = get_rnc_record(self.doc_ident)
 			self.name = rnc_record[1]
