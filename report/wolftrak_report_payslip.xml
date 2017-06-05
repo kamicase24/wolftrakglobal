@@ -22,7 +22,7 @@
 									</td>
 									<td class="tablecolor textcolor">Cedula de Identidad</td>
 									<td class="colorb">
-										<span t-field="o.employee_id.doc_ident"/>
+										<span t-field="o.employee_id.identification_id"/>
 									</td>
 								</tr>
 
