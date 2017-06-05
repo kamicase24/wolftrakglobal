@@ -32,6 +32,18 @@
             <field name="arch" type="xml">
                 <xpath expr="//search" position="inside">
                     <field name="phone"/>
+                    <field name="doc_ident"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_tree" model="ir.ui.view">
+            <field name="name">res.partner.tree.custom</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="inside">
+                    <field name="doc_ident"/>
                 </xpath>
             </field>
         </record>

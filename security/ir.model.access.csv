@@ -1,3 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_memory_storage,memory.storage,model_memory_storage,maintenance.group_equipment_manager,1,1,1,1
 access_equipment_replacement,equipment.replacement,model_equipment_replacement,maintenance.group_equipment_manager,1,1,1,1
+
+access_hr_auto_timesheet,access_hr_auto_timesheet,model_hr_auto_timesheet,,1,1,1,1
+access_wolftrak_activity,access_wolftrak_activity,model_wolftrak_activity,sales_team.group_sale_manager,1,1,1,1
+access_wolftrakglobal_report607,access_wolftrakglobal_report607,model_wolftrakglobal_report607,account.group_account_manager,1,1,1,1
+access_wizard_report607,access_wizard_report607,model_wizard_report607,account.group_account_manager,1,1,1,1
+access_wolftrakglobal_report606,access_wolftrakglobal_report606,model_wolftrakglobal_report606,account.group_account_manager,1,1,1,1
+access_wizard_report606,access_wizard_report606,model_wizard_report606,account.group_account_manager,1,1,1,1
+access_hr_payroll_report,access_hr_payroll_report,model_hr_payroll_report,hr_payroll.group_hr_payroll_user,1,1,1,1
