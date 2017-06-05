@@ -12,25 +12,6 @@
 							</h3>
 							<table class="table table-condensed table-bordered">
 								<tr>
-									<td class="tablecolor textcolor">Mes</td>
-									<td class="colorb">
-										<t t-foreach="o.worked_days_line_ids" t-as="p">
-											<t t-if="p.code == 'DM'"><span t-field="p.name"/></t>
-										</t>
-									</td>
-									<td class="tablecolor textcolor">Dias</td>
-									<td class="colorb">
-										<t t-foreach="o.worked_days_line_ids" t-as="p">
-											<t t-if="p.code == 'DM'"><span t-field="p.number_of_days"/></t>
-										</t>
-									</td>
-									<td class="tablecolor textcolor">Quincena</td>
-									<td class="colorb">
-										<span t-field="o.date_from"/>
-									</td>
-								</tr>
-
-								<tr>
 									<td class="tablecolor textcolor">Trabajador</td>
 									<td class="colorb">
 										<span t-field="o.employee_id"/>
@@ -39,13 +20,17 @@
 									<td class="colorb">
 										<span t-field="o.employee_id.job_id"/>
 									</td>
-									<td class="tablecolor textcolor">Sueldo</td>
+									<td class="tablecolor textcolor">Cedula de Identidad</td>
 									<td class="colorb">
-										<span t-field="o.contract_id.wage"/>
+										<span t-field="o.employee_id.doc_ident"/>
 									</td>
 								</tr>
 
 		 						<tr>
+									<td class="tablecolor textcolor">Sueldo</td>
+									<td class="colorb">
+										<span t-field="o.contract_id.wage"/>
+									</td>
 									<td class="tablecolor textcolor">Desde</td>
 									<td class="colorb">
 										<span t-field="o.date_from"/>
@@ -54,10 +39,7 @@
 									<td class="colorb">
 										<span t-field="o.date_to"/>
 									</td>
-									<td class="tablecolor textcolor"><!-- fecha de transferencia --></td>
-									<td class="colorb">
-										<!-- fecha de transferencia -->
-									</td>
+
 								</tr>
 							</table>
 
