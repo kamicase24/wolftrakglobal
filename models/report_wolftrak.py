@@ -150,10 +150,10 @@ class WolftrakReport606(models.Model):
         regs = str(len(self.moves))
         self.number_reg = ''.zfill(12)[len(regs):]+regs
 
-    @api.onchange('tax_hold')
-    def _real_tax_hold(self):
-        str_tax_hold = str('%.2f'%self.tax_hold)
-        self.total_tax_hold = ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold
+    # @api.onchange('tax_hold')
+    # def _real_tax_hold(self):
+    #     str_tax_hold = str('%.2f'%self.tax_hold)
+    #     self.total_tax_hold = ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold
 
     def _default_moves(self):
         return self.env['account.move'].search([('journal_id','=',2)])

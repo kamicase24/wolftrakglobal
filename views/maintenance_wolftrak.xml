@@ -118,12 +118,130 @@
         </field>
     </record>
 
+    <!-- GPS DEVICE VIEWS -->
+
+    <record id="gps_dev_form" model="ir.ui.view">
+        <field name="name">gps.devices.form</field>
+        <field name="model">gps.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1><field name="name" placeholder="Nombre"/></h1>
+                    <group>
+                        <group>
+                            <field name="brand" widget="many2many_tags"/>
+                            <field name="model"/>
+                            <field name="stock"/>
+                        </group>
+                        <group>
+                            <field name="imei"/>
+                            <field name="esn"/>
+                            <field name="sn"/>
+                        </group>
+                        <group>
+                            <field name="image" widget="image" nolabel="1"/>
+                        </group>
+                    </group>
+                    <field name="note" colspan="4" placeholder="Nota Interna" nolabel="1" height="50"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="gps_device_brand_form" model="ir.ui.view">
+        <field name="name">gps.device.brand.form</field>
+        <field name="model">gps.brand</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="supplier"/>
+                        <field name="note"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="gps_device_model_form" model="ir.ui.view">
+        <field name="name">gps.device.models.form</field>
+        <field name="model">gps.model</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="note"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="gps_dev_tree" model="ir.ui.view">
+        <field name="name">gps.device.tree</field>
+        <field name="model">gps.device</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="model"/>
+                <field name="brand"/>
+                <field name="imei"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="gps_dev_kanban" model="ir.ui.view">
+        <field name="name">gps.device.kanban</field>
+        <field name="model">gps.device</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard">
+                <field name="name"/>
+                <field name="brand"/>
+                <field name="model"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary"><field name="name"/></div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content o_visible">
+                                <div class="row">
+                                    <div class="col-xs-6 o_kanban_primary_left">
+                                        <b>Marca</b>
+                                        <span><field name="brand"/></span>
+                                        <b>Modelo</b>
+                                        <span><field name="model"/></span>
+                                    </div>
+                                    <div class="col-xs-6 o_kanban_primary_left">
+                                        <field name="image"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="existence_action" model="ir.actions.act_window">
         <field name="name">Existencia</field>
         <field name="res_model">equipment.replacement</field>
         <field name="view_mode">kanban,form,tree</field>
         <field name="view_type">form</field>
         <!--<field name="view_id" ref="equipment_replacement_kanban"/>-->
+    </record>
+
+    <record id="gpd_dev_action" model="ir.actions.act_window">
+        <field name="name">Dispositivos GPS</field>
+        <field name="res_model">gps.device</field>
+        <field name="view_model">kanban,form,tree</field>
+        <field name="view_type">form</field>
+        <!--<field name="view_id" ref="gps_dev_kanban"/>-->
     </record>
 
     <menuitem
@@ -133,4 +251,12 @@
         action="existence_action"
         groups="maintenance.group_equipment_manager"
         sequence="2" />
+
+    <menuitem
+        id="menu_gps_device"
+        name="Dispositivos GPS"
+        parent="maintenance.menu_maintenance_title"
+        action="gpd_dev_action"
+        groups="maintenance.group_equipment_manager"
+        sequence="3" />
 </odoo>
