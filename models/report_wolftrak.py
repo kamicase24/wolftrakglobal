@@ -215,12 +215,12 @@ class WizardReport606(models.Model):
             for ln in move.line_ids:
                 if ln.account_id.id == 82:
                     _logger.info(ln.debit)
-                    tax = ln.debit
-                    amount = 0.0
+                    tax += ln.debit
+                    amount += 0.0
                     break
                 else:
-                    amount = ln.debit
-                    tax = 0.0
+                    amount += ln.debit
+                    tax += 0.0
 
             str_tax = str('%.2f'%tax)
             str_amount = str('%.2f'%amount)
