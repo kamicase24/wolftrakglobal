@@ -217,14 +217,14 @@ class WizardReport606(models.Model):
                     _logger.info(ln.debit)
                     tax += ln.debit
                     amount += 0.0
-                    break
+                    # break
                 else:
                     amount += ln.debit
                     tax += 0.0
 
             str_tax = str('%.2f'%tax)
-            str_amount = str('%.2f'%amount)
             str_tax_hold = str('%.2f'%move.tax_hold)
+            str_amount = str('%.2f'%amount)
             str_rent_hold = str('%.2f'%move.rent_hold)
             var1 += date_result+date_result+''.zfill(9)[len(str_tax[:str_tax.index('.')]):]+str_tax # itbis factura y fechas
             var1 += ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold # itbis retenido
