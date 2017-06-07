@@ -15,7 +15,7 @@
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="dgii_state"/>
                     <field name="pay_reg"/>
-                    <field name="doc_ident_type" invisible="1"/>
+                    <field name="doc_ident_type"/>
                     <field name="partner_inv" invisible="1"/>
                 </xpath>
 
