@@ -52,7 +52,7 @@ class wolftrakglobal_report(models.Model):
     to_str = fields.Char(compute=_set_to)
     total_inv = fields.Char(string='Total Calculado')
     total_tax = fields.Char(string='ITBIS Calculado')
-    invoices = fields.Many2many('account.invoice', string='Facturas', domain=[('type', '=', 'out_invoice'),('state', '=', 'paid'),('state', '=', 'open')])
+    invoices = fields.Many2many('account.invoice', string='Facturas', domain=[('type', '=', 'out_invoice'),('state', '!=', 'draft')])
     period = fields.Char(string='Periodo')
     number_reg = fields.Char('Cantidad de registros')
 
