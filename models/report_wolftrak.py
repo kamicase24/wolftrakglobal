@@ -1,5 +1,7 @@
+import base64
 import time
 import logging
+import urllib
 from datetime import datetime
 from dateutil import relativedelta
 from odoo import models, fields, api
@@ -50,7 +52,7 @@ class wolftrakglobal_report(models.Model):
     to_str = fields.Char(compute=_set_to)
     total_inv = fields.Char(string='Total Calculado')
     total_tax = fields.Char(string='ITBIS Calculado')
-    invoices = fields.Many2many('account.invoice', string='Facturas', domain=[('type', '=', 'out_invoice'),('state', '=', 'paid')])
+    invoices = fields.Many2many('account.invoice', string='Facturas', domain=[('type', '=', 'out_invoice'),('state', '=', 'paid'),('state', '=', 'open')])
     period = fields.Char(string='Periodo')
     number_reg = fields.Char('Cantidad de registros')
 
@@ -85,7 +87,7 @@ class WizardReport607(models.Model):
     def _default_report_result(self):
 
         rpt = self.env['wolftrakglobal.report607'].search([('id','=',self.env.context['report_id'])])
-        line1 = "607 131104371"+str(rpt.period)+str(rpt.number_reg)+str(rpt.total_inv)+str(rpt.total_tax)+"\n"
+        line1 = "607  131104371"+str(rpt.period)+str(rpt.number_reg)+str(rpt.total_inv)+"\n"
         for inv in rpt.invoices:
             line2 = "  "+str(inv.partner_id.doc_ident)+str(inv.partner_id.doc_ident_type)+str(inv.ncf)
             date = str(inv.date)
@@ -196,8 +198,6 @@ class WizardReport606(models.Model):
     def _default_report(self):
         return self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])])
 
-    reports = fields.Many2one('wolftrakglobal.report606', default=_default_report)
-
     def _default_report_result(self):
         _logger.info(self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])]))
         rpt = self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])])
@@ -230,7 +230,49 @@ class WizardReport606(models.Model):
             var1 += ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold # itbis retenido
             var1 += ''.zfill(9)[len(str_amount[:str_amount.index('.')]):]+str_amount # monto factura
             var1 += ''.zfill(9)[len(str_rent_hold[:str_rent_hold.index('.')]):]+str_rent_hold+'\n' # retencion renta
+
+            # file = open("C:\Users\Jesus Rojas/test2.txt","r+")
+            # file.write(var1)
+            # # file.close()
+            # _logger.info(file)
+            # _logger.info(file.read())
+            # self.binary_report = base64.encodestring(file)
         return var1
 
+    @api.one
+    def download_file(self):
+        result = self._default_report_result()
+
+        return {
+            'type':'ir.action.act_url',
+            'url':'/web/binary/download_document?model=wizard.report.606&field=binary_report&id=%s&filename=test1.txt'%(self.id),
+        }
+
+        # return self.write({'file_name':'test1.txt','binary_report':base64.encodestring(result)})
+
+        # self.write({'data': base64.encodestring(result)})
+        # this = self.browse()[0]
+        # _logger.info(this)
+        # _logger.info(self.inv.context)
+        # return {
+        #     'type' : 'ir.actions.act_window',
+        #     'res_model' : 'wizard.report606',
+        #     'view_mode' : 'form',
+        #     'view_type' : 'form',
+        #     'res_id' : this.id,
+        #     'views' : [(False,'form')],
+        #     'target' : 'new'
+        # }
+
+        # file = open("DGII_F_606_131104371_yearmonth.txt","w")
+        # file.write(result)
+        # file.close
+        # opener = urllib.URLopener
+        # opener.retrieve("http://localhost:8069/web/DGII_F_606_131104371_yearmonth.txt","DGII_F_606_131104371_yearmonth.txt")
+
+
+    reports = fields.Many2one('wolftrakglobal.report606', default=_default_report)
     report_result = fields.Text(string="Reporte", default=_default_report_result)
+    binary_report = fields.Binary('Binario')
+    binary_str = fields.Char('Binario str')
 
