@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import http
+from odoo import http
 
 # class Wolftrakglobal(http.Controller):
 #     @http.route('/wolftrakglobal/wolftrakglobal/', auth='public')
@@ -18,3 +18,9 @@ from openerp import http
 #         return http.request.render('wolftrakglobal.object', {
 #             'object': obj
 #         })
+
+# class Binary(http.Controler):
+#     @http.route('/wolftrakglobal/binary/', type='http', auth='public')
+#     @serialize_exception
+#     def download_document(self,model,field,id,filename=None, **kw):
+#

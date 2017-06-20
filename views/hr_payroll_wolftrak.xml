@@ -7,57 +7,65 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button string="Generar Reporte" name="#" type="#" class="oe_highlight"/>
+
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1><field name="name"/></h1>
+                    <group>
                         <group>
-                            <group>
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="employee_id" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <button name="load_payslip" type="object" string="Cargar Nóminas"/>
+                        <button name="open_report" type="object" string="Abrir Repore"/>
+                    </group>
+                    <group>
+                        <field name="payslip_id">
+                            <tree>
+                                <field name="number"/>
+                                <field name="employee_id"/>
                                 <field name="date_from"/>
                                 <field name="date_to"/>
-                            </group>
-                        </group>
-                        <group>
-                            <field name="employee_id" readonly="1">
-                                <tree>
-                                    <field name="id"/>
-                                    <field name="name_related"/>
-                                    <field name="identification_id"/>
-                                    <field name="job_id"/>
-                                </tree>
-                            </field>
-                            <field name="payslip_id" invisible="1">
-                                <tree>
-                                    <field name="id"/>
-                                </tree>
-                            </field>
-                            <field name="payslip_lines" invisible="1"/>
-                        </group>
-                    </div>
+                                <field name="state" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="payroll_report_tree" model="ir.ui.view">
-        <field name="name">payroll.report.tree</field>
-        <field name="model">hr.payroll.report</field>
+    <record id="hr_payroll_report_view" model="ir.ui.view">
+        <field name="name">payroll report view</field>
+        <field name="model">hr.payroll.report.wizard</field>
+        <field name="type">form</field>
         <field name="arch" type="xml">
-            <tree string="Quincenas">
-                <field name="name"/>
-                <field name="date_from"/>
-                <field name="date_to"/>
-                <field name="create_uid"/>
-            </tree>
+            <form>
+                <field name="report_list_id" readonly="True">
+                    <tree>
+                        <field name="emp_name"/>
+                        <field name="emp_ident_doc"/>
+                        <field name="emp_charge"/>
+                        <field name="basic_wage"/>
+                        <field name="daily_wage"/>
+                        <field name="hour_value"/>
+                    </tree>
+                </field>
+            </form>
         </field>
     </record>
 
     <record id="payroll_report_action" model="ir.actions.act_window">
-        <field name="name">Lista de Nomina</field>
+        <field name="name">Lista de Nómina</field>
         <field name="res_model">hr.payroll.report</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">form</field>
         <!--<field name="view_id" ref="payroll_report_tree"/>-->
     </record>
 

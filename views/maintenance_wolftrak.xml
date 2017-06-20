@@ -30,8 +30,8 @@
                 <h1><field name="name" placeholder="Memoria Kingston"/></h1>
                 <group>
                     <group>
-                        <field name="brand"/>
-                        <field name="model"/>
+                        <field name="brand_id"/>
+                        <field name="model_id"/>
                         <field name="memory" placeholder="Gb"/>
                         <field name="serial"/>
                         <field name="type"/>
@@ -50,8 +50,8 @@
                     <h1><field name="name" placeholder="Ej. Teclado Microsoft"/></h1>
                     <group>
                         <group>
-                            <field name="brand"/>
-                            <field name="model"/>
+                            <field name="brand_id"/>
+                            <field name="model_id"/>
                         </group>
                         <group>
                             <field name="serial"/>
@@ -73,9 +73,9 @@
             <tree>
                 <field name="name"/>
                 <field name="category"/>
-                <field name="brand"/>
+                <field name="brand_id"/>
                 <field name="serial"/>
-                <field name="model"/>
+                <field name="model_id"/>
             </tree>
         </field>
     </record>
@@ -86,8 +86,8 @@
         <field name="arch" type="xml">
             <kanban class="oe_background_grey o_kanban_dashboard">
                 <field name="name"/>
-                <field name="brand"/>
-                <field name="model"/>
+                <field name="brand_id"/>
+                <field name="model_id"/>
                 <field name="category"/>
                 <templates>
                     <t t-name="kanban-box">
@@ -101,9 +101,9 @@
                                 <div class="row">
                                     <div class="col-xs-6 o_kanban_primary_left">
                                         <b>Marca</b>
-                                        <span><field name="brand"/></span>
+                                        <span><field name="brand_id"/></span>
                                         <b>Modelo</b>
-                                        <span><field name="model"/></span>
+                                        <span><field name="model_id"/></span>
                                     </div>
                                     <div class="col-xs-6 o_kanban_primary_right">
                                         <b>Categoria</b>
@@ -129,8 +129,8 @@
                     <h1><field name="name" placeholder="Nombre"/></h1>
                     <group>
                         <group>
-                            <field name="brand" widget="many2many_tags"/>
-                            <field name="model"/>
+                            <field name="brand_id" widget="many2many_tags"/>
+                            <field name="model_id"/>
                             <field name="stock"/>
                         </group>
                         <group>
@@ -185,8 +185,8 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="model"/>
-                <field name="brand"/>
+                <field name="model_id"/>
+                <field name="brand_id"/>
                 <field name="imei"/>
             </tree>
         </field>
@@ -198,8 +198,9 @@
         <field name="arch" type="xml">
             <kanban class="oe_background_grey o_kanban_dashboard">
                 <field name="name"/>
-                <field name="brand"/>
-                <field name="model"/>
+                <field name="brand_id"/>
+                <field name="model_id"/>
+                <field name="image"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_global_click">
@@ -212,9 +213,9 @@
                                 <div class="row">
                                     <div class="col-xs-6 o_kanban_primary_left">
                                         <b>Marca</b>
-                                        <span><field name="brand"/></span>
+                                        <span><field name="brand_id"/></span>
                                         <b>Modelo</b>
-                                        <span><field name="model"/></span>
+                                        <span><field name="model_id"/></span>
                                     </div>
                                     <div class="col-xs-6 o_kanban_primary_left">
                                         <field name="image"/>
@@ -228,20 +229,148 @@
         </field>
     </record>
 
+    <!-- MOBILE DEVICE VIEWS -->
+
+    <record id="mobile_dev_form_view" model="ir.ui.view">
+        <field name="name">mobile.device.form</field>
+        <field name="model">mobile.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="brand_id"/>
+                            <field name="model_id"/>
+                        </group>
+                        <group>
+                            <field name="imei"/>
+                            <field name="employee_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Esp. de Bateria">
+                            <field name="batery"/>
+                            <field name="batery_serial"/>
+                            <field name="batery_model"/>
+                        </group>
+                        <group>
+                            <field name="number"/>
+                            <field name="simcard_imei"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mobile_dev_tree_view" model="ir.ui.view">
+        <field name="name">mobile.device.tree</field>
+        <field name="model">mobile.device</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="imei"/>
+                <field name="name"/>
+                <field name="brand_id"/>
+                <field name="model_id"/>
+                <field name="number"/>
+                <field name="employee_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="mobile_dev_kanban_view" model="ir.ui.view">
+        <field name="name">mobile.device.kanban</field>
+        <field name="model">mobile.device</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard">
+                <field name="imei"/>
+                <field name="name"/>
+                <field name="brand_id"/>
+                <field name="model_id"/>
+                <field name="number"/>
+                <field name="employee_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary"><field name="imei"/></div>
+                                </div>
+                                <field name="name"/>
+                            </div>
+                            <div class="container o_kanban_card_content o_visible">
+                                <div class="row">
+                                    <div class="col-xs-6 o_kanban_primary_left">
+                                        <b>Marca</b>
+                                        <span><field name="brand_id"/></span>
+                                        <b>Modelo</b>
+                                        <span><field name="model_id"/></span>
+                                    </div>
+                                    <div class="col-xs-6 o_kanban_primary_left">
+                                        <p>Número</p>
+                                        <field name="number"/>
+                                        <p>Empleado Asignado</p>
+                                        <field name="employee_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="mobile_brand_form" model="ir.ui.view">
+        <field name="name">mobile.brand.form</field>
+        <field name="model">mobile.brand</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="name"/>
+                <field name="model_lines" context="{'default_brand_id':id}">
+                    <tree editable="top">
+                        <field name="name"/>
+                        <field name="brand_id"/>
+                    </tree>
+                </field>
+                <field name="note"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="mobile_model_form" model="ir.ui.view">
+        <field name="name">mobile.model.form</field>
+        <field name="model">mobile.model</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="brand_id"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
     <record id="existence_action" model="ir.actions.act_window">
         <field name="name">Existencia</field>
         <field name="res_model">equipment.replacement</field>
         <field name="view_mode">kanban,form,tree</field>
         <field name="view_type">form</field>
-        <!--<field name="view_id" ref="equipment_replacement_kanban"/>-->
     </record>
 
-    <record id="gpd_dev_action" model="ir.actions.act_window">
+    <record id="gps_dev_action" model="ir.actions.act_window">
         <field name="name">Dispositivos GPS</field>
         <field name="res_model">gps.device</field>
-        <field name="view_model">kanban,form,tree</field>
+        <field name="view_mode">kanban,form,tree</field>
         <field name="view_type">form</field>
-        <!--<field name="view_id" ref="gps_dev_kanban"/>-->
+    </record>
+
+    <record id="mobile_dev_action" model="ir.actions.act_window">
+        <field name="name">Dispositivos Moviles</field>
+        <field name="res_model">mobile.device</field>
+        <field name="view_mode">kanban,form,tree</field>
+        <field name="view_type">form</field>
     </record>
 
     <menuitem
@@ -256,7 +385,13 @@
         id="menu_gps_device"
         name="Dispositivos GPS"
         parent="maintenance.menu_maintenance_title"
-        action="gpd_dev_action"
-        groups="maintenance.group_equipment_manager"
+        action="gps_dev_action"
         sequence="3" />
+
+    <menuitem
+        id="menu_mobile_device"
+        name="Dispositivos Moviles"
+        parent="maintenance.menu_maintenance_title"
+        action="mobile_dev_action"
+        sequence="4" />
 </odoo>

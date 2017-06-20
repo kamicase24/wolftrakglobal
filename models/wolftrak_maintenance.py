@@ -20,8 +20,8 @@ class MemoryStorage(models.Model):
     _name = 'memory.storage'
 
     name = fields.Char(string='Nombre', required=True)
-    brand = fields.Char(string='Marca')
-    model = fields.Char(string='Modelo')
+    brand_id = fields.Char(string='Marca')
+    model_id = fields.Char(string='Modelo')
     memory = fields.Integer(string='Capacidad')
     serial = fields.Char(string='Serial')
     type = fields.Selection([('hard_disc','Disco Duro'),('ram','Memoria RAM')], string="Tipo", required=True)
@@ -30,8 +30,8 @@ class EquipmentReplacement(models.Model):
     _name = 'equipment.replacement'
 
     name = fields.Char(string='Nombre del producto', required=True)
-    brand = fields.Char(string='Marca')
-    model = fields.Char(string='Modelo')
+    brand_id = fields.Char(string='Marca')
+    model_id = fields.Char(string='Modelo')
     serial = fields.Char(string='Serial')
     note = fields.Text(string='Nota')
     category = fields.Selection([('charger','Cargador'),('batery','Bateria'),('peripheral','Periferico')],string='Categoria', required=True)
@@ -57,8 +57,8 @@ class GpsDevice(models.Model):
 
     name = fields.Char(required=True)
     image = fields.Binary(default=_get_default_image)
-    brand = fields.Many2one('gps.brand', string='Marca')
-    model = fields.Many2one('gps.model',string='Modelo')
+    brand_id = fields.Many2one('gps.brand', string='Marca')
+    model_id = fields.Many2one('gps.model',string='Modelo')
     imei = fields.Char(string='IMEI', help='International Mobile Station Equipment Identity')
     esn = fields.Char(string='ESN')
     sn = fields.Char(string='S/N')
@@ -77,6 +77,50 @@ class GpsModel(models.Model):
 
     name = fields.Char(string='Modelo')
     note = fields.Text(string='Nota')
+
+class MobileDevice(models.Model):
+    _name = 'mobile.device'
+
+    @api.onchange('brand_id')
+    def get_domain_model_id(self):
+
+        return {
+            'domain': {
+                'model_id':[('brand_id','=',self.brand_id.id)]
+            }
+        }
+
+    name = fields.Char(required=True)
+    brand_id = fields.Many2one('mobile.brand', string='Marca')
+    model_id = fields.Many2one('mobile.model', string='Modelo')
+    imei = fields.Char(string='IMEI', help='International Mobile Station Equipment Identity')
+    batery = fields.Char(string='Batería')
+    batery_serial = fields.Char(string='Serial de la Batería')
+    batery_model = fields.Char(string='Modelo de la Batería')
+    employee_id = fields.Many2one('hr.employee', string='Empleado', domain=[('id','!=',1)], help='Empleado Asignado a este número de telefono')
+    number = fields.Integer(string='Número asociado')
+    simcard_imei = fields.Integer(string='IMEI de la Simcard')
+
+
+
+class MobileBrand(models.Model):
+    _name = 'mobile.brand'
+
+    name = fields.Char(string='Marca', required=True)
+    note = fields.Text(string='Nota')
+    model_lines = fields.One2many('mobile.model', 'brand_id')
+
+    # @api.multi
+    # def write(self, vals):
+    #
+    #     vals['name'] = self.name+' ['+self.model+']'
+    #     return super(MobileBrand, self).write(vals)
+
+class MobileModel(models.Model):
+    _name = 'mobile.model'
+
+    name = fields.Char(string='Modelo', required=True)
+    brand_id = fields.Many2one('mobile.brand', string='Marca')
 
 
 
