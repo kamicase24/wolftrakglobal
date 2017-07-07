@@ -31,7 +31,6 @@
         'report/wolftrak_report_header.xml',
         'report/wolftrak_report_invoice.xml', # factura
         'report/wolftrak_report_saleorder.xml', # presupuesto
-        'report/wolftrak_report_payroll_list.xml', # lista de nómina
         'report/wolftrak_report_daily_journal.xml',
         # views
         'views/606_wolftrak.xml',
