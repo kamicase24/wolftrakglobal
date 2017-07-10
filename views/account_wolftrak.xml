@@ -7,19 +7,26 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="attributes">
+                    <attribute name="confirm">Esta seguro?</attribute>
+                </xpath>
+
                 <xpath expr="//form/sheet/h1/label" position="replace">
                     <field name="draft_number" attrs="{'invisible': ['|',('state','not in',('draft',))]}"/>
                 </xpath>
+
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="type_nul"/>
                     <field name="ex_rate"/>
                 </xpath>
-            	<xpath expr="//form/sheet/notebook/page/group/group[2]" position="inside">
+
+                <xpath expr="//form/sheet/notebook/page/group/group[2]" position="inside">
             		<field name="ncf"/>
                     <field name="type_comp"/>
                     <field name="ncf_result"/>
                     <field name="tax_hold" attrs="{'invisible': [('tax_hold', '>=', 0)]}"/>
             	</xpath>
+
                 <xpath expr="//form/sheet/notebook/page/group/group/field[6]" position="replace">
                     <field name="date_due"/>
                 </xpath>
