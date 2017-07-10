@@ -5,7 +5,7 @@
         <field name="name">payroll.report.form</field>
         <field name="model">hr.payroll.report</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false">
                 <header>
 
                 </header>
@@ -46,7 +46,7 @@
         <field name="model">hr.payroll.report.wizard</field>
         <field name="type">form</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false" edit="false">
                 <field name="report_list_id" readonly="True">
                     <tree>
                         <field name="emp_name"/>
@@ -55,8 +55,32 @@
                         <field name="basic_wage"/>
                         <field name="daily_wage"/>
                         <field name="hour_value"/>
+                        <field name="worked_days"/>
+                        <field name="worked_days_total"/>
+                        <field name="no_worked_days"/>
+                        <field name="no_worked_days_total"/>
+                        <field name="d_ext_hrs"/>
+                        <field name="n_ext_hrs"/>
+                        <field name="total_d_ext_hrs"/>
+                        <field name="total_n_ext_hrs"/>
+                        <field name="holydays_sundays"/>
+                        <field name="total_hds_sds"/>
+                        <field name="bonus_days"/>
+                        <field name="subtotal_asg"/>
+                        <field name="tax1"/>
+                        <field name="unpaid_hours"/>
+                        <field name="total_unpaid_hours"/>
+                        <field name="tax2"/>
+                        <field name="loan"/>
+                        <field name="tax3"/>
+                        <field name="tax4"/>
+                        <field name="subtotal_dec"/>
+                        <field name="net"/>
                     </tree>
                 </field>
+                <footer>
+                    <!--<button name="print_report" type="object" string="Download" class="oe_highlight"/>-->
+                </footer>
             </form>
         </field>
     </record>
@@ -66,6 +90,7 @@
         <field name="res_model">hr.payroll.report</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
+        <field name="res_id">1</field>
         <!--<field name="view_id" ref="payroll_report_tree"/>-->
     </record>
 
@@ -74,5 +99,5 @@
         name="Lista de Nómina"
         parent="hr_payroll.menu_hr_payroll_root"
         action="payroll_report_action"
-        />
+    />
 </odoo>

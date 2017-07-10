@@ -24,5 +24,9 @@
             <field name="trg_date_range">0</field>
         </record>
 
+        <record id="hr_payroll_report_record" model="hr.payroll.report">
+            <field name="id">1</field>
+        </record>
+
     </data>
 </odoo>
