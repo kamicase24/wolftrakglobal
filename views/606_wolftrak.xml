@@ -42,8 +42,11 @@
 				<form>
 					<field name="report_result"/>
 					<field name="reports" invisible="1"/>
-					<field name="binary_report" filename="binary_str" widget="binary"/>
-					<button name="download_file" string="Descargar" type="object"/>
+					<footer>
+						<button string="Descargar" type="object" name="download_file"/>
+						<field name="binary_string" invisible="1"/>
+						<field name="binary_report" filename="binary_string" readonly="1"/>
+					</footer>
 				</form>
 			</field>
 		</record>

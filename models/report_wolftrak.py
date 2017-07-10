@@ -7,7 +7,7 @@ from dateutil import relativedelta
 from odoo import models, fields, api
 _logger = logging.getLogger(__name__)
 
-class wolftrakglobal_report(models.Model):
+class WolftrakReport607(models.Model):
     _name = 'wolftrakglobal.report607'
 
     @api.onchange('invoices')
@@ -239,40 +239,142 @@ class WizardReport606(models.Model):
             # self.binary_report = base64.encodestring(file)
         return var1
 
-    @api.one
-    def download_file(self):
-        result = self._default_report_result()
-
-        return {
-            'type':'ir.action.act_url',
-            'url':'/web/binary/download_document?model=wizard.report.606&field=binary_report&id=%s&filename=test1.txt'%(self.id),
-        }
-
-        # return self.write({'file_name':'test1.txt','binary_report':base64.encodestring(result)})
-
-        # self.write({'data': base64.encodestring(result)})
-        # this = self.browse()[0]
-        # _logger.info(this)
-        # _logger.info(self.inv.context)
-        # return {
-        #     'type' : 'ir.actions.act_window',
-        #     'res_model' : 'wizard.report606',
-        #     'view_mode' : 'form',
-        #     'view_type' : 'form',
-        #     'res_id' : this.id,
-        #     'views' : [(False,'form')],
-        #     'target' : 'new'
-        # }
-
-        # file = open("DGII_F_606_131104371_yearmonth.txt","w")
-        # file.write(result)
-        # file.close
-        # opener = urllib.URLopener
-        # opener.retrieve("http://localhost:8069/web/DGII_F_606_131104371_yearmonth.txt","DGII_F_606_131104371_yearmonth.txt")
-
-
     reports = fields.Many2one('wolftrakglobal.report606', default=_default_report)
     report_result = fields.Text(string="Reporte", default=_default_report_result)
-    binary_report = fields.Binary('Binario')
-    binary_str = fields.Char('Binario str')
+    binary_report = fields.Binary('Descargar')
+    binary_string = fields.Char('Descargar')
 
+
+    @api.multi
+    def download_file(self):
+        content_write = open("C:\Users\openpgsvc\DGII_F_606_131104371_yearmonth.txt", "w")
+        content_write.write(self.report_result)
+        content_write.close()
+        content_read = open("C:\Users\openpgsvc\DGII_F_606_131104371_yearmonth.txt", "r")
+        _logger.info(self.report_result)
+        self.write({
+            'binary_string': 'file.txt',
+            'binary_report': base64.encodestring(content_read.read())
+        })
+        return {'type':'ir.actions.do_nothing'}
+
+# result = self._default_report_result()
+#
+# return {
+#     'type':'ir.action.act_url',
+#     'url':'/web/binary/download_document?model=wizard.report.606&field=binary_report&id=%s&filename=test1.txt'%(self.id),
+# }
+
+# return self.write({'file_name':'test1.txt','binary_report':base64.encodestring(result)})
+
+# self.write({'data': base64.encodestring(result)})
+# this = self.browse()[0]
+# _logger.info(this)
+# _logger.info(self.inv.context)
+# return {
+#     'type' : 'ir.actions.act_window',
+#     'res_model' : 'wizard.report606',
+#     'view_mode' : 'form',
+#     'view_type' : 'form',
+#     'res_id' : this.id,
+#     'views' : [(False,'form')],
+#     'target' : 'new'
+# }
+
+# file = open("DGII_F_606_131104371_yearmonth.txt","w")
+# file.write(result)
+# file.close
+# opener = urllib.URLopener
+# opener.retrieve("http://localhost:8069/web/
+
+
+class WolftrakPartnersWizard(models.TransientModel):
+    _name = 'wizard.partner.report'
+
+    def _default_lines(self):
+        return self.env['partner.report'].search([])
+
+    partner_report = fields.Many2many('partner.report', default=_default_lines)
+    date_to = fields.Date(string='Desde')
+    date_from = fields.Date(string='Hasta')
+
+    def update_lines(self):
+
+        sql = """delete from partner_report"""
+        self.env.cr.execute(sql)
+
+        invoices = self.env['account.invoice'].search([('date_invoice','>=',self.date_to),('date_invoice','<=',self.date_from)])
+
+        partner_name = []
+        amount_inv = []
+        last_partner = False
+        for inv in invoices:
+            actual_partner = inv.partner_id.name
+            if last_partner:
+                partner_name.append(inv.partner_id.name)
+            else:
+                partner_name.append(last_partner)
+                last_partner = actual_partner
+        partner_names = dict.fromkeys(partner_name).keys()
+
+        _logger.info(partner_names)
+
+        partner_complete = []
+        last_partner = False
+        for name in partner_names:
+            for inv in invoices:
+                if inv.partner_id.name == name:
+                    inv_lines = []
+                    for line in inv.invoice_line_ids:
+                        # inv_lines.append(line.price_unit,line.quantity,line.name)
+                        inv_lines.append(line.price_unit)
+                        inv_lines.append(line.quantity)
+                        inv_lines.append(line.name)
+                    partner_complete.append({inv.partner_id.name:[inv.amount_total,inv_lines,]})
+
+        last_partner = False
+        partner_dic = {}
+
+        for partner in partner_complete:
+            actual_partner = partner.keys()[0]
+            if last_partner:
+                if actual_partner != last_partner:
+                    # _logger.info(partner[actual_partner][0])
+                    partner_dic[actual_partner] = [partner[actual_partner][0]]
+                    last_partner = actual_partner
+                else:
+                    partner_dic[actual_partner][0] = + partner[last_partner][0]
+
+                    last_partner = actual_partner
+            else:
+                partner_dic[actual_partner] = [partner[actual_partner][0]]
+                last_partner = actual_partner
+                # _logger.info(partner_dic)
+
+        sql = """insert into partner_report (partner_id, amount, devices, date_invoice) values
+         (1,
+         99,
+         2,
+         '02-05-2016')"""
+        self.env.cr.execute(sql)
+
+        view_ref = self.env['ir.model.data'].get_object_reference('wolftrakglobal', 'wizard_partner_report_form')
+        view_id = view_ref[1] if view_ref else False
+
+        return {
+            'name' : 'Reporte Clientes Fijos',
+            'view_type' : 'form',
+            'view_mode' : 'form',
+            'res_model' : 'wizard.partner.report',
+            'view_id' : view_id,
+            'type' : 'ir.actions.act_window',
+            'target' : 'new'
+        }
+
+class WolftrakPartnersReport(models.Model):
+    _name = 'partner.report'
+
+    partner_id = fields.Char(string='Cliente')
+    amount = fields.Float(string='Monto')
+    devices = fields.Integer(string='Dispositivos')
+    date_invoice = fields.Date(string='Fecha de la Factura')
