@@ -7,6 +7,7 @@ from dateutil import relativedelta
 from odoo import models, fields, api
 _logger = logging.getLogger(__name__)
 
+
 class WolftrakReport607(models.Model):
     _name = 'wolftrakglobal.report607'
 
@@ -18,15 +19,15 @@ class WolftrakReport607(models.Model):
             total_inv += value.amount_untaxed
             total_tax += value.amount_tax
 
-        str_total_inv = str('%.2f'%total_inv)
-        str_total_tax = str('%.2f'%total_tax)
+        str_total_inv = str('%.2f' % total_inv)
+        str_total_tax = str('%.2f' % total_tax)
         self.total_inv = ''.zfill(13)[len(str_total_inv[:str_total_inv.index('.')]):]+str_total_inv
         self.total_tax = ''.zfill(9)+str_total_tax
 
         regs = str(len(self.invoices))
         self.number_reg = ''.zfill(12)[len(regs):]+regs
 
-    @api.onchange('to_607','invoices')
+    @api.onchange('to_607', 'invoices')
     def _set_period(self):
         month = str(self.to_607[5:7])
         year = str(self.to_607[:4])
@@ -52,7 +53,8 @@ class WolftrakReport607(models.Model):
     to_str = fields.Char(compute=_set_to)
     total_inv = fields.Char(string='Total Calculado')
     total_tax = fields.Char(string='ITBIS Calculado')
-    invoices = fields.Many2many('account.invoice', string='Facturas', domain=[('type', '=', 'out_invoice'),('state', '!=', 'draft')])
+    invoices = fields.Many2many('account.invoice', string='Facturas', domain=[('type', '=', 'out_invoice'),
+                                                                              ('state', '!=', 'draft')])
     period = fields.Char(string='Periodo')
     number_reg = fields.Char('Cantidad de registros')
 
@@ -76,17 +78,18 @@ class WolftrakReport607(models.Model):
             'context': {'report_id': record_id}
         }
 
+
 class WizardReport607(models.Model):
     _name = 'wizard.report607'
 
     def _default_report(self):
-        return self.env['wolftrakglobal.report607'].search([('id','=',self.env.context['report_id'])])
+        return self.env['wolftrakglobal.report607'].search([('id', '=', self.env.context['report_id'])])
 
     reports = fields.Many2one('wolftrakglobal.report607', default=_default_report)
 
     def _default_report_result(self):
 
-        rpt = self.env['wolftrakglobal.report607'].search([('id','=',self.env.context['report_id'])])
+        rpt = self.env['wolftrakglobal.report607'].search([('id', '=', self.env.context['report_id'])])
         line1 = "607  131104371"+str(rpt.period)+str(rpt.number_reg)+str(rpt.total_inv)+"\n"
         for inv in rpt.invoices:
             line2 = "  "+str(inv.partner_id.doc_ident)+str(inv.partner_id.doc_ident_type)+str(inv.ncf)
@@ -94,8 +97,8 @@ class WizardReport607(models.Model):
             year = date[:date.index('-')]
             rest = date[date.index('-')+1:]
             date_result = year+rest[:rest.index('-')]+rest[rest.index('-')+1:]
-            str_amount_tax = str('%.2f'%inv.amount_tax)
-            str_amount_untaxed = str('%.2f'%inv.amount_untaxed)
+            str_amount_tax = str('%.2f' % inv.amount_tax)
+            str_amount_untaxed = str('%.2f' % inv.amount_untaxed)
             line2 += "                   "+str(date_result)
             line2 += "".zfill(9)[len(str_amount_tax[:str_amount_tax.index('.')]):]+str_amount_tax
             line2 += "".zfill(9)[len(str_amount_untaxed[:str_amount_untaxed.index('.')]):]+str_amount_untaxed+"\n"
@@ -104,17 +107,18 @@ class WizardReport607(models.Model):
 
     report_result = fields.Text(string="Reporte", default=_default_report_result)
 
+
 class WolftrakReport606(models.Model):
     _name = 'wolftrakglobal.report606'
 
-    @api.onchange('to_606','moves')
+    @api.onchange('to_606', 'moves')
     def _set_period(self):
         month = str(self.to_606[5:7])
         year = str(self.to_606[:4])
         self.period = year+month
 
-    @api.depends('from_606','to_606')
-    @api.onchange('from_606','to_606')
+    @api.depends('from_606', 'to_606')
+    @api.onchange('from_606', 'to_606')
     def _set_dates(self):
         from_year = str(self.from_606[:4])
         from_month = str(self.from_606[5:7])
@@ -143,9 +147,9 @@ class WolftrakReport606(models.Model):
             total_inv += value.amount - tax
             total_tax_hold += value.tax_hold
 
-        str_total_inv = str('%.2f'%total_inv)
-        str_total_tax = str('%.2f'%total_tax)
-        str_total_tax_hold = str('%.2f'%total_tax_hold)
+        str_total_inv = str('%.2f' % total_inv)
+        str_total_tax = str('%.2f' % total_tax)
+        str_total_tax_hold = str('%.2f' % total_tax_hold)
         self.total_inv = ''.zfill(13)[len(str_total_inv[:str_total_inv.index('.')]):]+str_total_inv
         self.total_tax = ''.zfill(9)[len(str_total_tax[:str_total_tax.index('.')]):]+str_total_tax
         self.total_tax_hold = ''.zfill(9)[len(str_total_tax_hold[:str_total_tax_hold.index('.')]):]+str_total_tax_hold
@@ -158,8 +162,7 @@ class WolftrakReport606(models.Model):
     #     self.total_tax_hold = ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold
 
     def _default_moves(self):
-        return self.env['account.move'].search([('journal_id','=',2)])
-
+        return self.env['account.move'].search([('journal_id', '=', 2)])
 
     from_606 = fields.Date('Desde', default=time.strftime('%Y-%m-01'))
     from_str = fields.Char(compute=_set_dates)
@@ -170,7 +173,7 @@ class WolftrakReport606(models.Model):
     total_tax_hold = fields.Char('ITBIS Retenido')
     total_tax = fields.Char('ITBIS Calculado')
     total_inv = fields.Char('Total Calculado')
-    moves = fields.Many2many('account.move', string='Asientos', domain=[('journal_id','=',2)])
+    moves = fields.Many2many('account.move', string='Asientos', domain=[('journal_id', '=', 2)])
 
     def to_wizard(self):
 
@@ -178,29 +181,30 @@ class WolftrakReport606(models.Model):
         view_id = view_ref[1] if view_ref else False
 
         if 'id' in self.env.context['params']:
-           record_id = self.env.context['params']['id']
+            record_id = self.env.context['params']['id']
         else:
             record_id = self.id
         return {
-            'name' : 'Report 606',
-            'view_type' : 'form',
-            'view_mode' : 'form',
-            'res_model' : 'wizard.report606',
-            'view_id' : view_id,
-            'type' : 'ir.actions.act_window',
-            'target' : 'new',
-            'context' : {'report_id' : record_id}
+            'name': 'Report 606',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'wizard.report606',
+            'view_id': view_id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {'report_id': record_id}
         }
+
 
 class WizardReport606(models.Model):
     _name = 'wizard.report606'
 
     def _default_report(self):
-        return self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])])
+        return self.env['wolftrakglobal.report606'].search([('id', '=', self.env.context['report_id'])])
 
     def _default_report_result(self):
-        _logger.info(self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])]))
-        rpt = self.env['wolftrakglobal.report606'].search([('id','=',self.env.context['report_id'])])
+        _logger.info(self.env['wolftrakglobal.report606'].search([('id', '=', self.env.context['report_id'])]))
+        rpt = self.env['wolftrakglobal.report606'].search([('id', '=', self.env.context['report_id'])])
 
         var1 = "606  131104371"+str(rpt.period)+str(rpt.number_reg)+str(rpt.total_inv)+str(rpt.total_tax_hold)+"\n"
         for move in rpt.moves:
@@ -222,14 +226,18 @@ class WizardReport606(models.Model):
                     amount += ln.debit
                     tax += 0.0
 
-            str_tax = str('%.2f'%tax)
-            str_tax_hold = str('%.2f'%move.tax_hold)
-            str_amount = str('%.2f'%amount)
-            str_rent_hold = str('%.2f'%move.rent_hold)
-            var1 += date_result+date_result+''.zfill(9)[len(str_tax[:str_tax.index('.')]):]+str_tax # itbis factura y fechas
-            var1 += ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold # itbis retenido
-            var1 += ''.zfill(9)[len(str_amount[:str_amount.index('.')]):]+str_amount # monto factura
-            var1 += ''.zfill(9)[len(str_rent_hold[:str_rent_hold.index('.')]):]+str_rent_hold+'\n' # retencion renta
+            str_tax = str('%.2f' % tax)
+            str_tax_hold = str('%.2f' % move.tax_hold)
+            str_amount = str('%.2f' % amount)
+            str_rent_hold = str('%.2f' % move.rent_hold)
+            # itbis factura y fechas
+            var1 += date_result+date_result+''.zfill(9)[len(str_tax[:str_tax.index('.')]):]+str_tax
+            # itbis retenido
+            var1 += ''.zfill(9)[len(str_tax_hold[:str_tax_hold.index('.')]):]+str_tax_hold
+            # monto factura
+            var1 += ''.zfill(9)[len(str_amount[:str_amount.index('.')]):]+str_amount
+            # retencion renta
+            var1 += ''.zfill(9)[len(str_rent_hold[:str_rent_hold.index('.')]):]+str_rent_hold+'\n'
 
             # file = open("C:\Users\Jesus Rojas/test2.txt","r+")
             # file.write(var1)
@@ -244,7 +252,6 @@ class WizardReport606(models.Model):
     binary_report = fields.Binary('Descargar')
     binary_string = fields.Char('Descargar')
 
-
     @api.multi
     def download_file(self):
         content_write = open("C:\Users\openpgsvc\DGII_F_606_131104371_yearmonth.txt", "w")
@@ -256,7 +263,7 @@ class WizardReport606(models.Model):
             'binary_string': 'file.txt',
             'binary_report': base64.encodestring(content_read.read())
         })
-        return {'type':'ir.actions.do_nothing'}
+        return {'type': 'ir.actions.do_nothing'}
 
 # result = self._default_report_result()
 #
@@ -303,10 +310,11 @@ class WolftrakPartnersWizard(models.TransientModel):
         sql = """delete from partner_report"""
         self.env.cr.execute(sql)
 
-        invoices = self.env['account.invoice'].search([('date_invoice','>=',self.date_to),('date_invoice','<=',self.date_from)])
+        invoices = self.env['account.invoice'].search([('date_invoice', '>=', self.date_to),
+                                                       ('date_invoice', '<=', self.date_from)])
 
         partner_name = []
-        amount_inv = []
+        # amount_inv = []
         last_partner = False
         for inv in invoices:
             actual_partner = inv.partner_id.name
@@ -320,7 +328,7 @@ class WolftrakPartnersWizard(models.TransientModel):
         _logger.info(partner_names)
 
         partner_complete = []
-        last_partner = False
+        # last_partner = False
         for name in partner_names:
             for inv in invoices:
                 if inv.partner_id.name == name:
@@ -330,7 +338,7 @@ class WolftrakPartnersWizard(models.TransientModel):
                         inv_lines.append(line.price_unit)
                         inv_lines.append(line.quantity)
                         inv_lines.append(line.name)
-                    partner_complete.append({inv.partner_id.name:[inv.amount_total,inv_lines,]})
+                    partner_complete.append({inv.partner_id.name: [inv.amount_total, inv_lines]})
 
         last_partner = False
         partner_dic = {}
@@ -362,14 +370,15 @@ class WolftrakPartnersWizard(models.TransientModel):
         view_id = view_ref[1] if view_ref else False
 
         return {
-            'name' : 'Reporte Clientes Fijos',
-            'view_type' : 'form',
-            'view_mode' : 'form',
-            'res_model' : 'wizard.partner.report',
-            'view_id' : view_id,
-            'type' : 'ir.actions.act_window',
-            'target' : 'new'
+            'name': 'Reporte Clientes Fijos',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'wizard.partner.report',
+            'view_id': view_id,
+            'type': 'ir.actions.act_window',
+            'target': 'new'
         }
+
 
 class WolftrakPartnersReport(models.Model):
     _name = 'partner.report'

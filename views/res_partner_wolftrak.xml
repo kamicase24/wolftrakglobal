@@ -6,6 +6,23 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button type="object"
+                        class="oe_stat_button"
+                        id="device_button"
+                        icon="fa-car"
+                        name="device_history"
+                        context="{'default_partner_id': active_id}"
+                        attrs="{'invisible':[('customer','=',False)]}"
+                    >
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="total_device" />
+                            </span>
+                            <span class="o_stat_text">Dispositivos</span>
+                        </div>
+                    </button>
+                </div>
             	<xpath expr="//form/sheet/div[2]" position="inside">
                     <h3>
                         <field name="doc_ident" placeholder="Documento de Identificación"/>

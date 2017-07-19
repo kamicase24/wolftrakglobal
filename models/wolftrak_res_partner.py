@@ -102,7 +102,7 @@ class WolftrakPartner(models.Model):
             self.pay_reg = rnc_record[4]
         except :
             pass
-
+    #
     # def device_history(self):
     #     partner_invs = self.env['account.invoice'].search([('partner_id','=',self.id)])
     #     _logger.info(self.env.context)

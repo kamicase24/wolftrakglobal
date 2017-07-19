@@ -9,7 +9,6 @@ from datetime import date
 import calendar
 _logger = logging.getLogger(__name__)
 
-
 main_base = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE_NAME = 'ncf.json'
 CONFIG_FILE = os.path.join(main_base, CONFIG_FILE_NAME)
