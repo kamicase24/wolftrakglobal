@@ -125,23 +125,47 @@
         <field name="model">gps.device</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="status_on"
+                            type="object"
+                            string="Activar"
+                            class="oe_highlight"
+                            attrs="{'invisible': ['|', ('status', '!=', 'off')]}"
+                    />
+                    <button name="status_off"
+                            type="object"
+                            class="oe_warning"
+                            string="Desactivar"
+                            attrs="{'invisible': ['|', ('status', '!=', 'on')]}"
+                    />
+                    <field name="status" widget="statusbar" nolabel="1"/>
+                </header>
                 <sheet>
-                    <h1><field name="name" placeholder="Nombre"/></h1>
-                    <group>
+                    <h1><field name="name" placeholder="Ficha"/></h1>
+                    <h4><field name="proyect" placeholder="Proyecto"/></h4>
+                    <group string="Datos del dispositivo">
                         <group>
+                            <field name="partner_id"/>
                             <field name="brand_id" widget="many2many_tags"/>
                             <field name="model_id"/>
-                            <field name="stock"/>
                         </group>
                         <group>
                             <field name="imei"/>
                             <field name="esn"/>
                             <field name="sn"/>
                         </group>
+                    </group>
+                    <group string="Datos de la Unidad">
                         <group>
-                            <field name="image" widget="image" nolabel="1"/>
+                            <field name="car_brand_id"/>
+                            <field name="car_model_id"/>
+                        </group>
+                        <group>
+                            <field name="license_plate"/>
+                            <field name="chassis"/>
                         </group>
                     </group>
+                    <field name="image" widget="image" nolabel="1"/>
                     <field name="note" colspan="4" placeholder="Nota Interna" nolabel="1" height="50"/>
                 </sheet>
             </form>
@@ -172,6 +196,45 @@
                 <group>
                     <group>
                         <field name="name"/>
+                        <field name="note"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+      <!-- CAR DETAILS VIEWS -->
+
+    <record id="car_model_form" model="ir.ui.view">
+        <field name="name">car.models.form</field>
+        <field name="model">car.model</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="brand_id"/>
+                        <field name="note"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="car_brand_form" model="ir.ui.view">
+        <field name="name">car.brand.form</field>
+        <field name="model">car.brand</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="model_lines">
+                            <tree editable="top">
+                                <field name="name"/>
+                                <field name="brand_id"/>
+                            </tree>
+                        </field>
                         <field name="note"/>
                     </group>
                 </group>
