@@ -65,24 +65,39 @@ class GpsDevice(models.Model):
     @api.onchange('car_brand_id')
     def get_domain_model_id(self):
 
+        self.car_model_id = None
         return {
             'domain': {
                 'car_model_id': [('brand_id', '=', self.car_brand_id.id)]
             }
         }
 
+    @api.onchange('brand_id')
+    def get_domain_gps_model_id(self):
+
+        self.model_id = None
+        return {
+            'domain': {
+                'model_id': [('brand_id', '=', self.brand_id.id)]
+            }
+        }
+
     name = fields.Char(required=True, string='Ficha')
-    # index_car = fields.Char(string='Ficha')
     image = fields.Binary(default=_get_default_image)
     brand_id = fields.Many2one('gps.brand', string='Marca')
     model_id = fields.Many2one('gps.model', string='Modelo')
-    imei = fields.Char(string='IMEI', help='International Mobile Station Equipment Identity')
+    imei = fields.Char(string='IMEI del GPS', help='International Mobile Station Equipment Identity')
     esn = fields.Char(string='ESN')
     sn = fields.Char(string='S/N')
+
+    device_num = fields.Char(string='Número Asignado')
+    sim_imei = fields.Char(string='IMEI SIMCARD')
+
     chassis = fields.Char(string='Chasis')
     license_plate = fields.Char(string='Placa')
-    car_brand_id = fields.Many2one('car.brand', string='Marca de la Unidad')
+    car_brand_id = fields.Many2one('car.brand', string='Marca de la unidad')
     car_model_id = fields.Many2one('car.model', string='Modelo de la unidad')
+    year = fields.Char(string='Año de la unidad')
     partner_id = fields.Many2one('res.partner', string='Cliente')
     status = fields.Selection([('on', 'Activado'), ('off', 'Desactivado')],
                               string='Estado', readonly=True, default='on')
@@ -101,6 +116,7 @@ class GpsBrand(models.Model):
 
     name = fields.Char(string='Marca')
     note = fields.Text(string='Nota')
+    model_lines = fields.One2many('gps.model', 'brand_id')
     supplier = fields.Many2one('res.partner', string='Proveedor',
                                domain=[('supplier', '=', True), ('customer', '=', False)])
 
@@ -110,6 +126,7 @@ class GpsModel(models.Model):
 
     name = fields.Char(string='Modelo')
     note = fields.Text(string='Nota')
+    brand_id = fields.Many2one('gps.brand', string='Marca')
 
 
 class CarBrand(models.Model):

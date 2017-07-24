@@ -118,7 +118,7 @@
         </field>
     </record>
 
-    <!-- GPS DEVICE VIEWS -->
+    <!-- GPS DEVICE FORM VIEW -->
 
     <record id="gps_dev_form" model="ir.ui.view">
         <field name="name">gps.devices.form</field>
@@ -146,7 +146,7 @@
                     <group string="Datos del dispositivo">
                         <group>
                             <field name="partner_id"/>
-                            <field name="brand_id" widget="many2many_tags"/>
+                            <field name="brand_id"/>
                             <field name="model_id"/>
                         </group>
                         <group>
@@ -155,22 +155,33 @@
                             <field name="sn"/>
                         </group>
                     </group>
-                    <group string="Datos de la Unidad">
-                        <group>
+                    <group>
+                        <group string="Datos de la Unidad">
                             <field name="car_brand_id"/>
                             <field name="car_model_id"/>
-                        </group>
-                        <group>
                             <field name="license_plate"/>
                             <field name="chassis"/>
+                            <field name="year"/>
+                        </group>
+                        <group string="Datos del SIMCARD">
+                            <field name="sim_imei"/>
+                            <field name="device_num" placeholder="###-#######"/>
                         </group>
                     </group>
-                    <field name="image" widget="image" nolabel="1"/>
-                    <field name="note" colspan="4" placeholder="Nota Interna" nolabel="1" height="50"/>
+                    <group>
+                        <group>
+                            <field name="image" widget="image"/>
+                        </group>
+                        <group>
+                            <field name="note" colspan="4" placeholder="Nota Interna" nolabel="1" height="50"/>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>
     </record>
+
+    <!-- GPS DETAILS VIEWS -->
 
     <record id="gps_device_brand_form" model="ir.ui.view">
         <field name="name">gps.device.brand.form</field>
@@ -180,6 +191,15 @@
                 <group>
                     <group>
                         <field name="name"/>
+                        <field name="model_lines">
+                            <tree editable="top">
+                                <field name="name"/>
+                                <field name="brand_id"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group>
+                        <field name="id" readonly="1"/>
                         <field name="supplier"/>
                         <field name="note"/>
                     </group>
@@ -196,6 +216,8 @@
                 <group>
                     <group>
                         <field name="name"/>
+                        <field name="id" readonly="1"/>
+                        <field name="brand_id"/>
                         <field name="note"/>
                     </group>
                 </group>
@@ -213,6 +235,7 @@
                 <group>
                     <group>
                         <field name="name"/>
+                        <field name="id" readonly="1"/>
                         <field name="brand_id"/>
                         <field name="note"/>
                     </group>
@@ -235,12 +258,17 @@
                                 <field name="brand_id"/>
                             </tree>
                         </field>
+                    </group>
+                    <group>
+                        <field name="id" readonly="1"/>
                         <field name="note"/>
                     </group>
                 </group>
             </form>
         </field>
     </record>
+
+    <!-- GPS TREE AND KANBAN VIEWS -->
 
     <record id="gps_dev_tree" model="ir.ui.view">
         <field name="name">gps.device.tree</field>
