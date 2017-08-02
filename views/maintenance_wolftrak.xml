@@ -142,10 +142,10 @@
                 </header>
                 <sheet>
                     <h1><field name="name" placeholder="Ficha"/></h1>
-                    <h4><field name="proyect" placeholder="Proyecto"/></h4>
+                    <h4><field name="partner_id" placeholder="Cliente"/></h4>
                     <group string="Datos del dispositivo">
                         <group>
-                            <field name="partner_id"/>
+                            <field name="proyect" placeholder="Proyecto"/>
                             <field name="brand_id"/>
                             <field name="model_id"/>
                         </group>
@@ -168,14 +168,38 @@
                             <field name="device_num" placeholder="###-#######"/>
                         </group>
                     </group>
-                    <group>
-                        <group>
-                            <field name="image" widget="image"/>
-                        </group>
-                        <group>
-                            <field name="note" colspan="4" placeholder="Nota Interna" nolabel="1" height="50"/>
-                        </group>
-                    </group>
+                    <notebook>
+                        <page string="Otros datos">
+                            <group>
+                                <group>
+                                    <field name="image" widget="image"/>
+                                </group>
+                                <group>
+                                    <field name="note" colspan="4" placeholder="Nota Interna" nolabel="1" height="50"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Contrato">
+                            <group>
+                                <group>
+                                    <button name="set_partner_dateprice"
+                                        type="object"
+                                        string="Sincronizar"
+                                        class="oe_highlight"
+                                    />
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="start_date"/>
+                                </group>
+                                <group>
+                                    <field name="gps_price"/>
+                                </group>
+                                <field name="invoices" nolabel="1" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

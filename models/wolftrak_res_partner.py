@@ -53,19 +53,13 @@ class WolftrakPartner(models.Model):
         all_partners_and_children = {}
         all_partner_ids = []
         for partner in self:
-            # price_total is in the company currency
             all_partners_and_children[partner] = self.search([('id', 'child_of', partner.id)]).ids
             all_partner_ids += all_partners_and_children[partner]
-        _logger.info('all partners andd children')
-        _logger.info(all_partners_and_children.items())
-        _logger.info('al partners ids')
-        _logger.info(all_partner_ids)
-        # for inv in invoices.search([('partner_id', '=', self.id)], limit=1):
-        #     _logger.info(inv)
-        # self.total_device = 4
 
         for partner, child_ids in all_partners_and_children.items():
-            partner.total_device = 0
+            gps_devices = self.env['gps.device'].search([('partner_id', '=', partner.id)])
+            _logger.info(len(gps_devices))
+            partner.total_device = len(gps_devices)
         return False
 
     def _default_user_id(self):
@@ -77,6 +71,7 @@ class WolftrakPartner(models.Model):
     doc_ident_type = fields.Integer(string='Tipo de Documento')
     user_id = fields.Many2one('res.users', string='Comercial', default=_default_user_id)
     total_device = fields.Integer(string='Dispositivos', help='Total de dispositivos vendidos a este cliente', compute=_total_device)
+    start_date = fields.Date(string='Fecha de Inicio', help='Fecha en que inicio el contrato el cliente.')
 
     def _get_partner_invoices(self):
         invoices = self.env['account.invoice']
@@ -126,7 +121,7 @@ class WolftrakPartner(models.Model):
         _logger.info("Dispositivos: ")
         _logger.info(partner_invoices)
 
-        action = self.env.ref('wolftrakglobal.action_invoice_lines_partner')
+        action = self.env.ref('wolftrakglobal.action_partner_device_lines')
         result = action.read()[0]
         # result['domain'] = [('partner_id', 'in', self.ids), ('product_id', 'in', [2, 4])]
         result['domain'] = [('partner_id', 'in', self.ids)]

@@ -39,6 +39,10 @@
                 <xpath expr="//form/sheet/group/group[2]/field[2]" position="replace">
                     <field name="phone" placeholder="###-#######"/>
                 </xpath>
+
+                <xpath expr="//form/sheet/group/group[2]/field[8]" position="after">
+                    <field name="start_date"/>
+                </xpath>
             </field>
     	</record>
 
@@ -65,41 +69,41 @@
             </field>
         </record>
 
-        <record id="invoice_line_custom_search" model="ir.ui.view">
-            <field name="name">invoice.line.custom.search</field>
-            <field name="model">account.invoice.line</field>
+        <record id="partner_device_custom_search" model="ir.ui.view">
+            <field name="name">partner.device.custom.search</field>
+            <field name="model">gps.device</field>
             <field name="arch" type="xml">
                 <search string="Mes">
                     <group expand="0" string="Mes">
-                        <filter string="Fecha" name="create_date" context="{'group_by' : 'create_date'}"/>
+                        <filter string="Fecha" name="start_date" context="{'group_by' : 'start_date'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <record id="invoice_lines_partner_tree" model="ir.ui.view">
-            <field name="name">invoice.lines.partner.tree</field>
-            <field name="model">account.invoice.line</field>
+        <record id="partner_device_tree" model="ir.ui.view">
+            <field name="name">partner.device.tree</field>
+            <field name="model">gps.device</field>
             <field name="arch" type="xml">
                 <tree readonly="1" create="false" edit="false">
-                    <field name="product_id"/>
+                    <field name="partner_id"/>
                     <field name="name"/>
-                    <field name="description"/>
-                    <field name="quantity" sum="Total Unidades"/>
-                    <field name="price_unit" sum="Total Precio"/>
-                    <field name="create_date" invisible="1"/>
+                    <field name="start_date"/>
+                    <field name="proyect"/>
+                    <field name="imei"/>
+                    <field name="gps_price"/>
                 </tree>
             </field>
         </record>
 
-        <record id="action_invoice_lines_partner" model="ir.actions.act_window">
-            <field name="name">Invoices</field>
-            <field name="res_model">account.invoice.line</field>
+        <record id="action_partner_device_lines" model="ir.actions.act_window">
+            <field name="name">Devices</field>
+            <field name="res_model">gps.device</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree</field>
-            <field name="view_id" ref="invoice_lines_partner_tree"/>
-            <field name="search_view_id" ref="invoice_line_custom_search"/>
-            <field name="context">{'group_by': 'create_date'}</field>
+            <field name="view_id" ref="partner_device_tree"/>
+            <field name="search_view_id" ref="partner_device_custom_search"/>
+            <field name="context">{'group_by': 'start_date'}</field>
         </record>
 
 
