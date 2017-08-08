@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<report
+			id="gps_device_report"
+			model="gps.device"
+			string="Dispositivos GPS"
+			report_type="qweb-pdf"
+			name="wolftrakglobal.wolftrak_gps_device_report"
+			file="wolftrakglobal.wolftrak_gps_device_report"
+		/>
+
+        <template id="wolftrak_gps_device_report">
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <h3 class="tablecolor textcolor">Dispositivos GPS</h3>
+                        <br/>
+                        <table class="table table-bordered table-condensed">
+                            <tr>
+                                <td class="tablecolor textcolor">Ficha</td>
+                                <td class="tablecolor textcolor">Precio de Disp.</td>
+                                <td class="tablecolor textcolor">Mensualidad de Disp.</td>
+                                <td class="tablecolor textcolor">Fecha de Inicio</td>
+                                <!--<td class="tablecolor textcolor">Proyecto</td>-->
+                                <td class="tablecolor textcolor">IMEI</td>
+                                <td class="tablecolor textcolor">Num. Tlf.</td>
+                            </tr>
+                            <t t-set="total_gp" t-value="0.0"/>
+                            <t t-set="total_mp" t-value="0.0"/>
+                            <t t-foreach="docs" t-as="o">
+                                <tr>
+                                    <td><span t-field="o.name"/></td>
+                                    <td><span t-field="o.gps_price" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                                    <td><span t-field="o.gps_month_payment" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                                    <td><span t-field="o.start_date"/></td>
+                                    <!--<td><span t-field="o.proyect"/></td>-->
+                                    <td><span t-field="o.imei"/></td>
+                                    <td><span t-field="o.device_num"/></td>
+                                </tr>
+                                <t t-set="total_gp" t-value="total_gp + o.gps_price"/>
+                                <t t-set="total_mp" t-value="total_mp + o.gps_month_payment"/>
+                            </t>
+                            <tr>
+                                <td></td>
+                                <td class="total1 textcolor"><span t-esc="total_gp" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                                <td class="total1 textcolor"><span t-esc="total_mp" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

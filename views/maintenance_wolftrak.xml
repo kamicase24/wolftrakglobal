@@ -125,6 +125,7 @@
         <field name="model">gps.device</field>
         <field name="arch" type="xml">
             <form>
+                <field name="currency_id" invisible="1"/>
                 <header>
                     <button name="status_on"
                             type="object"
@@ -189,18 +190,139 @@
                                     />
                                 </group>
                             </group>
-                            <group>
+                            <group col="3">
                                 <group>
                                     <field name="start_date"/>
                                 </group>
                                 <group>
-                                    <field name="gps_price"/>
+                                    <field name="gps_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                 </group>
+                                <group>
+                                    <field name="gps_month_payment" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </group>
+                            <group>
                                 <field name="invoices" nolabel="1" readonly="1"/>
                             </group>
                         </page>
                     </notebook>
                 </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="gps_dev_search" model="ir.ui.view">
+        <field name="name">gps.device.search</field>
+        <field name="model">gps.device</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="imei"/>
+                <field name="device_num"/>
+                <group expand="1" string="Clientes">
+                    <filter string="Cliente" domain="[]" context="{'group_by':'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="gps_dev_tree" model="ir.ui.view">
+        <field name="name">gps.device.tree</field>
+        <field name="model">gps.device</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="imei"/>
+                <field name="device_num"/>
+                <field name="model_id"/>
+                <field name="brand_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="gps_dev_kanban" model="ir.ui.view">
+        <field name="name">gps.device.kanban</field>
+        <field name="model">gps.device</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard">
+                <field name="name"/>
+                <field name="imei"/>
+                <field name="device_num"/>
+                <field name="model_id"/>
+                <field name="brand_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary"><field name="name"/></div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content o_visible">
+                                <div class="row">
+                                    <div class="col-xs-6 o_kanban_primary_left">
+                                        <b>Marca</b>
+                                        <span><field name="brand_id"/></span>
+                                        <b>Modelo</b>
+                                        <span><field name="model_id"/></span>
+                                    </div>
+                                    <div class="col-xs-6 o_kanban_primary_left">
+                                        <b>IMEI</b>
+                                        <span><field name="imei"/></span>
+                                        <b>Número Asignado</b>
+                                        <span><field name="device_num"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="gps_config_form" model="ir.ui.view">
+        <field name="name">Configuracion GPS</field>
+        <field name="model">gps.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <group col="2" string="Sincronizar Datos">
+                    <group>
+                        <field name="partner_id"/>
+
+                        <label for="sync_date" string="Fecha"/>
+                        <div class="o_row mr16">
+                            <field name="sync_date"/> <field name="custom_date" nolabel="1"/>
+                        </div>
+
+                        <label for="sync_unit_price" string="Precio del Disp."/>
+                        <div class="o_row mr16">
+                            <field name="sync_unit_price"/> <field name="custom_unit_price" nolabel="1"/>
+                        </div>
+
+                        <label for="sync_month_payment" string="Mensualidad del Disp."/>
+                        <div class="o_row mr16">
+                            <field name="sync_month_payment"/> <field name="custom_mont_payment" nolabel="1"/>
+                        </div>
+                        <button name="sync_data"
+                                type="object"
+                                string="Sincronizar"
+                                class="oe_highlight"
+                                confirm="Esta por insertar valores a todos los registro de este usuario. ¿Desea Continuar?"
+                        />
+                    </group>
+                </group>
+                <group string="Nuevos Registros">
+                    <group>
+
+                    </group>
+                    <group>
+                        <button name="" type="object" string="Procesar" class="oe_highlight"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="close" string="Cerrar" class="oe_highlight"/>
+                </footer>
             </form>
         </field>
     </record>
@@ -289,58 +411,6 @@
                     </group>
                 </group>
             </form>
-        </field>
-    </record>
-
-    <!-- GPS TREE AND KANBAN VIEWS -->
-
-    <record id="gps_dev_tree" model="ir.ui.view">
-        <field name="name">gps.device.tree</field>
-        <field name="model">gps.device</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="name"/>
-                <field name="model_id"/>
-                <field name="brand_id"/>
-                <field name="imei"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id="gps_dev_kanban" model="ir.ui.view">
-        <field name="name">gps.device.kanban</field>
-        <field name="model">gps.device</field>
-        <field name="arch" type="xml">
-            <kanban class="oe_background_grey o_kanban_dashboard">
-                <field name="name"/>
-                <field name="brand_id"/>
-                <field name="model_id"/>
-                <field name="image"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="oe_kanban_global_click">
-                            <div class="o_kanban_card_header">
-                                <div class="o_kanban_card_header_title">
-                                    <div class="o_primary"><field name="name"/></div>
-                                </div>
-                            </div>
-                            <div class="container o_kanban_card_content o_visible">
-                                <div class="row">
-                                    <div class="col-xs-6 o_kanban_primary_left">
-                                        <b>Marca</b>
-                                        <span><field name="brand_id"/></span>
-                                        <b>Modelo</b>
-                                        <span><field name="model_id"/></span>
-                                    </div>
-                                    <div class="col-xs-6 o_kanban_primary_left">
-                                        <field name="image"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
         </field>
     </record>
 
@@ -467,6 +537,8 @@
         </field>
     </record>
 
+    <!-- ACTIONS -->
+
     <record id="existence_action" model="ir.actions.act_window">
         <field name="name">Existencia</field>
         <field name="res_model">equipment.replacement</field>
@@ -479,6 +551,8 @@
         <field name="res_model">gps.device</field>
         <field name="view_mode">kanban,form,tree</field>
         <field name="view_type">form</field>
+        <field name="search_view_id" ref="gps_dev_search"/>
+         <field name="context">{'group_by': 'partner_id'}</field>
     </record>
 
     <record id="mobile_dev_action" model="ir.actions.act_window">
@@ -487,6 +561,16 @@
         <field name="view_mode">kanban,form,tree</field>
         <field name="view_type">form</field>
     </record>
+
+    <record id="gps_config_action" model="ir.actions.act_window">
+        <field name="name">Configuracion GPS</field>
+        <field name="res_model">gps.config</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- MENU ITEMS -->
 
     <menuitem
         id="menu_equipment_form"
@@ -504,9 +588,18 @@
         sequence="3" />
 
     <menuitem
+        id="menu_gps_config"
+        name="Configuracion GPS"
+        parent="maintenance.menu_maintenance_configuration"
+        action="gps_config_action"
+        sequence="4" />
+
+    <menuitem
         id="menu_mobile_device"
         name="Dispositivos Moviles"
         parent="maintenance.menu_maintenance_title"
         action="mobile_dev_action"
         sequence="4" />
+
+
 </odoo>

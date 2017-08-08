@@ -15,7 +15,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account','hr_payroll','gamification'],
+    'depends': ['base', 'account', 'hr_payroll', 'gamification'],
     # always loaded
     'data': [
         # secutiry
@@ -24,14 +24,15 @@
         # 'report/wolftrak_report_footer.xml', dejar comentado 4 ever
         'report/wolftrak_report_606.xml',
         'report/wolftrak_report_607.xml',
-        'report/wolftrak_report_cesta_ticket.xml', # cesta ticket
+        'report/wolftrak_report_cesta_ticket.xml',  # cesta ticket
         'report/wolftrak_report_act_det.xml',
-        'report/wolftrak_report_statement.xml', # estado de cuenta
-        'report/wolftrak_report_payslip.xml', # nómina
+        'report/wolftrak_report_statement.xml',  # estado de cuenta
+        'report/wolftrak_report_payslip.xml',  # nomina
         'report/wolftrak_report_header.xml',
-        'report/wolftrak_report_invoice.xml', # factura
-        'report/wolftrak_report_saleorder.xml', # presupuesto
+        'report/wolftrak_report_invoice.xml',  # factura
+        'report/wolftrak_report_saleorder.xml',  # presupuesto
         'report/wolftrak_report_daily_journal.xml',
+        'report/wolftrak_report_gps_device.xml',  # dispositivos gps
         # views
         'views/606_wolftrak.xml',
         'views/607_wolftrak.xml',

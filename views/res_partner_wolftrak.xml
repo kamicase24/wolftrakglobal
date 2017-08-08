@@ -86,12 +86,14 @@
             <field name="model">gps.device</field>
             <field name="arch" type="xml">
                 <tree readonly="1" create="false" edit="false">
-                    <field name="partner_id"/>
+                    <field name="currency_id" invisible="1"/>
+                    <!--<field name="partner_id"/>-->
                     <field name="name"/>
+                    <field name="gps_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="gps_month_payment" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="start_date"/>
                     <field name="proyect"/>
                     <field name="imei"/>
-                    <field name="gps_price"/>
                 </tree>
             </field>
         </record>
