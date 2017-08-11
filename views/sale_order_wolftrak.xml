@@ -10,6 +10,10 @@
 					<field name="payment_term_id" invisible="1"/>
 					<field name="ex_rate"/>
 				</xpath>
+
+                <xpath expr="//form/sheet/group/group" position="inside">
+                    <button name="currency_exchange" string="Cambio monetario" icon="fa-repeat" type="object" class="oe_highlight"/>
+                </xpath>
 			</field>
 		</record>
 	</data>
