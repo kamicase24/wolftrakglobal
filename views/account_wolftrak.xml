@@ -7,6 +7,14 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//form/header/field[@name='state']" position="replace">
+                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,open,open2,paid"/>
+                </xpath>
+
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="before">
+                    <button name="action_invoice_open2" type="object" string="Validar sin credito fiscal" class="oe_highlight"/>
+                </xpath>
+
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="attributes">
                     <attribute name="confirm">¿Esta seguro?</attribute>
                 </xpath>

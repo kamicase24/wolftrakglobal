@@ -4,6 +4,7 @@ import json
 import logging
 import sys, os
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 from bs4 import BeautifulSoup
 import requests
 from datetime import date
@@ -113,11 +114,35 @@ class WolftrakInvoice(models.Model):
                 line_tax.amount = (line_tax.base * tax.amount) / 100
             self.amount_tax = sum(line_tax.amount for line_tax in self.tax_line_ids)
 
+    def action_invoice_open2(self):
+        to_open_invoices = self.filtered(lambda inv: inv.state != 'open2')
+        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open']):
+            raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
+        to_open_invoices.action_date_assign()
+        to_open_invoices.action_move_create()
+        return to_open_invoices.invoice_validate_no_tax()
+
     @api.multi
     def invoice_validate(self):
         self.date_invoice = time.strftime('%Y-%m-%d')
         return self.write({'state': 'open'})
 
+    def invoice_validate_no_tax(self):
+        for invoice in self:
+            # refuse to validate a vendor bill/refund
+            # if there already exists one with the same reference for the same partner,
+            # because it's probably a double encoding of the same bill/refund
+            if invoice.type in ('in_invoice', 'in_refund') and invoice.reference:
+                if self.search([('type', '=', invoice.type),
+                                ('reference', '=', invoice.reference),
+                                ('company_id', '=', invoice.company_id.id),
+                                ('commercial_partner_id', '=', invoice.commercial_partner_id.id),
+                                ('id', '!=', invoice.id)]):
+                    raise UserError(_("Duplicated vendor reference detected. "
+                                      "You probably encoded twice the same vendor bill/refund."))
+
+        self.date_invoice = time.strftime('%Y-%m-%d')
+        return self.write({'state': 'open2'})
 
     draft_number = fields.Char(readonly=False, default=default_draft_number)
 
@@ -159,6 +184,24 @@ class WolftrakInvoice(models.Model):
                                 ('07', '07 Devolución de Productos'),
                                 ('08', '08 Omisión de Productos'),
                                 ('09', '09 Errores de Secuencias de NCF')], string="Tipo de Anulación")
+
+    state = fields.Selection([
+            ('draft', 'Draft'),
+            ('proforma', 'Pro-forma'),
+            ('proforma2', 'Pro-forma'),
+            ('open', 'Open'),
+            ('open2', 'Abierto (Sin credito Fiscal)'),
+            ('paid', 'Paid'),
+            ('cancel', 'Cancelled')
+        ], string='Status', index=True, readonly=True, default='draft',
+        track_visibility='onchange', copy=False,
+        help=" * The 'Draft' status is used when a user is encoding a new and unconfirmed Invoice.\n"
+             " * The 'Pro-forma' status is used when the invoice does not have an invoice number.\n"
+             " * The 'Open' status is used when user creates invoice, an invoice number is generated."
+             "It stays in the open status till the user pays the invoice.\n"
+             " * The 'Paid' status is set automatically when the invoice is paid. "
+             "Its related journal entries may or may not be reconciled.\n"
+             " * The 'Cancelled' status is used when user cancel invoice.")
 
     ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4), default=default_ex_rate_2)
 
@@ -270,3 +313,4 @@ class WolftrakMove(models.Model):
             self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
         else:
             self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
+
