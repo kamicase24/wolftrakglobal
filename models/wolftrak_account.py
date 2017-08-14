@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 import json
 import logging
 import sys, os
@@ -15,10 +16,9 @@ CONFIG_FILE = os.path.join(main_base, CONFIG_FILE_NAME)
 
 
 def load_config(json_file):
-    with open(json_file, 'r') as file:
-        config_data = json.load(file)
+    with open(json_file, 'r') as wfile:
+        config_data = json.load(wfile)
         return config_data
-
 
 def get_ncf_record(ncf, rnc, config_data=None):
     if not config_data:
@@ -92,6 +92,12 @@ class WolftrakInvoice(models.Model):
                 _logger.info(line.price_unit)
                 line.price_unit = line.price_unit * self.ex_rate
                 self.currency_id = 74
+            for line_tax in self.tax_line_ids:
+                tax = self.env['account.tax'].search([('id', '=', line_tax.tax_id.id)])
+                _logger.info(tax.amount)
+                _logger.info(line_tax.base)
+                line_tax.amount = (line_tax.base * tax.amount) / 100
+            self.amount_tax = sum(line_tax.amount for line_tax in self.tax_line_ids)
 
         elif self.currency_id.name == 'DOP':
             _logger.info('Pesos Dominicanos 74')
@@ -100,6 +106,18 @@ class WolftrakInvoice(models.Model):
             for line in line_ids:
                 line.price_unit = line.price_unit / self.ex_rate
                 self.currency_id = 3
+            for line_tax in self.tax_line_ids:
+                tax = self.env['account.tax'].search([('id', '=', line_tax.tax_id.id)])
+                _logger.info(tax.amount)
+                _logger.info(line_tax.base)
+                line_tax.amount = (line_tax.base * tax.amount) / 100
+            self.amount_tax = sum(line_tax.amount for line_tax in self.tax_line_ids)
+
+    @api.multi
+    def invoice_validate(self):
+        self.date_invoice = time.strftime('%Y-%m-%d')
+        return self.write({'state': 'open'})
+
 
     draft_number = fields.Char(readonly=False, default=default_draft_number)
 

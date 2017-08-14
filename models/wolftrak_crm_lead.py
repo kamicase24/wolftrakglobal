@@ -33,3 +33,5 @@ class LeadWolftrak(models.Model):
             self.zip = self.partner_id.zip
         if self.partner_id.country_id:
             self.country_id = self.partner_id.country_id
+
+    country_id = fields.Many2one('res.country', string='Country', default=62)
