@@ -34,7 +34,6 @@ class LeadWolftrak(models.Model):
         if self.partner_id.country_id:
             self.country_id = self.partner_id.country_id
 
-    @api.onchange('partner_id')
     def confirm_rnc(self):
         if self.partner_id:
             if self.partner_id.doc_ident:

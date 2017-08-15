@@ -16,7 +16,6 @@
                             type="object"
                             string="Validar sin crédito fiscal"
                             class="oe_highlight"
-                            attrs="{'invisible':['|',('sent','=',True), ('state', '!=', 'open')]}"
                             confirm="¿Esta seguro?"/>
                 </xpath>
 
