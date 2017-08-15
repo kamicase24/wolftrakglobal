@@ -12,7 +12,12 @@
                 </xpath>
 
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="before">
-                    <button name="action_invoice_open2" type="object" string="Validar sin credito fiscal" class="oe_highlight"/>
+                    <button name="action_invoice_open2"
+                            type="object"
+                            string="Validar sin crédito fiscal"
+                            class="oe_highlight"
+                            attrs="{'invisible':['|',('sent','=',True), ('state', '!=', 'open')]}"
+                            confirm="¿Esta seguro?"/>
                 </xpath>
 
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="attributes">

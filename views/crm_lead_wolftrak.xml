@@ -101,6 +101,10 @@
 					</group>
 				</xpath>
 
+				<xpath expr="//form/sheet/group/group" position="inside">
+					<field name="confirm_note" readonly="1"/>
+				</xpath>
+
 				<xpath expr="//form/sheet/notebook/page[2]/group/group/div" position="replace">
 					<div></div>
 					<!--<div class="o_address_format" invisible="1">-->

@@ -34,4 +34,13 @@ class LeadWolftrak(models.Model):
         if self.partner_id.country_id:
             self.country_id = self.partner_id.country_id
 
+    @api.onchange('partner_id')
+    def confirm_rnc(self):
+        if self.partner_id:
+            if self.partner_id.doc_ident:
+                self.confirm_note = """<p style='color: blue'> %s </p>""" % self.partner_id.doc_ident
+            else:
+                self.confirm_note = """<p style='color: red'>El cliente no posee RNC</p>"""
+
     country_id = fields.Many2one('res.country', string='Country', default=62)
+    confirm_note = fields.Html(string='RNC')

@@ -125,8 +125,8 @@
         <field name="model">gps.device</field>
         <field name="arch" type="xml">
             <form>
-                <field name="currency_id" invisible="1"/>
                 <header>
+                    <field name="currency_id" invisible="1"/>
                     <button name="status_on"
                             type="object"
                             string="Activar"
@@ -139,7 +139,7 @@
                             string="Desactivar"
                             attrs="{'invisible': ['|', ('status', '!=', 'on')]}"
                     />
-                    <field name="status" widget="statusbar" nolabel="1"/>
+                    <field name="status" widget="statusbar" statusbar_visible="on,off,personal,garage,check" nolabel="1"/>
                 </header>
                 <sheet>
                     <h1><field name="name" placeholder="Ficha"/></h1>
