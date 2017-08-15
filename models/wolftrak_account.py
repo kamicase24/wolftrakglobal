@@ -122,10 +122,10 @@ class WolftrakInvoice(models.Model):
         to_open_invoices.action_move_create()
         return to_open_invoices.invoice_validate_no_tax()
 
-    @api.multi
-    def invoice_validate(self):
-        self.date_invoice = time.strftime('%Y-%m-%d')
-        return self.write({'state': 'open'})
+    # @api.multi
+    # def invoice_validate(self):
+    #     self.date_invoice = time.strftime('%Y-%m-%d')
+    #     return self.write({'state': 'open'})
 
     def invoice_validate_no_tax(self):
         for invoice in self:
