@@ -114,13 +114,13 @@ class WolftrakInvoice(models.Model):
                 line_tax.amount = (line_tax.base * tax.amount) / 100
             self.amount_tax = sum(line_tax.amount for line_tax in self.tax_line_ids)
 
-    # def action_invoice_open2(self):
-    #     to_open_invoices = self.filtered(lambda inv: inv.state != 'open2')
-    #     if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open']):
-    #         raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
-    #     to_open_invoices.action_date_assign()
-    #     to_open_invoices.action_move_create()
-    #     return to_open_invoices.invoice_validate_no_tax()
+    def action_invoice_open2(self):
+        to_open_invoices = self.filtered(lambda inv: inv.state != 'open2')
+        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open']):
+            raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
+        to_open_invoices.action_date_assign()
+        to_open_invoices.action_move_create()
+        return to_open_invoices.invoice_validate_no_tax()
 
     # @api.multi
     # def invoice_validate(self):
@@ -141,7 +141,7 @@ class WolftrakInvoice(models.Model):
                     raise UserError(_("Duplicated vendor reference detected. "
                                       "You probably encoded twice the same vendor bill/refund."))
 
-        self.date_invoice = time.strftime('%Y-%m-%d')
+        # self.date_invoice = time.strftime('%Y-%m-%d')
         return self.write({'state': 'open2'})
 
     draft_number = fields.Char(readonly=False, default=default_draft_number)
