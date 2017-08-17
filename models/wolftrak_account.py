@@ -140,7 +140,6 @@ class WolftrakInvoice(models.Model):
                                 ('id', '!=', invoice.id)]):
                     raise UserError(_("Duplicated vendor reference detected. "
                                       "You probably encoded twice the same vendor bill/refund."))
-
         # self.date_invoice = time.strftime('%Y-%m-%d')
         return self.write({'state': 'open2'})
 
