@@ -122,10 +122,10 @@ class WolftrakInvoice(models.Model):
         to_open_invoices.action_move_create()
         return to_open_invoices.invoice_validate_no_tax()
 
-    # @api.multi
-    # def invoice_validate(self):
-    #     self.date_invoice = time.strftime('%Y-%m-%d')
-    #     return self.write({'state': 'open'})
+    @api.multi
+    def invoice_validate(self):
+        self.date_invoice = time.strftime('%Y-%m-%d')
+        return self.write({'state': 'open'})
 
     def invoice_validate_no_tax(self):
         for invoice in self:
@@ -140,7 +140,7 @@ class WolftrakInvoice(models.Model):
                                 ('id', '!=', invoice.id)]):
                     raise UserError(_("Duplicated vendor reference detected. "
                                       "You probably encoded twice the same vendor bill/refund."))
-        # self.date_invoice = time.strftime('%Y-%m-%d')
+        self.date_invoice = time.strftime('%Y-%m-%d')
         return self.write({'state': 'open2'})
 
     draft_number = fields.Char(readonly=False, default=default_draft_number)

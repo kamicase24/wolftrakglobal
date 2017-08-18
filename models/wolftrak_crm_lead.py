@@ -43,3 +43,4 @@ class LeadWolftrak(models.Model):
 
     country_id = fields.Many2one('res.country', string='Country', default=62)
     confirm_note = fields.Html(string='RNC')
+    # assigned_by = fields.Many2one('res.partner', string='Asignado por', domain=[('id', '!=', 1)])

@@ -152,9 +152,9 @@ class GpsDevice(models.Model):
 
     chassis = fields.Char(string='Chasis')
     license_plate = fields.Char(string='Placa')
-    car_brand_id = fields.Many2one('car.brand', string='Marca de la unidad')
-    car_model_id = fields.Many2one('car.model', string='Modelo de la unidad')
-    year = fields.Char(string='Año de la unidad')
+    car_brand_id = fields.Many2one('car.brand', string='Marca del Vehiculo')
+    car_model_id = fields.Many2one('car.model', string='Modelo del Vehiculo')
+    year = fields.Char(string='Año del Vehiculo')
     partner_id = fields.Many2one('res.partner', string='Cliente')
     status = fields.Selection([('on', 'Activado'),
                                ('off', 'Desactivado'),
@@ -314,6 +314,27 @@ class MobileDevice(models.Model):
                                   help='Empleado Asignado a este número de telefono')
     number = fields.Integer(string='Número asociado')
     simcard_imei = fields.Integer(string='IMEI de la Simcard')
+
+
+class BransModelsConfig(models.TransientModel):
+    _name = 'brands.models.config'
+
+    def default_gps_brands(self):
+        return self.env['gps.brand'].search([])
+
+    def default_gps_models(self):
+        return self.env['gps.model'].search([])
+
+    def default_car_brands(self):
+        return self.env['car.brand'].search([])
+
+    def default_car_models(self):
+        return self.env['car.model'].search([])
+
+    brand_id = fields.Many2many('gps.brand', string='Marca', default=default_gps_brands)
+    model_id = fields.Many2many('gps.model', string='Modelo', default=default_gps_models)
+    car_brand_id = fields.Many2many('car.brand', string='Marca del Vehiculo', default=default_car_brands)
+    car_model_id = fields.Many2many('car.model', string='Modelo del Vehiculo', default=default_car_models)
 
 
 class MobileBrand(models.Model):

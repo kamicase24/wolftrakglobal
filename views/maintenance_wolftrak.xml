@@ -327,6 +327,48 @@
         </field>
     </record>
 
+    <record id="brands_models_form" model="ir.ui.view">
+        <field name="name">Marcas y Modelos (GPS/Autos)</field>
+        <field name="model">brands.models.config</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" write="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="brand_id">
+                                <tree editable="botton">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="model_id">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="car_brand_id">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="car_model_id">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
     <!-- GPS DETAILS VIEWS -->
 
     <record id="gps_device_brand_form" model="ir.ui.view">
@@ -570,6 +612,13 @@
         <field name="target">new</field>
     </record>
 
+    <record id="brands_models_action" model="ir.actions.act_window">
+        <field name="name">Marcas y Modelos (GPS/Autos)</field>
+        <field name="res_model">brands.models.config</field>
+        <field name="view_mode">form,tree</field>
+        <field name="view_type">form</field>
+    </record>
+
     <!-- MENU ITEMS -->
 
     <menuitem
@@ -601,5 +650,11 @@
         action="mobile_dev_action"
         sequence="4" />
 
+    <menuitem
+        id="menu_brands_models"
+        name="Modelos y Marcas"
+        parent="maintenance.menu_maintenance_configuration"
+        action="brands_models_action"
+        sequence="5" />
 
 </odoo>

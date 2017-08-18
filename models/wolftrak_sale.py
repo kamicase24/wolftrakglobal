@@ -1,6 +1,8 @@
+import logging
 from odoo import api, fields, models, _
 from bs4 import BeautifulSoup
 import requests
+_logger = logging.getLogger(__name__)
 
 class WolftrakSaleOrder(models.Model):
     _name = "sale.order"
