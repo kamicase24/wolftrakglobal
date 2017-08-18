@@ -109,6 +109,10 @@
 					</div>
 				</xpath>
 
+				<xpath expr="//form/sheet/group/group[4]" position="inside">
+					<field name="assigned_by"/>
+				</xpath>
+
 				<xpath expr="//form/sheet/notebook/page[2]/group/group/div" position="replace">
 					<div></div>
 					<!--<div class="o_address_format" invisible="1">-->

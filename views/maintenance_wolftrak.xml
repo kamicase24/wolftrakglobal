@@ -617,6 +617,7 @@
         <field name="res_model">brands.models.config</field>
         <field name="view_mode">form,tree</field>
         <field name="view_type">form</field>
+        <field name="target">current</field>
     </record>
 
     <!-- MENU ITEMS -->

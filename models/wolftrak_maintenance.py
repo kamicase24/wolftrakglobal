@@ -188,6 +188,7 @@ class GpsBrand(models.Model):
     model_lines = fields.One2many('gps.model', 'brand_id')
     supplier = fields.Many2one('res.partner', string='Proveedor',
                                domain=[('supplier', '=', True), ('customer', '=', False)])
+    config_id = fields.Many2one('brands.models.config')
 
 
 class GpsModel(models.Model):
@@ -196,6 +197,7 @@ class GpsModel(models.Model):
     name = fields.Char(string='Modelo')
     note = fields.Text(string='Nota')
     brand_id = fields.Many2one('gps.brand', string='Marca')
+    config_id = fields.Many2one('brands.models.config')
 
 
 class CarBrand(models.Model):
@@ -204,6 +206,7 @@ class CarBrand(models.Model):
     name = fields.Char(string='Marca')
     note = fields.Char(string='Nota')
     model_lines = fields.One2many('car.model', 'brand_id')
+    config_id = fields.Many2one('brands.models.config')
 
 
 class CarModel(models.Model):
@@ -212,6 +215,7 @@ class CarModel(models.Model):
     name = fields.Char(string='Modelo')
     note = fields.Char(string='Nota')
     brand_id = fields.Many2one('car.brand', string='Marca')
+    config_id = fields.Many2one('brands.models.config')
 
 
 class GpsConfig(models.TransientModel):
@@ -316,7 +320,7 @@ class MobileDevice(models.Model):
     simcard_imei = fields.Integer(string='IMEI de la Simcard')
 
 
-class BransModelsConfig(models.TransientModel):
+class BransModelsConfig(models.Model):
     _name = 'brands.models.config'
 
     def default_gps_brands(self):
@@ -331,10 +335,15 @@ class BransModelsConfig(models.TransientModel):
     def default_car_models(self):
         return self.env['car.model'].search([])
 
-    brand_id = fields.Many2many('gps.brand', string='Marca', default=default_gps_brands)
-    model_id = fields.Many2many('gps.model', string='Modelo', default=default_gps_models)
-    car_brand_id = fields.Many2many('car.brand', string='Marca del Vehiculo', default=default_car_brands)
-    car_model_id = fields.Many2many('car.model', string='Modelo del Vehiculo', default=default_car_models)
+    @api.onchange('brand_id', 'model_id', 'car_brand_id', 'car_model_id')
+    def write(self):
+        sql = 'delete from brands_models_config'
+        self.env.cr.execute(sql)
+
+    brand_id = fields.One2many('gps.brand', 'config_id', string='Marca', default=default_gps_brands)
+    model_id = fields.One2many('gps.model', 'config_id', string='Modelo', default=default_gps_models)
+    car_brand_id = fields.One2many('car.brand', 'config_id', string='Marca del Vehiculo', default=default_car_brands)
+    car_model_id = fields.One2many('car.model', 'config_id', string='Modelo del Vehiculo', default=default_car_models)
 
 
 class MobileBrand(models.Model):
