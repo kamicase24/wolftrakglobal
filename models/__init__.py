@@ -10,3 +10,4 @@ from . import report_wolftrak
 from . import wolftrak_hr_timesheet
 from . import wolftrak_maintenance
 from . import wolftrak_crm_lead
+from . import wolftrak_product
