@@ -337,14 +337,17 @@
                         <group>
                             <field name="brand_id">
                                 <tree editable="botton">
+                                    <field name="id"/>
                                     <field name="name"/>
                                 </tree>
                             </field>
                         </group>
                         <group>
                             <field name="model_id">
-                                <tree editable="top">
+                                <tree editable="botton">
+                                    <field name="id"/>
                                     <field name="name"/>
+                                    <field name="brand_id"/>
                                 </tree>
                             </field>
                         </group>
@@ -352,15 +355,18 @@
                     <group>
                         <group>
                             <field name="car_brand_id">
-                                <tree editable="top">
+                                <tree editable="botton">
+                                    <field name="id"/>
                                     <field name="name"/>
                                 </tree>
                             </field>
                         </group>
                         <group>
                             <field name="car_model_id">
-                                <tree editable="top">
+                                <tree editable="botton">
+                                    <field name="id"/>
                                     <field name="name"/>
+                                    <field name="brand_id"/>
                                 </tree>
                             </field>
                         </group>

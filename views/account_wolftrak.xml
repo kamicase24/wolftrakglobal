@@ -16,7 +16,8 @@
                             type="object"
                             string="Validar sin crédito fiscal"
                             class="oe_highlight"
-                            confirm="¿Esta seguro?"/>
+                            confirm="¿Esta seguro?"
+                            attrs="{'invisible': ['|', ('state', 'in', ('open2','open','paid'))]}"/>
                 </xpath>
 
                 <xpath expr="//form/header/button[@name='action_invoice_open']" position="attributes">
