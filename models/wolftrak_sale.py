@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 _logger = logging.getLogger(__name__)
 
+
 class WolftrakSaleOrder(models.Model):
     _name = "sale.order"
     _inherit = "sale.order"
@@ -36,22 +37,27 @@ class WolftrakSaleOrder(models.Model):
         line_ids = self.order_line
         if self.currency_id.name == 'USD':
             _logger.info('Dolares 3')
-            _logger.info(self.currency_id.id)
-            _logger.info(self.currency_id.name)
+            _logger.info('Dolares(SO) 2')
             for line in line_ids:
                 _logger.info('inicial')
                 _logger.info(line.price_unit)
                 line.price_unit = line.price_unit * self.ex_rate
                 self.pricelist_id = 1
-                # self.currency_id = 74
-
         elif self.currency_id.name == 'DOP':
             _logger.info('Pesos Dominicanos 74')
-            _logger.info(self.currency_id.id)
-            _logger.info(self.currency_id.name)
+            _logger.info('Pesos Dominicanos(SO) 1')
             for line in line_ids:
                 line.price_unit = line.price_unit / self.ex_rate
                 self.pricelist_id = 2
-                # self.currency_id = 3
 
-    ex_rate = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=default_ex_rate_2)
+    @api.onchange('order_line')
+    def _currency_exchange_online(self):
+        if self.order_line:
+            for line in self.order_line:
+                if line.currency_id.name == 'USD':
+                    line.price_unit = line.price_unit * self.ex_rate
+                    self.pricelist_id = 1
+                    line.currency_id = 74
+
+    pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', required=True, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, help="Pricelist for current sales order.", default=2)
+    ex_rate = fields.Float(string='Tasa de Cambio del dia', digits=(1, 4), default=default_ex_rate_2)
