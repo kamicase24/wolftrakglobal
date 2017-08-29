@@ -33,6 +33,7 @@
         'report/wolftrak_report_saleorder.xml',  # presupuesto
         'report/wolftrak_report_daily_journal.xml',
         'report/wolftrak_report_gps_device.xml',  # dispositivos gps
+        'report/wolftrak_report_partners.xml',  # reporte dispositivos mensuales (cliente)
         # views
         'views/606_wolftrak.xml',
         'views/607_wolftrak.xml',
@@ -49,6 +50,7 @@
         # 'views/hr_timesheet_wolftrak.xml',
         'views/layouts.xml',
         'views/maintenance_wolftrak.xml',
+        'views/partners_report_wolftrak.xml',
         # data
         'data/base_action_wolftrak.xml',
         # wizards

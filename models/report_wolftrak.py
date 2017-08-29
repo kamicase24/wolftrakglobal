@@ -1,5 +1,6 @@
 import base64
 import time
+import calendar
 import logging
 import urllib
 from datetime import datetime
@@ -47,9 +48,10 @@ class WolftrakReport607(models.Model):
         day = str(self.to_607[8:10])
         self.to_str = year + month + day
 
-    from_607 = fields.Date('Desde', default=time.strftime('%Y-%m-01'))
+    from_607 = fields.Date(string='Desde', default=time.strftime('%Y-%m-01'))
     from_str = fields.Char(compute=_set_from)
-    to_607 = fields.Date('Hasta', default=str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10])
+    to_607 = fields.Date(string='Hasta',
+                         default=str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10])
     to_str = fields.Char(compute=_set_to)
     total_inv = fields.Char(string='Total Calculado')
     total_tax = fields.Char(string='ITBIS Calculado')
@@ -164,9 +166,10 @@ class WolftrakReport606(models.Model):
     def _default_moves(self):
         return self.env['account.move'].search([('journal_id', '=', 2)])
 
-    from_606 = fields.Date('Desde', default=time.strftime('%Y-%m-01'))
+    from_606 = fields.Date(string='Desde', default=time.strftime('%Y-%m-01'))
     from_str = fields.Char(compute=_set_dates)
-    to_606 = fields.Date('Hasta', default=str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10])
+    to_606 = fields.Date(string='Hasta',
+                         default=str(datetime.now() + relativedelta.relativedelta(months=+1, day=1, days=-1))[:10])
     to_str = fields.Char(compute=_set_dates)
     period = fields.Char(string='Periodo')
     number_reg = fields.Char('Cantidad de registros')
@@ -310,8 +313,8 @@ class WolftrakPartnersWizard(models.TransientModel):
         sql = """delete from partner_report"""
         self.env.cr.execute(sql)
 
-        invoices = self.env['account.invoice'].search([('date_invoice', '>=', self.date_to),
-                                                       ('date_invoice', '<=', self.date_from)])
+        invoices = self.env['account.invoice'].search([('month', '>=', self.date_to),
+                                                       ('month', '<=', self.date_from)])
 
         partner_name = []
         # amount_inv = []
@@ -359,7 +362,7 @@ class WolftrakPartnersWizard(models.TransientModel):
                 last_partner = actual_partner
                 # _logger.info(partner_dic)
 
-        sql = """insert into partner_report (partner_id, amount, devices, date_invoice) values
+        sql = """insert into partner_report (partner_id, amount, devices, month) values
          (1,
          99,
          2,
@@ -380,10 +383,106 @@ class WolftrakPartnersWizard(models.TransientModel):
         }
 
 
+class WolftrakPartnersDashboard(models.Model):
+    _name = 'partner.dashboard'
+
+    i = 0
+    double_list = []
+    for month in calendar.month_name:
+        if not i == 0:
+            double_list.append((month, month))
+        i += 1
+
+    month = fields.Selection(double_list, string='Mes')
+    _type = fields.Selection([('1', 'Pago'),
+                              ('2', 'No Pagado'),
+                              ('3', 'Pago y No Pago')], string='Tipo de Reporte')
+    partner_report = fields.Many2many('partner.report', string='Reporte', store=True)
+
+    @api.onchange('month')
+    def set_invoice(self):
+        # year = int(datetime.now().strftime('%Y'))  # No borrar, se usara en el futuro
+        if self.month:
+            months = {'ENERO': 'JANUARY',
+                      'FEBRERO': 'FEBRUARY',
+                      'MARZO': 'MARCH',
+                      'ABRIL': 'APRIL',
+                      'MAYO': 'MAY',
+                      'JUNIO': 'JUNE',
+                      'JULIO': 'JULY',
+                      'AGOSTO': 'AUGUST',
+                      'SEPTIEMBRE': 'SEPTEMBER',
+                      'OCTUBER': 'OCTOBER',
+                      'NOVIEMBRE': 'NOVEMBER',
+                      'DICIEMBRE': 'DECEMBER'}
+            month_spa = "%"+self.month.upper()+"%"
+            month_eng = "%"+months[self.month.upper()]+"%"
+            _logger.info(month_spa)
+            _logger.info(month_eng)
+
+            self.env.cr.execute("delete from partner_report")
+            sql = """insert into partner_report(partner_id, quantity, price_unit, total)
+    
+                    select res_partner.name,
+                    sum((select sum(quantity) from account_invoice_line 
+                    where account_invoice_line.invoice_id = account_invoice.id
+                    and product_id = 2
+                    and (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or 
+                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
+                    )) AS cant,
+                    sum((select sum(price_unit) from account_invoice_line
+                    where account_invoice_line.invoice_id = account_invoice.id
+                    and product_id = 2
+                    and (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or 
+                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
+                    )) as value,
+                    sum((select sum(price_unit) from account_invoice_line
+                    where account_invoice_line.invoice_id = account_invoice.id
+                    and product_id = 2
+                    and (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or 
+                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
+                    )) *
+                    sum((select sum(quantity) from account_invoice_line 
+                    where account_invoice_line.invoice_id = account_invoice.id
+                    and product_id = 2
+                    and (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or
+                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
+                    )) as total
+                    from res_partner join account_invoice on (res_partner.id = account_invoice.partner_id)
+                    where account_invoice.id in (select account_invoice_line.invoice_id from account_invoice_line
+                    where (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or 
+                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
+                    and account_invoice_line.product_id = 2)
+                    group by res_partner.id""" % (month_eng, month_spa, month_eng, month_spa,
+                                                  month_eng, month_spa, month_eng, month_spa, month_eng, month_spa)
+
+            self.env.cr.execute(sql)
+            self.partner_report = self.env['partner.report'].search([])
+            _logger.info(self.env['partner.report'].search([]))
+
+    @api.multi
+    def print_report(self):
+        self.partner_report = None
+        self.partner_report = self.env['partner.report'].search([])
+
+        return self.env['report'].get_action(self, 'wolftrakglobal.partners_report_template')
+        # return False
+
+        # datas = {}
+        # if self.env.context is None:
+        #     self.env.context = {}
+        # data = self.read()[0]
+        # datas = {'ids': [], 'model': 'partner.report', 'form': data}
+        # return {'type': 'ir.actions.report.xml',
+        # 'report_name': 'wolftrakglobal.partners_report_template', 'datas': datas}
+
+
 class WolftrakPartnersReport(models.Model):
     _name = 'partner.report'
 
+    # dashboard_id = fields.Many2one('partner.dashboard')
+
     partner_id = fields.Char(string='Cliente')
-    amount = fields.Float(string='Monto')
-    devices = fields.Integer(string='Dispositivos')
-    date_invoice = fields.Date(string='Fecha de la Factura')
+    quantity = fields.Float(string='Cantidad')
+    price_unit = fields.Float(string='Precio Unitario')
+    total = fields.Float(string='Total')

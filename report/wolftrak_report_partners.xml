@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+            id="partners_report_report"
+            model="partner.dashboard"
+            string="Reporte Dispositivos"
+            report_type="qweb-pdf"
+            name="wolftrakglobal.partners_report_template"
+            file="wolftrakglobal.report_wolftrak"
+        />
+
+        <template id="partners_report_template">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <table class="table table-bordered">
+                                <tr class="tablecolor textcolor">
+                                    <td>Cliente</td>
+                                    <td>Cantidad</td>
+                                    <td>Valor</td>
+                                    <td>Total</td>
+                                </tr>
+                                <t t-set="total_res" t-value="0"/>
+                                <t t-set="total_qty" t-value="0"/>
+                            <t t-foreach="o.partner_report" t-as="pr">
+                                <tr>
+                                    <td><span t-field="pr.partner_id"/></td>
+                                    <td><span t-field="pr.quantity"/></td>
+                                    <td><span t-field="pr.price_unit"/></td>
+                                    <td><span t-field="pr.total"/></td>
+                                    <t t-set="total_qty" t-value="total_qty + pr.quantity"/>
+                                    <t t-set="total_res" t-value="total_res + pr.total"/>
+                                </tr>
+                            </t>
+                                <tr class="total1 textcolor">
+                                    <td></td>
+                                    <td><span t-esc="total_qty"/></td>
+                                    <td></td>
+                                    <td><span t-esc="total_res"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</openerp>

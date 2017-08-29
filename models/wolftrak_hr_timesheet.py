@@ -22,6 +22,7 @@ class AutoTimesheet(models.Model):
             self.department_id = self.employee_id.department_id
             self.user_id = self.employee_id.user_id
 
+
 class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet_sheet.sheet"
 

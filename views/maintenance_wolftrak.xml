@@ -131,14 +131,14 @@
                             type="object"
                             string="Activar"
                             class="oe_highlight"
-                            attrs="{'invisible': ['|', ('status', '!=', 'off')]}"
                     />
+                            <!--attrs="{'invisible': ['|', ('status', '!=', 'off')]}"-->
                     <button name="status_off"
                             type="object"
                             class="oe_warning"
                             string="Desactivar"
-                            attrs="{'invisible': ['|', ('status', '!=', 'on')]}"
                     />
+                            <!--attrs="{'invisible': ['|', ('status', '!=', 'on')]}"-->
                     <field name="status" widget="statusbar" statusbar_visible="on,off,personal,garage,check" nolabel="1"/>
                 </header>
                 <sheet>

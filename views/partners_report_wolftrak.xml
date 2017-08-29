@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="parters_report_form1" model="ir.ui.view">
+            <field name="name">parners.report.form1</field>
+            <field name="model">partner.dashboard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="month"/>
+                        <field name="_type" invisible="1"/>
+                        <button name="print_report" string="Print" type="object" class="oe_highlight"/>
+                    </group>
+                    <field name="partner_report">
+                        <tree>
+                            <field name="partner_id"/>
+                            <field name="quantity"/>
+                            <field name="price_unit"/>
+                            <field name="total" sum="total"/>
+                        </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+        <record id="partners_report_action" model="ir.actions.act_window">
+            <field name="name">Reporte Dispositivos</field>
+            <field name="res_model">partner.dashboard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="partners_report_action_2" model="ir.actions.act_window">
+            <field name="name">Reporte Dispositivos</field>
+            <field name="res_model">partner.dashboard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <!--<field name="target">new</field>-->
+        </record>
+
+        <menuitem
+            id="partners_report_menu"
+            name="Reporte Dispositivos"
+            sequence="1"
+            action="partners_report_action"
+            parent="account.menu_finance_reports"
+        />
+    </data>
+</openerp>

@@ -82,6 +82,12 @@ class WolftrakInvoice(models.Model):
             number = int(''.join(last_id.draft_number[9:]))+1
             return 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
 
+    @api.model
+    def _default_currency(self):
+        if self.currency_id.name == 'DOP':
+            self.currency_id = 3
+        return 3
+
     def currency_exchange(self):
         line_ids = self.invoice_line_ids
         if self.currency_id.name == 'USD':
@@ -206,7 +212,7 @@ class WolftrakInvoice(models.Model):
 
     comment = fields.Text(string='Additional Information', readonly=False, states={'draft': [('readonly', False)]})
 
-    @api.onchange('date_invoice')
+    @api.onchange('month')
     def _compute_draft_number(self):
         invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
         last_id = invoices and max(invoices)
