@@ -42,7 +42,8 @@ class WolftrakSaleOrder(models.Model):
                 _logger.info('inicial')
                 _logger.info(line.price_unit)
                 line.price_unit = line.price_unit * self.ex_rate
-                self.currency_id = 74
+                self.pricelist_id = 1
+                # self.currency_id = 74
 
         elif self.currency_id.name == 'DOP':
             _logger.info('Pesos Dominicanos 74')
@@ -50,6 +51,7 @@ class WolftrakSaleOrder(models.Model):
             _logger.info(self.currency_id.name)
             for line in line_ids:
                 line.price_unit = line.price_unit / self.ex_rate
-                self.currency_id = 3
+                self.pricelist_id = 2
+                # self.currency_id = 3
 
     ex_rate = fields.Float(string='Tasa de Cambio del dia', digits=(1,4), default=default_ex_rate_2)
