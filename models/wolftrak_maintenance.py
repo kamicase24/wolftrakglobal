@@ -316,8 +316,8 @@ class MobileDevice(models.Model):
     batery_model = fields.Char(string='Modelo de la Batería')
     employee_id = fields.Many2one('hr.employee', string='Empleado', domain=[('id', '!=', 1)],
                                   help='Empleado Asignado a este número de telefono')
-    number = fields.Integer(string='Número asociado')
-    simcard_imei = fields.Integer(string='IMEI de la Simcard')
+    number = fields.Char(string='Número asociado')
+    simcard_imei = fields.Char(string='IMEI de la Simcard')
 
 
 class BransModelsConfig(models.Model):
