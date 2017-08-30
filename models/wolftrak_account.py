@@ -4,9 +4,10 @@ import json
 import logging
 import sys, os
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from bs4 import BeautifulSoup
 import requests
+import datetime
 from datetime import date
 import calendar
 _logger = logging.getLogger(__name__)
@@ -82,11 +83,10 @@ class WolftrakInvoice(models.Model):
             number = int(''.join(last_id.draft_number[9:]))+1
             return 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
 
-    @api.model
-    def _default_currency(self):
-        if self.currency_id.name == 'DOP':
+    @api.onchange('partner_id')
+    def _set_custom_currency(self):
+        if self.currency_id.name == 'DOP' and self.partner_shipping_id:
             self.currency_id = 3
-        return 3
 
     def currency_exchange(self):
         line_ids = self.invoice_line_ids
@@ -130,24 +130,30 @@ class WolftrakInvoice(models.Model):
 
     @api.multi
     def invoice_validate(self):
-        self.date_invoice = time.strftime('%Y-%m-%d')
-        return self.write({'state': 'open'})
+        if self.currency_id.name == 'DOP':
+            self.date_invoice = time.strftime('%Y-%m-%d')
+            return self.write({'state': 'open'})
+        else:
+            raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
 
     def invoice_validate_no_tax(self):
-        for invoice in self:
-            # refuse to validate a vendor bill/refund
-            # if there already exists one with the same reference for the same partner,
-            # because it's probably a double encoding of the same bill/refund
-            if invoice.type in ('in_invoice', 'in_refund') and invoice.reference:
-                if self.search([('type', '=', invoice.type),
-                                ('reference', '=', invoice.reference),
-                                ('company_id', '=', invoice.company_id.id),
-                                ('commercial_partner_id', '=', invoice.commercial_partner_id.id),
-                                ('id', '!=', invoice.id)]):
-                    raise UserError(_("Duplicated vendor reference detected. "
-                                      "You probably encoded twice the same vendor bill/refund."))
-        self.date_invoice = time.strftime('%Y-%m-%d')
-        return self.write({'state': 'open2'})
+        if self.currency_id.name == 'DOP':
+            for invoice in self:
+                # refuse to validate a vendor bill/refund
+                # if there already exists one with the same reference for the same partner,
+                # because it's probably a double encoding of the same bill/refund
+                if invoice.type in ('in_invoice', 'in_refund') and invoice.reference:
+                    if self.search([('type', '=', invoice.type),
+                                    ('reference', '=', invoice.reference),
+                                    ('company_id', '=', invoice.company_id.id),
+                                    ('commercial_partner_id', '=', invoice.commercial_partner_id.id),
+                                    ('id', '!=', invoice.id)]):
+                        raise UserError(_("Duplicated vendor reference detected. "
+                                          "You probably encoded twice the same vendor bill/refund."))
+            self.date_invoice = time.strftime('%Y-%m-%d')
+            return self.write({'state': 'open2'})
+        else:
+            raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
 
     draft_number = fields.Char(readonly=False, default=default_draft_number)
 
@@ -277,8 +283,9 @@ class WolftrakInvoice(models.Model):
 
 class WolftrakInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
-
-    description = fields.Char(string='Detalle', default="Mes: " + calendar.month_name[date.today().month])
+    now = datetime.datetime.now()
+    description = fields.Char(string='Detalle',
+                              default="Mes: " + calendar.month_name[date.today().month] + " " + str(now.year))
 
 
 class WolftrakMove(models.Model):

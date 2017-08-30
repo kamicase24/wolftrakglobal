@@ -7,6 +7,25 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//form/header/field[@name='state']" position="before">
+                    <button name="action_invoice_sent"
+                            type="object"
+                            string="Enviar Email"
+                            attrs="{'invisible': ['|', ('state', '!=', 'open2')]}"
+                            groups="base.group_user"/>
+                    <button name="invoice_print"
+                            string="Imprimir Factura"
+                            type="object"
+                            attrs="{'invisible': ['|', ('state', '!=', 'open2')]}"
+                            groups="base.group_user"/>
+                    <button name="%(account.action_account_invoice_payment)d"
+                            type="action"
+                            states="open2"
+                            string="Registrar Pago"
+                            groups="account.group_account_invoice"
+                            class="oe_highlight"/>
+                </xpath>
+
                 <xpath expr="//form/header/field[@name='state']" position="replace">
                     <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,open,open2,paid"/>
                 </xpath>
