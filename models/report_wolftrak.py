@@ -478,11 +478,11 @@ class WolftrakPartnersReport(models.Model):
 
     # dashboard_id = fields.Many2one('partner.dashboard')
 
-    def _default_currency(self):
-        self.currency_id = 3
-        return 3
+    # def _default_currency(self):
+    #     self.currency_id = 3
+    #     return 3
 
-    currency_id = fields.Many2one('res.currency', string='Moneda', default=_default_currency)
+    currency_id = fields.Many2one('res.currency', string='Moneda')
 
     partner_id = fields.Integer(string='Id Cliente')
     partner_name = fields.Char(string='Cliente')
