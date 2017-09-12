@@ -394,6 +394,11 @@ class WolftrakPartnersDashboard(models.Model):
         i += 1
 
     month = fields.Selection(double_list, string='Mes')
+
+    year = fields.Selection([('2015', '2015'), ('2016', '2016'),
+                             ('2017', '2017'), ('2018', '2018'),
+                             ('2019', '2019'), ('2020', '2020')], string='Year', default='2017')
+
     _type = fields.Selection([('1', 'Pago'),
                               ('2', 'No Pagado'),
                               ('3', 'Pago y No Pago')], string='Tipo de Reporte')
@@ -401,7 +406,7 @@ class WolftrakPartnersDashboard(models.Model):
 
     @api.onchange('month')
     def set_invoice(self):
-        # year = int(datetime.now().strftime('%Y'))  # No borrar, se usara en el futuro
+        year = int(datetime.now().strftime('%Y'))
         if self.month:
             months = {'ENERO': 'JANUARY',
                       'FEBRERO': 'FEBRUARY',
@@ -412,51 +417,42 @@ class WolftrakPartnersDashboard(models.Model):
                       'JULIO': 'JULY',
                       'AGOSTO': 'AUGUST',
                       'SEPTIEMBRE': 'SEPTEMBER',
-                      'OCTUBER': 'OCTOBER',
+                      'OCTUBRE': 'OCTOBER',
                       'NOVIEMBRE': 'NOVEMBER',
                       'DICIEMBRE': 'DECEMBER'}
             month_spa = "%"+self.month.upper()+"%"
             month_eng = "%"+months[self.month.upper()]+"%"
+            year = "%"+str(year)+"%"
             _logger.info(month_spa)
             _logger.info(month_eng)
 
             self.env.cr.execute("delete from partner_report")
-            sql = """insert into partner_report(partner_id, quantity, price_unit, total)
-    
-                    select res_partner.name,
-                    sum((select sum(quantity) from account_invoice_line 
-                    where account_invoice_line.invoice_id = account_invoice.id
-                    and product_id = 2
-                    and (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or 
-                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
-                    )) AS cant,
-                    sum((select sum(price_unit) from account_invoice_line
-                    where account_invoice_line.invoice_id = account_invoice.id
-                    and product_id = 2
-                    and (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or 
-                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
-                    )) as value,
-                    sum((select sum(price_unit) from account_invoice_line
-                    where account_invoice_line.invoice_id = account_invoice.id
-                    and product_id = 2
-                    and (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or 
-                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
-                    )) *
-                    sum((select sum(quantity) from account_invoice_line 
-                    where account_invoice_line.invoice_id = account_invoice.id
-                    and product_id = 2
-                    and (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or
-                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
-                    )) as total
-                    from res_partner join account_invoice on (res_partner.id = account_invoice.partner_id)
-                    where account_invoice.id in (select account_invoice_line.invoice_id from account_invoice_line
-                    where (upper(split_part(account_invoice_line.description, ' ', 2)) like '%s' or 
-                    upper(split_part(account_invoice_line.description, ' ', 2)) like '%s')
-                    and account_invoice_line.product_id = 2)
-                    group by res_partner.id""" % (month_eng, month_spa, month_eng, month_spa,
-                                                  month_eng, month_spa, month_eng, month_spa, month_eng, month_spa)
+
+            sql = """insert into partner_report(partner_id, partner_name, product_id, price_unit, quantity, total, currency_id)
+            
+            select 
+                res_partner.id,
+                res_partner.name,
+                account_invoice_line.product_id,
+                round( CAST(float8 (account_invoice_line.price_unit/account_invoice.ex_rate) as numeric),2) as price_unit_usd,
+                sum(account_invoice_line.quantity) as total_quantity, 
+                round( CAST(float8(round( CAST(float8 (account_invoice_line.price_unit/account_invoice.ex_rate) as numeric),2)*
+                    sum(account_invoice_line.quantity))as numeric),2) as total_price,3
+            from 
+                account_invoice_line join
+                res_partner on (account_invoice_line.partner_id = res_partner.id) join 
+                account_invoice on (account_invoice_line.invoice_id = account_invoice.id)
+            where ((upper(account_invoice_line.description) like '%s') or
+                (upper(account_invoice_line.description) like '%s')) and 
+                account_invoice_line.description like '%s' and 
+                account_invoice_line.product_id in (38,39,40,41,30,31,32,8)
+            group by res_partner.id,res_partner.name,
+                account_invoice_line.product_id,
+                round( CAST(float8 (account_invoice_line.price_unit/account_invoice.ex_rate) as numeric),2)
+            order by 5,2 asc;""" % (month_spa, month_eng, year)
 
             self.env.cr.execute(sql)
+            _logger.info(sql)
             self.partner_report = self.env['partner.report'].search([])
             _logger.info(self.env['partner.report'].search([]))
 
@@ -482,7 +478,15 @@ class WolftrakPartnersReport(models.Model):
 
     # dashboard_id = fields.Many2one('partner.dashboard')
 
-    partner_id = fields.Char(string='Cliente')
-    quantity = fields.Float(string='Cantidad')
+    def _default_currency(self):
+        self.currency_id = 3
+        return 3
+
+    currency_id = fields.Many2one('res.currency', string='Moneda', default=_default_currency)
+
+    partner_id = fields.Integer(string='Id Cliente')
+    partner_name = fields.Char(string='Cliente')
+    product_id = fields.Integer(string='Id Producto')
+    quantity = fields.Integer(string='Cantidad')
     price_unit = fields.Float(string='Precio Unitario')
     total = fields.Float(string='Total')

@@ -11,39 +11,68 @@
         />
 
         <template id="partners_report_template">
-            <t t-call="report.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="report.external_layout">
-                        <div class="page">
-                            <table class="table table-bordered">
-                                <tr class="tablecolor textcolor">
-                                    <td>Cliente</td>
-                                    <td>Cantidad</td>
-                                    <td>Valor</td>
-                                    <td>Total</td>
-                                </tr>
-                                <t t-set="total_res" t-value="0"/>
-                                <t t-set="total_qty" t-value="0"/>
-                            <t t-foreach="o.partner_report" t-as="pr">
-                                <tr>
-                                    <td><span t-field="pr.partner_id"/></td>
-                                    <td><span t-field="pr.quantity"/></td>
-                                    <td><span t-field="pr.price_unit"/></td>
-                                    <td><span t-field="pr.total"/></td>
-                                    <t t-set="total_qty" t-value="total_qty + pr.quantity"/>
-                                    <t t-set="total_res" t-value="total_res + pr.total"/>
-                                </tr>
-                            </t>
-                                <tr class="total1 textcolor">
-                                    <td></td>
-                                    <td><span t-esc="total_qty"/></td>
-                                    <td></td>
-                                    <td><span t-esc="total_res"/></td>
-                                </tr>
-                            </table>
-                        </div>
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                        <h1 class="textcolor3">
+                            <b>Wolftrak Global</b>
+                            <img src="wolftrakglobal/static/src/img/lobo1.png"/>
+                        </h1>
+                    <h1><span t-field="o.month"/></h1>
+                    <table class="table table-bordered">
+                        <tr class="tablecolor textcolor">
+                            <td>#</td>
+                            <!--<td>Id Cliente</td>-->
+                            <td>Cliente</td>
+                            <!--<td>Id Prod.</td>-->
+                            <td>Cantidad</td>
+                            <td>Valor/U</td>
+                            <td>Total</td>
+                        </tr>
+                        <t t-set="total_res" t-value="0"/>
+                        <t t-set="total_qty" t-value="0"/>
+                        <t t-set="almonte" t-value="0"/>
+                        <t t-set="num" t-value="1"/>
+                    <t t-foreach="o.partner_report" t-as="pr">
+                        <t t-if="pr.product_id == 8 and pr.partner_id == 2214">
+                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
+                        </t>
+                        <t t-if="pr.product_id == 38 and pr.partner_id == 2214">
+                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
+                        </t>
                     </t>
-                </t>
+                    <t t-foreach="o.partner_report" t-as="pr">
+                        <tr>
+                        <t t-if="pr.product_id != 8">
+                            <td><span t-esc="num"/></td>
+                            <!--<td><span t-field="pr.partner_id"/></td>-->
+                            <td><span t-field="pr.partner_name"/></td>
+                            <!--<td><span t-field="pr.product_id"/></td>-->
+                            <td><span t-field="pr.quantity"/></td>
+                        <t t-if="almonte > 0 and pr.partner_id == 2214">
+                            <td><span t-esc="almonte" t-options="{'widget': 'monetary',
+                                                    'display_currency': pr.currency_id}"/></td>
+                        </t>
+                        <t t-else="">
+                            <td><span t-field="pr.price_unit" t-options="{'widget': 'monetary',
+                                                    'display_currency': pr.currency_id}"/></td>
+                        </t>
+                            <td><span t-field="pr.total" t-options="{'widget': 'monetary',
+                                                        'display_currency': pr.currency_id}"/></td>
+                            <t t-set="total_qty" t-value="total_qty + pr.quantity"/>
+                            <t t-set="total_res" t-value="total_res + pr.total"/>
+                            <t t-set="num" t-value="num+1"/>
+                        </t>
+                        </tr>
+                    </t>
+                        <tr class="total1 textcolor">
+                            <td></td>
+                            <td></td>
+                            <td><span t-esc="total_qty"/></td>
+                            <td></td>
+                            <td>$ <span t-esc="total_res"/></td>
+                        </tr>
+                    </table>
+                </div>
             </t>
         </template>
 
