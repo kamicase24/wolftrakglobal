@@ -404,9 +404,9 @@ class WolftrakPartnersDashboard(models.Model):
                               ('3', 'Pago y No Pago')], string='Tipo de Reporte')
     partner_report = fields.Many2many('partner.report', string='Reporte', store=True)
 
-    @api.onchange('month')
+    @api.onchange('month','year')
     def set_invoice(self):
-        year = int(datetime.now().strftime('%Y'))
+        # year = int(datetime.now().strftime('%Y'))
         if self.month:
             months = {'ENERO': 'JANUARY',
                       'FEBRERO': 'FEBRUARY',
@@ -422,9 +422,7 @@ class WolftrakPartnersDashboard(models.Model):
                       'DICIEMBRE': 'DECEMBER'}
             month_spa = "%"+self.month.upper()+"%"
             month_eng = "%"+months[self.month.upper()]+"%"
-            year = "%"+str(year)+"%"
-            _logger.info(month_spa)
-            _logger.info(month_eng)
+            year = "%"+str(self.year)+"%"
 
             self.env.cr.execute("delete from partner_report")
 
@@ -452,9 +450,7 @@ class WolftrakPartnersDashboard(models.Model):
             order by 5,2 asc;""" % (month_spa, month_eng, year)
 
             self.env.cr.execute(sql)
-            _logger.info(sql)
             self.partner_report = self.env['partner.report'].search([])
-            _logger.info(self.env['partner.report'].search([]))
 
     @api.multi
     def print_report(self):
