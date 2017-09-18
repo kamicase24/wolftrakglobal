@@ -22,6 +22,7 @@ def load_config(json_file):
         config_data = json.load(wfile)
         return config_data
 
+
 def get_ncf_record(ncf, rnc, config_data=None):
     if not config_data:
         config_data = load_config(CONFIG_FILE)
@@ -122,11 +123,27 @@ class WolftrakInvoice(models.Model):
 
     def action_invoice_open2(self):
         to_open_invoices = self.filtered(lambda inv: inv.state != 'open2')
-        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open']):
+        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open', 'payorder']):
             raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
-        to_open_invoices.action_date_assign()
-        to_open_invoices.action_move_create()
+        if not self.state == 'payorder':
+            to_open_invoices.action_date_assign()
+            to_open_invoices.action_move_create()
+        else:
+            _logger.info('No creamos asientos somos cool')
         return to_open_invoices.invoice_validate_no_tax()
+
+    @api.multi
+    def action_invoice_open(self):
+        # lots of duplicate calls to action_invoice_open, so we remove those already open
+        to_open_invoices = self.filtered(lambda inv: inv.state != 'open')
+        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'payorder']):
+            raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
+        if not self.state == 'payorder':
+            to_open_invoices.action_date_assign()
+            to_open_invoices.action_move_create()
+        else:
+            _logger.info('No creamos asientos somos cool')
+        return to_open_invoices.invoice_validate()
 
     @api.multi
     def invoice_validate(self):
@@ -139,9 +156,6 @@ class WolftrakInvoice(models.Model):
     def invoice_validate_no_tax(self):
         if self.currency_id.name == 'DOP':
             for invoice in self:
-                # refuse to validate a vendor bill/refund
-                # if there already exists one with the same reference for the same partner,
-                # because it's probably a double encoding of the same bill/refund
                 if invoice.type in ('in_invoice', 'in_refund') and invoice.reference:
                     if self.search([('type', '=', invoice.type),
                                     ('reference', '=', invoice.reference),
@@ -154,6 +168,38 @@ class WolftrakInvoice(models.Model):
             return self.write({'state': 'open2'})
         else:
             raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
+
+    @api.multi
+    def invoice_validate_payorder(self):
+        if self.currency_id.name == 'DOP':
+            for invoice in self:
+                if invoice.type in ('in_invoice', 'in_refund') and invoice.reference:
+                    if self.search([('type', '=', invoice.type),
+                                    ('reference', '=', invoice.reference),
+                                    ('company_id', '=', invoice.company_id.id),
+                                    ('commercial_partner_id', '=', invoice.commercial_partner_id.id),
+                                    ('id', '!=', invoice.id)]):
+                        raise UserError(_("Duplicated vendor reference detected. "
+                                          "You probably encoded twice the same vendor bill/refund."))
+            self.date_invoice = time.strftime('%Y-%m-%d')
+            return True
+        else:
+            raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
+
+    def pay_order(self):
+        to_open_invoices = self.filtered(lambda inv: inv.state != 'payorder')
+        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open']):
+            raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
+        to_open_invoices.action_date_assign()
+        to_open_invoices.action_move_create()
+        to_open_invoices.invoice_validate_payorder()
+        return self.write({'state': 'payorder'})
+
+    @api.multi
+    def action_payorder_cancel(self):
+        if self.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open', 'payorder']):
+            raise UserError(_("Invoice must be in draft,Pro-forma or open state in order to be cancelled."))
+        return self.action_cancel()
 
     draft_number = fields.Char(readonly=False, default=default_draft_number)
 
@@ -198,6 +244,7 @@ class WolftrakInvoice(models.Model):
 
     state = fields.Selection([
             ('draft', 'Draft'),
+            ('payorder', 'Orden de Pago'),
             ('proforma', 'Pro-forma'),
             ('proforma2', 'Pro-forma'),
             ('open', 'Open'),
@@ -218,6 +265,14 @@ class WolftrakInvoice(models.Model):
 
     comment = fields.Text(string='Additional Information', readonly=False, states={'draft': [('readonly', False)]})
 
+    date_invoice = fields.Date(string='Invoice Date', readonly=True,
+        states={'draft': [('readonly', False)], 'payorder': [('readonly', False)]},
+        index=True, help="Keep empty to use the current date", copy=False)
+
+    ncf_date = fields.Date(string='Fecha del Comprobante Fiscal', state={'paid': [('readonly', True)]})
+
+    install_date = fields.Date(string='Fecha de Instalación', state={'paid': [('readony', True)]})
+
     @api.onchange('month')
     def _compute_draft_number(self):
         invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
@@ -234,13 +289,6 @@ class WolftrakInvoice(models.Model):
                     i = number
             _logger.info("contador: "+str(i))
             self.draft_number = "OP/"+date_str+"/"+str(i+1)
-            _logger.info(self.draft_number)
-            # if self.draft_number != last_id.draft_number:
-            #     _logger.info(last_id.draft_number)
-            #     number = int(''.join(last_id.draft_number[9:]))+1
-            #     _logger.info(number)
-            #     self.draft_number = 'OP/'+date_str+'/'+str(number)
-            #     _logger.info(self.draft_number)
 
     @api.onchange('isr')
     def isr_holding(self):
@@ -338,10 +386,10 @@ class WolftrakPayment(models.Model):
                 raise UserError(
                     _("Only a draft payment can be posted. Trying to post a payment in state %s.") % rec.state)
 
-            # if any(inv.state != 'open' or inv.state != 'open2' for inv in rec.invoice_ids):
-            #     raise ValidationError(_("The payment cannot be processed because the invoice is not open!"))
-            for inv in rec.invoice_ids:
-                inv.write({'state': 'paid'})
+            if any(inv.state != 'open' or inv.state != 'open2' for inv in rec.invoice_ids):
+                raise ValidationError(_("The payment cannot be processed because the invoice is not open!"))
+            # for inv in rec.invoice_ids:
+            #     inv.write({'state': 'paid'})
 
             # Use the right sequence to set the name
             if rec.payment_type == 'transfer':

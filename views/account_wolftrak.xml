@@ -1,36 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
     	<record id="invoice_form" model="ir.ui.view">
             <field name="name">account.invoice.form</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//form/header/field[@name='state']" position="before">
+                    <button name="pay_order"
+                            type="object"
+                            string="Orden de Pago"
+                            confirm="Está a punto de realizar una Orden de pago, esta creara asientos antes de estado de Validación."
+                            attrs="{'invisible': ['|', ('state', '!=', ('draft'))]}"/>
+
                     <button name="action_invoice_sent"
                             type="object"
                             string="Enviar Email"
-                            attrs="{'invisible': ['|', ('state', '!=', 'open2')]}"
+                            attrs="{'invisible': ['|', ('state', '!=', ('open2','payorder'))]}"
                             groups="base.group_user"/>
+
                     <button name="invoice_print"
                             string="Imprimir Factura"
                             type="object"
-                            attrs="{'invisible': ['|', ('state', '!=', 'open2')]}"
+                            attrs="{'invisible': ['|', ('state', '!=', ('open2','payorder'))]}"
                             groups="base.group_user"/>
+
                     <button name="%(account.action_account_invoice_payment)d"
                             type="action"
                             states="open2"
                             string="Registrar Pago"
                             groups="account.group_account_invoice"
                             class="oe_highlight"/>
+
+                    <button name="action_payorder_cancel"
+                            type="object"
+                            string="Cancelar Orden de pago"
+                            attrs="{'invisible': ['|', ('state', '!=', 'payorder')]}"
+                    />
                 </xpath>
 
                 <xpath expr="//form/header/field[@name='state']" position="replace">
-                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,open,open2,paid"/>
+                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,payorder,open,open2,paid"/>
                 </xpath>
 
-                <xpath expr="//form/header/button[@name='action_invoice_open']" position="before">
+                <xpath expr="//form/header/button[@name='action_invoice_open']" position="replace">
+                    <button name="action_invoice_open"
+                            type="object"
+                            string="Validar"
+                            class="oe_highlight"
+                            confirm="¿Esta seguro?"
+                            attrs="{'invisible': ['|', ('state', 'in', ('open2','open','paid'))]}"/>
+
                     <button name="action_invoice_open2"
                             type="object"
                             string="Validar sin crédito fiscal"
@@ -44,13 +64,15 @@
                 </xpath>
 
                 <xpath expr="//form/sheet/h1/label" position="replace">
-                    <field name="draft_number" attrs="{'invisible': ['|',('state','not in',('draft',))]}"/>
+                    <field name="draft_number" attrs="{'invisible': ['|',('state','not in',('draft'))]}"/>
                 </xpath>
 
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="type_nul"/>
                     <field name="ex_rate"/>
                 </xpath>
+
+                <xpath expr="//form/sheet/group/group[2]/field[@name='date_invoice']" position="before"/>
 
                 <xpath expr="//form/sheet/group/group[2]" position="inside">
                     <button name="currency_exchange" string="Cambio monetario" icon="fa-repeat" type="object" class="oe_highlight"/>
@@ -65,6 +87,8 @@
 
                 <xpath expr="//form/sheet/notebook/page/group/group/field[6]" position="replace">
                     <field name="date_due"/>
+                    <field name="ncf_date"/>
+                    <field name="install_date"/>
                 </xpath>
 
                 <xpath expr="//form/sheet/notebook/page/field" position="replace">
@@ -155,6 +179,9 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_tree"/>
             <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-info">{'state': ['draft', 'payorder']}</attribute>
+                </xpath>
                 <xpath expr="//tree" position="inside">
                     <field name="ncf"/>
                 </xpath>
