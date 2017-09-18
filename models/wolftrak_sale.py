@@ -50,7 +50,6 @@ class WolftrakSaleOrder(models.Model):
                 line.price_unit = line.price_unit / self.ex_rate
                 self.pricelist_id = 2
 
-    @api.onchange('order_line')
     def _currency_exchange_online(self):
         if self.order_line:
             for line in self.order_line:
