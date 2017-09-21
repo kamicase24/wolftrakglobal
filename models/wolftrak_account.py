@@ -2,6 +2,7 @@
 import time
 import json
 import logging
+import unicodedata
 import sys, os
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
@@ -121,15 +122,21 @@ class WolftrakInvoice(models.Model):
                 line_tax.amount = (line_tax.base * tax.amount) / 100
             self.amount_tax = sum(line_tax.amount for line_tax in self.tax_line_ids)
 
+    def pay_order(self):
+        to_open_invoices = self.filtered(lambda inv: inv.state != 'payorder')
+        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open']):
+            raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
+        to_open_invoices.action_date_assign()
+        to_open_invoices.action_move_create()
+        return to_open_invoices.invoice_validate_payorder()
+
     def action_invoice_open2(self):
         to_open_invoices = self.filtered(lambda inv: inv.state != 'open2')
-        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open', 'payorder']):
+        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'payorder']):
             raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
         if not self.state == 'payorder':
             to_open_invoices.action_date_assign()
             to_open_invoices.action_move_create()
-        else:
-            _logger.info('No creamos asientos somos cool')
         return to_open_invoices.invoice_validate_no_tax()
 
     @api.multi
@@ -141,8 +148,6 @@ class WolftrakInvoice(models.Model):
         if not self.state == 'payorder':
             to_open_invoices.action_date_assign()
             to_open_invoices.action_move_create()
-        else:
-            _logger.info('No creamos asientos somos cool')
         return to_open_invoices.invoice_validate()
 
     @api.multi
@@ -181,19 +186,9 @@ class WolftrakInvoice(models.Model):
                                     ('id', '!=', invoice.id)]):
                         raise UserError(_("Duplicated vendor reference detected. "
                                           "You probably encoded twice the same vendor bill/refund."))
-            self.date_invoice = time.strftime('%Y-%m-%d')
-            return True
+            return self.write({'state': 'payorder'})
         else:
             raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
-
-    def pay_order(self):
-        to_open_invoices = self.filtered(lambda inv: inv.state != 'payorder')
-        if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open']):
-            raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
-        to_open_invoices.action_date_assign()
-        to_open_invoices.action_move_create()
-        to_open_invoices.invoice_validate_payorder()
-        return self.write({'state': 'payorder'})
 
     @api.multi
     def action_payorder_cancel(self):
@@ -386,10 +381,18 @@ class WolftrakPayment(models.Model):
                 raise UserError(
                     _("Only a draft payment can be posted. Trying to post a payment in state %s.") % rec.state)
 
-            if any(inv.state != 'open' or inv.state != 'open2' for inv in rec.invoice_ids):
+            validation = False
+            for inv in rec.invoice_ids:
+                state = unicodedata.normalize('NFKD', inv.state).encode('ascii', 'ignore')
+                if state != 'open' or state != 'open2':
+                    validation = False
+                else:
+                    validation = True
+
+            if validation:
                 raise ValidationError(_("The payment cannot be processed because the invoice is not open!"))
-            # for inv in rec.invoice_ids:
-            #     inv.write({'state': 'paid'})
+            for inv in rec.invoice_ids:
+                inv.write({'state': 'paid'})
 
             # Use the right sequence to set the name
             if rec.payment_type == 'transfer':

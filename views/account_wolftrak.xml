@@ -64,7 +64,11 @@
                 </xpath>
 
                 <xpath expr="//form/sheet/h1/label" position="replace">
-                    <field name="draft_number" attrs="{'invisible': ['|',('state','not in',('draft'))]}"/>
+                    <field name="draft_number" attrs="{'invisible': ['|',('state','not in',('draft', 'payorder'))]}"/>
+                </xpath>
+
+                <xpath expr="//form/sheet/h1/field[@name='number']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('state','in',('draft','payorder'))]}</attribute>
                 </xpath>
 
                 <xpath expr="//form/sheet/group/group" position="inside">
@@ -179,9 +183,9 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//tree" position="attributes">
-                    <attribute name="decoration-info">{'state': ['draft', 'payorder']}</attribute>
-                </xpath>
+                <!--<xpath expr="//tree" position="attributes">-->
+                    <!--<attribute name="decoration-info">{'state': 'draft'}</attribute>-->
+                <!--</xpath>-->
                 <xpath expr="//tree" position="inside">
                     <field name="ncf"/>
                 </xpath>
