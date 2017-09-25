@@ -9,3 +9,6 @@ access_wizard_report607,access_wizard_report607,model_wizard_report607,account.g
 access_wolftrakglobal_report606,access_wolftrakglobal_report606,model_wolftrakglobal_report606,account.group_account_manager,1,1,1,1
 access_wizard_report606,access_wizard_report606,model_wizard_report606,account.group_account_manager,1,1,1,1
 access_hr_payroll_report,access_hr_payroll_report,model_hr_payroll_report,hr_payroll.group_hr_payroll_user,1,1,1,1
+
+access_partner_report,access_partner_report,model_partner_report,account.group_account_manager,1,1,1,1
+access_partner_dashboard,access_partner_dashboard,model_partner_dashboard,account.group_account_manager,1,1,1,1
