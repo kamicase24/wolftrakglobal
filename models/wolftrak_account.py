@@ -122,12 +122,22 @@ class WolftrakInvoice(models.Model):
                 line_tax.amount = (line_tax.base * tax.amount) / 100
             self.amount_tax = sum(line_tax.amount for line_tax in self.tax_line_ids)
 
+    def move_rename(self, type):
+        new_move = self.env['account.move'].search([('id', '=', self.move_id.id)])
+        if type == 'payorder':
+            sql = "update account_move set name = '%s' where id = %s" % (self.draft_number, new_move.id)
+            self.env.cr.execute(sql)
+        if type == 'open':
+            sql = "update account_move set name = '%s' where id = %s" % (self.number, new_move.id)
+            self.env.cr.execute(sql)
+
     def pay_order(self):
         to_open_invoices = self.filtered(lambda inv: inv.state != 'payorder')
         if to_open_invoices.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open']):
             raise UserError(_("Invoice must be in draft or Pro-forma state in order to validate it."))
         to_open_invoices.action_date_assign()
         to_open_invoices.action_move_create()
+        to_open_invoices.move_rename('payorder')
         return to_open_invoices.invoice_validate_payorder()
 
     def action_invoice_open2(self):
@@ -137,6 +147,7 @@ class WolftrakInvoice(models.Model):
         if not self.state == 'payorder':
             to_open_invoices.action_date_assign()
             to_open_invoices.action_move_create()
+        to_open_invoices.move_rename('open')
         return to_open_invoices.invoice_validate_no_tax()
 
     @api.multi
@@ -148,6 +159,7 @@ class WolftrakInvoice(models.Model):
         if not self.state == 'payorder':
             to_open_invoices.action_date_assign()
             to_open_invoices.action_move_create()
+        to_open_invoices.move_rename('open')
         return to_open_invoices.invoice_validate()
 
     @api.multi
@@ -171,6 +183,7 @@ class WolftrakInvoice(models.Model):
                                           "You probably encoded twice the same vendor bill/refund."))
             self.date_invoice = time.strftime('%Y-%m-%d')
             return self.write({'state': 'open2'})
+
         else:
             raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
 
