@@ -8,10 +8,10 @@
                     <table class="table">
                         <tr class="tablecolor">
                             <td colspan="2">
-                                <h3 class="textcolor"><strong>Cliente </strong></h3>
+                                <h2 class="textcolor">Cliente</h2>
                             </td>
                             <td>
-                                <h3 class="textcolor text-center">
+                                <h2 class="textcolor text-center">
                                     <!--<span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>-->
                                     <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
                                     <!--<span t-if="o.type == 'out_invoice' and o.state == 'draft'">Invoice</span>-->
@@ -22,33 +22,29 @@
                                     <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
                                     <t t-if="o.state != 'draft'"><span t-field="o.number"/></t>
                                     <t t-if="o.state == 'draft'"><span t-field="o.draft_number"/></t>
-                                </h3>
+                                </h2>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <strong>Nombre </strong> <span t-field="o.partner_id.name"/>
+                                <strong>Nombre: </strong> <span t-field="o.partner_id.name"/>
                             </td>
                             <td>
-                                <strong>Fecha de Emisión </strong> <span t-field="o.date_invoice"/>
+                                <strong>Fecha de Emisión: </strong> <span t-field="o.date_invoice"/>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <t t-if="o.company_id.name == 'MYTRAK TECHNOLOGY SRL'">
-                                    <strong>RNC/Cédula </strong> <span t-field="o.partner_id.doc_ident"/>
-                                </t>
-                                <t t-if="o.company_id.name == 'Wolftrak Global'">
-                                    <strong>RIF/Cédula</strong> <span t-field="o.partner_id.doc_ident"/>
-                                </t>
+                                <strong>RNC/Cédula: </strong> <span t-field="o.partner_id.doc_ident"/>
                             </td>
                             <td>
-                                <strong>Fecha de vencimiento </strong> <span t-field="o.date_due"/>
+                                <strong>Fecha de vencimiento: </strong> <span t-field="o.date_due"/>
                             </td>
                         </tr>
+
                         <tr>
-                            <td colspan="3">
-                                <strong>Dirección </strong>
+                            <td colspan="2">
+                                <strong>Dirección: </strong>
                                 <span t-field="o.partner_id.street"/>,
                                 <span t-field="o.partner_id.street2"/>
                                 <span t-field="o.partner_id.city"/>
@@ -56,14 +52,18 @@
                                 <span t-field="o.partner_id.zip"/>
                                 <span t-field="o.partner_id.country_id"/>
                             </td>
+                            <td>
+                                <r t-if="o.state != 'draft'">
+                                    <strong>NCF: </strong>
+                                    <span t-field="o.ncf"/>
+                                </r>
+                            </td>
                         </tr>
                         <tr>
-                            <td colspan="3">
-                                <h4 t-if="o.state != 'draft'">
-                                    <strong t-if="o.company_id.name == 'MYTRAK TECHNOLOGY SRL'">NCF </strong>
-                                    <strong t-if="o.company_id.name == 'Wolftrak Global'"></strong>
-                                    <span t-field="o.ncf"/>
-                                </h4>
+                            <td colspan="2">
+                            </td>
+                            <td>
+                                <strong>Vendedor: </strong> <span t-field="o.user_id.name"/>
                             </td>
                         </tr>
                     </table>
@@ -162,33 +162,61 @@
                             <p class="textcolor text-center">Para mas información de nuestros productos y servicios visita:</p>
                         </td>
                     </tr>
-
                     <tr>
                         <td align="center">
-                            <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>
+                            <!--<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>-->
+                            <i class="fa fa-paypal fa-3x" aria-hidden="true"/>
                         </td>
                         <td align="left">
-                            <p>Paypal: administracion@wolftrakglobal.com</p>
+                            <h4>administracion@wolftrakglobal.com</h4>
+                            <small class="help-block">Los pagos por este medio poseen un recargo por paypal</small>
                         </td>
                         <td align="center">
-                            <strong>http://wolftrakglobal.com</strong>
+                            <i class="fa fa-globe fa-3x" aria-hidden="true"/>
+                            <h4>http://wolftrakglobal.com</h4>
                         </td>
                     </tr>
                     <tr>
                         <td align="center">
                             <img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
+                            <p><b>Banco Popular</b></p>
                         </td>
                         <td align="left">
-                            <p>Cuenta Corriente No.: 797197019</p>
+                            <h4>Cuenta Corriente No.: 797197019 $RD</h4>
+                            <h4>Cuenta Ahorros No.: 801569906 USD</h4>
                         </td>
                         <td align="center">
-                            <img src="wolftrakglobal/static/src/img/fb2.png"/>
-                            <img src="wolftrakglobal/static/src/img/tw2.png"/>
-                            <img src="wolftrakglobal/static/src/img/ins2.png"/>
-                            <p>Wolftrakglobal</p>
+                            <!--<img src="wolftrakglobal/static/src/img/fb2.png"/>-->
+                            <i class="fa fa-facebook-square fa-3x" aria-hidden="true"/>
+                            <!--<img src="wolftrakglobal/static/src/img/tw2.png"/>-->
+                            <i class="fa fa-twitter-square fa-3x" aria-hidden="true"/>
+                            <!--<img src="wolftrakglobal/static/src/img/ins2.png"/>-->
+                            <i class="fa fa-instagram fa-3x" aria-hidden="true"/>
+                            <h4>Wolftrakglobal</h4>
                         </td>
                     </tr>
                 </table>
+
+                <table class="table">
+                    <tr align="center">
+                        <td>
+                            <!--<img class="img img-responsive  text-center" src="wolftrakglobal/static/src/img/send2.png"/>-->
+                            <i class="fa fa-paper-plane fa-3x" aria-hidden="true"/>
+                            <h4 class="text-center">info@wolftrakglobal.com</h4>
+                        </td>
+                        <td  align="center">
+                            <!--<img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/logotype.png"/>-->
+                            <i class="fa fa-skype fa-3x" aria-hidden="true"/>
+                            <h4 class="text-center">soporte@wolftrakglobal.com</h4>
+                        </td>
+                        <td>
+                            <!--<img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/call2.png"/>-->
+                            <i class="fa fa-phone fa-3x" aria-hidden="true"/>
+                            <h4 class="text-center">+1 829 956 5565</h4>
+                        </td>
+                    </tr>
+                </table>
+
                 <p t-if="o.payment_term_id">
                     <span t-field="o.payment_term_id.note"/>
                 </p>

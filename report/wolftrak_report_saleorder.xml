@@ -6,37 +6,37 @@
 				<t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})" />
 					<div class="page">
 						<table class="table">
-							<tr>
-								<td class="tablecolor"><h3 class="textcolor text-center"><strong>Cliente:</strong></h3></td>
-								<td colspan="2" class="tablecolor">
-									<h3 class="textcolor text-center">
-										<strong>
+							<tr class="tablecolor">
+								<td colspan="2">
+									<h2 class="textcolor">Cliente</h2>
+								</td>
+								<td>
+									<h2 class="textcolor text-center">
 											<span t-if="doc.state not in ['draft','sent']">Order # </span>
 											<span t-if="doc.state in ['draft','sent']">Quotation # </span>
 											<span t-field="doc.name"/>
-										</strong>
-									</h3>
+									</h2>
 								</td>
 							</tr>
 							<tr>
-								<td class="colora"><strong>Nombre: </strong> <span t-field="doc.partner_id.display_name"/></td>
-								<td class="colora" align="right">
-									<strong>Fecha de Emision</strong>
-									<span t-field="doc.date_order"/>
+								<td colspan="2">
+									<strong>Nombre: </strong> <span t-field="doc.partner_id.display_name"/>
+								</td>
+								<td>
+									<strong>Fecha de Emisión: </strong>	<span t-field="doc.date_order"/>
 								</td>
 							</tr>
 							<tr> 
-								<td class="colorb">
-									<strong>Documento de Identidad: </strong>
-									<span t-field="doc.partner_id.doc_ident"/>
+								<td colspan="2">
+									<strong>RNC/Cédula: </strong> <span t-field="doc.partner_id.doc_ident"/>
 								</td>
-								<td class="colorb" align="right">
-									<strong>Fecha de Vencimiento:</strong>
-									<span t-field="doc.validity_date"/>
+								<td>
+									<strong>Fecha de Vencimiento:</strong> <span t-field="doc.validity_date"/>
 								</td>
 							</tr>
+
 							<tr>
-								<td class="colora" colspan="3">
+								<td colspan="2">
 									<strong>Direccion: </strong>
 									<span t-field="doc.partner_id.street"/>
 									<span t-field="doc.partner_id.street2"/>
@@ -45,18 +45,13 @@
 									<span t-field="doc.partner_id.zip"/>
 									<span t-field="doc.partner_id.country_id"/>
 								</td>
-							</tr>
-							<tr>
-								<td class="colorb" colspan="2">
+								<td>
 									<strong>Vendedor:</strong>
 									<span t-field="doc.user_id"/>
 								</td>
-<!-- 								<td class="colorb">
-									<strong>Metodo de Pago:</strong>
-									<span t-field="doc.payment_term_id"/>
-								</td> -->
 							</tr>
 						</table>
+
 						<div class="oe_structure"/>
 <!-- 						
 						<div class="row">
@@ -193,44 +188,8 @@
 								<strong><span t-field="doc.ex_rate"/></strong>
 							</div>
 						</div>
-						
-						<table class="table tablenob">
-							<tr>
-								<td class="tablecolor" colspan="2">
-									<strong class="textcolor text-center tablecolor">Metodos de Pago</strong>
-								</td>
-								<td class="tablecolor">
-									<strong class="textcolor text-center">Para mas informacion de nuestros productos y servicios visita:</strong>
-								</td>
-							</tr>
 
-							<tr>
-								<td align="center">
-									<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>
-								</td>
-								<td align="left">
-									<p>Paypal: administracion@wolftrakglobal.com</p>
-								</td>
-								<td align="center">
-									<p>http://wolftrakglobal.com</p>
-								</td>
-							</tr>
-							<tr>
-								<td align="center">
-									<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
-								</td>
-								<td align="left">
-									<p>Cuenta Corriente No.: 797197019</p>
-								</td>
-								<td align="center">
-									<img src="wolftrakglobal/static/src/img/fb2.png"/>
-									<img src="wolftrakglobal/static/src/img/tw2.png"/>
-									<img src="wolftrakglobal/static/src/img/ins2.png"/>
-									<p>Wolftrakglobal</p>
-								</td>
-							</tr>
-						</table>
-						
+						<strong><span>Nota:</span></strong>
 						<p t-field="doc.note" />
 						<p t-if="doc.payment_term_id.note">
 							<span t-field="doc.payment_term_id.note"/>
@@ -243,6 +202,70 @@
 							<span t-field="doc.fiscal_position_id.note"/>
 						</p>
 						<div class="oe_structure"/>
+
+						<table class="table">
+							<tr>
+								<td class="tablecolor" colspan="2">
+									<strong class="textcolor text-center tablecolor">Métodos de Pago</strong>
+								</td>
+								<td class="tablecolor">
+									<p class="textcolor text-center">Para mas información de nuestros productos y servicios visita:</p>
+								</td>
+							</tr>
+                    		<tr>
+								<td align="center">
+									<!--<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>-->
+									<i class="fa fa-paypal fa-3x" aria-hidden="true"/>
+								</td>
+								<td align="left">
+									<h4>administracion@wolftrakglobal.com</h4>
+									<small class="help-block">Los pagos por este medio poseen un recargo por paypal</small>
+								</td>
+								<td align="center">
+									<i class="fa fa-globe fa-3x" aria-hidden="true"/>
+									<h4>http://wolftrakglobal.com</h4>
+								</td>
+                    		</tr>
+                    		<tr>
+								<td align="center">
+									<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/popular.jpg"/>
+									<p><b>Banco Popular</b></p>
+								</td>
+								<td align="left">
+									<h4>Cuenta Corriente No.: 797197019 $RD</h4>
+									<h4>Cuenta Ahorros No.: 801569906 USD</h4>
+								</td>
+								<td align="center">
+									<!--<img src="wolftrakglobal/static/src/img/fb2.png"/>-->
+									<i class="fa fa-facebook-square fa-3x" aria-hidden="true"/>
+									<!--<img src="wolftrakglobal/static/src/img/tw2.png"/>-->
+									<i class="fa fa-twitter-square fa-3x" aria-hidden="true"/>
+									<!--<img src="wolftrakglobal/static/src/img/ins2.png"/>-->
+									<i class="fa fa-instagram fa-3x" aria-hidden="true"/>
+									<h4>Wolftrakglobal</h4>
+								</td>
+                    		</tr>
+                		</table>
+
+						<table class="table">
+							<tr align="center">
+								<td>
+									<!--<img class="img img-responsive  text-center" src="wolftrakglobal/static/src/img/send2.png"/>-->
+									<i class="fa fa-paper-plane fa-3x" aria-hidden="true"/>
+									<h4 class="text-center">info@wolftrakglobal.com</h4>
+								</td>
+								<td  align="center">
+									<!--<img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/logotype.png"/>-->
+									<i class="fa fa-skype fa-3x" aria-hidden="true"/>
+									<h4 class="text-center">soporte@wolftrakglobal.com</h4>
+								</td>
+								<td>
+									<!--<img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/call2.png"/>-->
+									<i class="fa fa-phone fa-3x" aria-hidden="true"/>
+									<h4 class="text-center">+1 829 956 5565</h4>
+								</td>
+							</tr>
+						</table>
 					</div>
 				</t>
 		</template>

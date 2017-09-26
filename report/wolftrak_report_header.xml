@@ -1,44 +1,18 @@
 <?xml version="1.0"?>
 <openerp>
-  <data>
-    <template id="report.external_layout_header">
- <div class="header">
-        <div class="row">
-          <div class="col-xs-12">
-            <div style="border-bottom: 1px solid black;"/>
-          </div>
-        </div>
-        <div class="row">
-          <span> Mytrak Technology SRL |</span>
-          <span> RNC 131104371 </span>
-          <span t-field="company.partner_id.street"/>
-          <span t-field="company.partner_id.street2"/>
-          <span t-field="company.partner_id.city"/>
-          <span t-field="company.partner_id.state_id"/>
-          <span t-field="company.partner_id.zip"/>
-          <span t-field="company.partner_id.country_id"/>
-          <table class="table">
-            <tr align="center">
-              <td>
-                <img t-if="company.partner_id.name == 'WOLFTRAK GLOBAL'" class="img img-responsive" src="wolftrakglobal/static/src/img/lobo3.png"/>
-                <img t-if="company.partner_id.name == 'Mytraktech'" class="img img-responsive" src="wolftrakglobal/static/src/img/mtt.png"/>
-              </td>
-              <td>
-                <img class="img img-responsive  text-center" src="wolftrakglobal/static/src/img/send2.png"/>
-                <h6 class="text-center">info@wolftrakglobal.com</h6>
-              </td>
-              <td  align="center">
-                <img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/logotype.png"/>
-                <h6 class="text-center">soporte@wolftrakglobal.com</h6>
-              </td>
-              <td>
-                <img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/call2.png"/>
-                <h6 class="text-center">+1 829 956 5565</h6>
-              </td>
-            </tr>
-          </table>
-        </div>
-</div>
-    </template>
-  </data>
+    <data>
+        <template id="report.external_layout_header">
+            <div class="header">
+                <!--<div class="row">-->
+                <!--<div style="background: black; width: 893px; height: 143px;"></div>-->
+                <img src="wolftrakglobal/static/src/img/header5.png"/>
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-xs-12">-->
+                        <!--<div style="border-bottom: 1px solid black;"/>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </template>
+    </data>
 </openerp>

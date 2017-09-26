@@ -277,6 +277,13 @@ class WolftrakInvoice(models.Model):
         states={'draft': [('readonly', False)], 'payorder': [('readonly', False)]},
         index=True, help="Keep empty to use the current date", copy=False)
 
+    date_due = fields.Date(string='Due Date', readonly=True, states={'draft': [('readonly', False)]}, required=True,
+                           index=True, copy=False, help="If you use payment terms, the due date will be computed "
+                           "automatically at the generation of accounting entries. The payment term may compute "
+                           "several due dates, for example 50% now and 50% in one month, but if you want to force a "
+                           "due date, make sure that the payment term is not set on the invoice. If you keep the "
+                           "payment term and the due date empty, it means direct payment.")
+
     ncf_date = fields.Date(string='Fecha del Comprobante Fiscal', state={'paid': [('readonly', True)]})
 
     install_date = fields.Date(string='Fecha de Instalación', state={'paid': [('readony', True)]})
