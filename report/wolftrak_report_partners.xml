@@ -66,21 +66,23 @@
                                                         'display_currency': pr.currency_id}"/></td>
                                 <td><span t-esc="almonte_total" t-options="{'widget': 'monetary',
                                                         'display_currency': pr.currency_id}"/></td>
+                                <t t-set="total_res" t-value="total_res + almonte_total"/>
                             </t>
                             <t t-elif="almonte > 0 and pr.partner_id == 9">
                                 <td><span t-esc="almonte" t-options="{'widget': 'monetary',
                                                         'display_currency': pr.currency_id}"/></td>
                                 <td><span t-esc="almonte_total" t-options="{'widget': 'monetary',
                                                             'display_currency': pr.currency_id}"/></td>
+                                <t t-set="total_res" t-value="total_res + almonte_total"/>
                             </t>
                             <t t-else="">
                                 <td><span t-field="pr.price_unit" t-options="{'widget': 'monetary',
                                                         'display_currency': pr.currency_id}"/></td>
                                 <td><span t-field="pr.total" t-options="{'widget': 'monetary',
                                                             'display_currency': pr.currency_id}"/></td>
+                                <t t-set="total_res" t-value="total_res + pr.total"/>
                             </t>
                             <t t-set="total_qty" t-value="total_qty + pr.quantity"/>
-                            <t t-set="total_res" t-value="total_res + pr.total"/>
                             <t t-set="num" t-value="num+1"/>
                         </t>
                         </tr>
