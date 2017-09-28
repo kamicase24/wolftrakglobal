@@ -17,7 +17,9 @@
                             <b>Wolftrak Global</b>
                             <img src="wolftrakglobal/static/src/img/lobo1.png"/>
                         </h1>
-                    <h1><span t-field="o.month"/></h1>
+                    <t t-set="month" t-value="str(o.month).upper()"/>
+                    <h1><span t-esc="month"/></h1><br/>
+
                     <table class="table table-bordered">
                         <tr class="tablecolor textcolor">
                             <td>#</td>
@@ -28,7 +30,7 @@
                             <td>Valor/U</td>
                             <td>Total</td>
                         </tr>
-                        <t t-set="total_res" t-value="0"/>
+                        <t t-set="total_res" t-value="0.0"/>
                         <t t-set="total_qty" t-value="0"/>
                         <t t-set="almonte" t-value="0"/>
                         <t t-set="almonte_total" t-value="0"/>
@@ -92,7 +94,14 @@
                             <td></td>
                             <td><span t-esc="total_qty"/></td>
                             <td></td>
-                            <td>$ <span t-esc="total_res"/></td>
+                            <t t-set="i" t-value="1"/>
+                            <t t-foreach="o.partner_report.search([], limit=1)" t-as="pr">
+                                <!--<t t-if="i == 1">-->
+                                    <td><span t-esc="total_res" t-options="{'widget': 'monetary',
+                                                                'display_currency': pr.currency_id}"/></td>
+                                    <t t-set="i" t-value="0"/>
+                                <!--</t>-->
+                            </t>
                         </tr>
                     </table>
                 </div>
