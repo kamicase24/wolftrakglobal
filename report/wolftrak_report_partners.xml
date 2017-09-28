@@ -35,23 +35,21 @@
                         <t t-set="price_unit" t-value="0"/>
                         <t t-set="num" t-value="1"/>
                     <t t-foreach="o.partner_report" t-as="pr">
-
-
                         <t t-if="pr.product_id == 8 and pr.partner_id == 2214">
-                            <t t-set="almonte" t-value="almonte + price_unit"/>
+                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
                             <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
                         </t>
                         <t t-if="pr.product_id == 38 and pr.partner_id == 2214">
-                            <t t-set="almonte" t-value="almonte + price_unit"/>
+                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
                             <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
                         </t>
 
                         <t t-if="pr.product_id == 8 and pr.partner_id == 9">
-                            <t t-set="almonte" t-value="almonte + price_unit"/>
+                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
                             <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
                         </t>
                         <t t-if="pr.product_id == 38 and pr.partner_id == 9">
-                            <t t-set="almonte" t-value="almonte + price_unit"/>
+                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
                             <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
                         </t>
                     </t>
@@ -63,24 +61,24 @@
                             <td><span t-field="pr.partner_name"/></td>
                             <!--<td><span t-field="pr.product_id"/></td>-->
                             <td><span t-field="pr.quantity"/></td>
-                        <t t-if="almonte > 0 and pr.partner_id == 2214">
-                            <td><span t-esc="almonte" t-options="{'widget': 'monetary',
-                                                    'display_currency': pr.currency_id}"/></td>
-                            <td><span t-esc="almonte_total" t-options="{'widget': 'monetary',
-                                                    'display_currency': pr.currency_id}"/></td>
-                        </t>
-                        <t t-elif="almonte > 0 and pr.partner_id == 9">
-                            <td><span t-esc="almonte" t-options="{'widget': 'monetary',
-                                                    'display_currency': pr.currency_id}"/></td>
-                            <td><span t-esc="almonte_total" t-options="{'widget': 'monetary',
+                            <t t-if="almonte > 0 and pr.partner_id == 2214">
+                                <td><span t-esc="almonte" t-options="{'widget': 'monetary',
                                                         'display_currency': pr.currency_id}"/></td>
-                        </t>
-                        <t t-else="">
-                            <td><span t-field="pr.price_unit" t-options="{'widget': 'monetary',
-                                                    'display_currency': pr.currency_id}"/></td>
-                            <td><span t-field="pr.total" t-options="{'widget': 'monetary',
+                                <td><span t-esc="almonte_total" t-options="{'widget': 'monetary',
                                                         'display_currency': pr.currency_id}"/></td>
-                        </t>
+                            </t>
+                            <t t-elif="almonte > 0 and pr.partner_id == 9">
+                                <td><span t-esc="almonte" t-options="{'widget': 'monetary',
+                                                        'display_currency': pr.currency_id}"/></td>
+                                <td><span t-esc="almonte_total" t-options="{'widget': 'monetary',
+                                                            'display_currency': pr.currency_id}"/></td>
+                            </t>
+                            <t t-else="">
+                                <td><span t-field="pr.price_unit" t-options="{'widget': 'monetary',
+                                                        'display_currency': pr.currency_id}"/></td>
+                                <td><span t-field="pr.total" t-options="{'widget': 'monetary',
+                                                            'display_currency': pr.currency_id}"/></td>
+                            </t>
                             <t t-set="total_qty" t-value="total_qty + pr.quantity"/>
                             <t t-set="total_res" t-value="total_res + pr.total"/>
                             <t t-set="num" t-value="num+1"/>
