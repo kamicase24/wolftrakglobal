@@ -126,3 +126,11 @@ class WolftrakPartner(models.Model):
         # result['domain'] = [('partner_id', 'in', self.ids), ('product_id', 'in', [2, 4])]
         result['domain'] = [('partner_id', 'in', self.ids)]
         return result
+
+    @api.multi
+    @api.depends('country_id')
+    def _compute_product_pricelist(self):
+        for p in self:
+            if not isinstance(p.id, models.NewId):  # if not onchange
+                p.property_product_pricelist = self.env['product.pricelist'].search([('id', '=', 2)])
+                # p.property_product_pricelist = self.env['product.pricelist']._get_partner_pricelist(p.id)
