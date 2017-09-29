@@ -65,6 +65,15 @@ class WolftrakPartner(models.Model):
     def _default_user_id(self):
         return self.env.uid
 
+    def _compute_tags(self):
+        leads = self.env['crm.lead'].search([('partner_id', 'in', self.ids)])
+        _logger.info(leads.tag_ids.name)
+        for tag in leads.tag_ids:
+            _logger.info(tag.name)
+            for partner in self:
+                _logger.info(partner)
+                partner.tag_ids = tag
+
     doc_ident = fields.Char(string='Documento de Identificación')
     dgii_state = fields.Char(string='Estado')
     pay_reg = fields.Char(string='Regimen de Pago')
@@ -72,6 +81,8 @@ class WolftrakPartner(models.Model):
     user_id = fields.Many2one('res.users', string='Comercial', default=_default_user_id)
     total_device = fields.Integer(string='Dispositivos', help='Total de dispositivos vendidos a este cliente', compute=_total_device)
     start_date = fields.Date(string='Fecha de Inicio', help='Fecha en que inicio el contrato el cliente.')
+
+    tag_ids = fields.Many2many('crm.lead.tag', string='Categoria', compute=_compute_tags)
 
     def _get_partner_invoices(self):
         invoices = self.env['account.invoice']
