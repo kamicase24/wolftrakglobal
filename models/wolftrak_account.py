@@ -343,6 +343,15 @@ class WolftrakInvoice(models.Model):
             else:
                 self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
 
+    @api.onchange('ncf')
+    def ncf_db_validation(self):
+        _logger.info(self.search([('ncf', '=', self.ncf)]))
+        if self.search([('ncf', '=', self.ncf)]) and self.ncf:
+            self.ncf = ''
+
+            raise ValidationError(_("EL Número de Comprobante Fiscal ya se encuentra registrado en el Sistema\n "
+                                    "Verifique nuevamente la información antes de proceder."))
+
 
 class WolftrakInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
