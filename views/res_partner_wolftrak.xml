@@ -34,6 +34,7 @@
                     <field name="pay_reg"/>
                     <field name="doc_ident_type"/>
                     <field name="partner_inv" invisible="1"/>
+                    <field name="tag_ids" widget="many2many_tags"/>
                 </xpath>
 
                 <xpath expr="//form/sheet/group/group[2]/field[2]" position="replace">
@@ -42,6 +43,10 @@
 
                 <xpath expr="//form/sheet/group/group[2]/field[8]" position="after">
                     <field name="start_date"/>
+                    <button name="update_fields"
+                            type="object"
+                            class="oe_highlight"
+                            icon="fa-refresh"/>
                 </xpath>
             </field>
     	</record>

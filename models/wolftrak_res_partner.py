@@ -67,12 +67,36 @@ class WolftrakPartner(models.Model):
 
     def _compute_tags(self):
         leads = self.env['crm.lead'].search([('partner_id', 'in', self.ids)])
-        _logger.info(leads.tag_ids.name)
-        for tag in leads.tag_ids:
-            _logger.info(tag.name)
-            for partner in self:
-                _logger.info(partner)
-                partner.tag_ids = tag
+        # _logger.info(leads.tag_ids.name)
+        for lead in leads:
+            for tag in lead.tag_ids:
+                _logger.info(tag.name)
+                for partner in self:
+                    _logger.info(partner)
+                    partner.tag_ids = tag
+
+    def update_fields(self):
+
+        leads = self.env['crm.lead'].search([('partner_id', 'in', self.ids)])
+        for lead in leads:
+            _logger.info(lead)
+            if lead.street and not self.street:
+                self.street = lead.street
+            if lead.street2 and not self.street2:
+                self.street2 = lead.street2
+            if lead.city and not self.city:
+                self.city = lead.city
+            if lead.country_id and not self.country_id:
+                self.contry_id = lead.country_id
+            if lead.state_id and not self.state_id:
+                self.state_id = lead.state_id
+            if lead.zip and not self.zip:
+                self.zip = lead.zip
+            if lead.email_from and not self.email:
+                self.email = lead.email_from
+            if lead.phone and not self.phone:
+                self.phone = lead.phone
+
 
     doc_ident = fields.Char(string='Documento de Identificación')
     dgii_state = fields.Char(string='Estado')
@@ -82,7 +106,7 @@ class WolftrakPartner(models.Model):
     total_device = fields.Integer(string='Dispositivos', help='Total de dispositivos vendidos a este cliente', compute=_total_device)
     start_date = fields.Date(string='Fecha de Inicio', help='Fecha en que inicio el contrato el cliente.')
 
-    tag_ids = fields.Many2many('crm.lead.tag', string='Categoria', compute=_compute_tags)
+    tag_ids = fields.Many2many('crm.lead.tag', string='Categoría', compute=_compute_tags)
 
     def _get_partner_invoices(self):
         invoices = self.env['account.invoice']
