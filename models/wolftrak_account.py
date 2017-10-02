@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import time
 import json
 import logging
@@ -52,37 +53,44 @@ class WolftrakInvoice(models.Model):
     _inherit = 'account.invoice'
 
     def default_ex_rate(self):
-        page = requests.get('http://promerica.com.do/')
-        soup = BeautifulSoup(page.content, 'lxml')
-        body = soup.body
-        result = body.marquee.string
-        venta = result[result.find('V'):]
-        rate = float(venta[venta.find('$')+1:venta.find('$')+6])
-        user = self.env.user
-        if user.company_id.name == 'Mytraktech':
-            return rate
-        else:
-            return 0.0
+        if not self.ex_rate:
+            page = requests.get('http://promerica.com.do/')
+            soup = BeautifulSoup(page.content, 'lxml')
+            body = soup.body
+            result = body.marquee.string
+            venta = result[result.find('V'):]
+            rate = float(venta[venta.find('$')+1:venta.find('$')+6])
+            user = self.env.user
+            if user.company_id.name == 'Mytraktech':
+                return rate
+            else:
+                return 0.0
 
     def default_ex_rate_2(self):
-        page = requests.get('https://www.banreservas.com/calculators/divisas')
-        soup = BeautifulSoup(page.content, 'lxml')
-        body = soup.body
-        rate = body.find_all('span')[1].string
-        user = self.env.user
-        if user.company_id.name == 'MYTRAK TECHNOLOGY SRL':
-            return rate
-        else:
-            return 0.0
+        if not self.ex_rate:
+            page = requests.get('https://www.banreservas.com/calculators/divisas')
+            soup = BeautifulSoup(page.content, 'lxml')
+            body = soup.body
+            rate = body.find_all('span')[1].string
+            user = self.env.user
+            if user.company_id.name == 'MYTRAK TECHNOLOGY SRL':
+                return rate
+            else:
+                return 0.0
 
     def default_draft_number(self):
-        invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
+        invoices = self.env['account.invoice'].search([], limit=1, order='id desc')
+        _logger.info(invoices)
         last_id = invoices and max(invoices)
         date_str = str(date.today().year)+str(date.today().month)
         if not last_id.draft_number:
             return 'OP/'+date_str+'/0001'
         else:
-            number = int(''.join(last_id.draft_number[9:]))+1
+            # number = ''.join(last_id.draft_number[9:])
+            number = int(re.findall(r'\d+', last_id.draft_number[9:])[0])+1
+            # number = int(''.join(last_id.draft_number[9:]))+1
+            _logger.info(number)
+            _logger.info('OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1))
             return 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
 
     @api.onchange('partner_id')
@@ -290,16 +298,19 @@ class WolftrakInvoice(models.Model):
 
     @api.onchange('month')
     def _compute_draft_number(self):
-        invoices = self.env['account.invoice'].search([], limit=1, order='draft_number desc')
+        invoices = self.env['account.invoice'].search([], limit=1, order='id desc')
         last_id = invoices and max(invoices)
         date_str = str(date.today().year)+str(date.today().month)
         if not last_id.draft_number:
             self.draft_number = 'OP/'+date_str+'/1'
         else:
+            _logger.info('DRAFT NUMBER!!')
             inv_chain = self.env['account.invoice'].search([], order='id asc')
+            _logger.info(inv_chain)
             i = 0
             for inv in inv_chain:
                 number = int(inv.draft_number[9:])
+                _logger.info(number)
                 if number > i:
                     i = number
             _logger.info("contador: "+str(i))
