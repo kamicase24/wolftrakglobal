@@ -174,7 +174,8 @@ class WolftrakInvoice(models.Model):
     def invoice_validate(self):
         if self.currency_id.name == 'DOP':
             self.date_invoice = time.strftime('%Y-%m-%d')
-            return self.write({'state': 'open'})
+            return self.write({'state': 'open',
+                               'number': self.move_name})
         else:
             raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
 
@@ -190,7 +191,8 @@ class WolftrakInvoice(models.Model):
                         raise UserError(_("Duplicated vendor reference detected. "
                                           "You probably encoded twice the same vendor bill/refund."))
             self.date_invoice = time.strftime('%Y-%m-%d')
-            return self.write({'state': 'open2'})
+            return self.write({'state': 'open2',
+                               'number': self.move_name})
 
         else:
             raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
@@ -207,7 +209,8 @@ class WolftrakInvoice(models.Model):
                                     ('id', '!=', invoice.id)]):
                         raise UserError(_("Duplicated vendor reference detected. "
                                           "You probably encoded twice the same vendor bill/refund."))
-            return self.write({'state': 'payorder'})
+            return self.write({'state': 'payorder',
+                               'number': ''})
         else:
             raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
 
