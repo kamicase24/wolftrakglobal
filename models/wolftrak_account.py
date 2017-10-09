@@ -52,32 +52,6 @@ class WolftrakInvoice(models.Model):
     _name = 'account.invoice'
     _inherit = 'account.invoice'
 
-    def default_ex_rate(self):
-        if not self.ex_rate:
-            page = requests.get('http://promerica.com.do/')
-            soup = BeautifulSoup(page.content, 'lxml')
-            body = soup.body
-            result = body.marquee.string
-            venta = result[result.find('V'):]
-            rate = float(venta[venta.find('$')+1:venta.find('$')+6])
-            user = self.env.user
-            if user.company_id.name == 'Mytraktech':
-                return rate
-            else:
-                return 0.0
-
-    def default_ex_rate_2(self):
-        if not self.ex_rate:
-            page = requests.get('https://www.banreservas.com/calculators/divisas')
-            soup = BeautifulSoup(page.content, 'lxml')
-            body = soup.body
-            rate = body.find_all('span')[1].string
-            user = self.env.user
-            if user.company_id.name == 'MYTRAK TECHNOLOGY SRL':
-                return rate
-            else:
-                return 0.0
-
     def default_draft_number(self):
         invoices = self.env['account.invoice'].search([], limit=1, order='id desc')
         _logger.info(invoices)
@@ -99,36 +73,7 @@ class WolftrakInvoice(models.Model):
             self.currency_id = 3
 
     def currency_exchange(self):
-        line_ids = self.invoice_line_ids
-        if self.currency_id.name == 'USD':
-            _logger.info('Dolares 3')
-            _logger.info(self.currency_id.id)
-            _logger.info(self.currency_id.name)
-            for line in line_ids:
-                _logger.info('inicial')
-                _logger.info(line.price_unit)
-                line.price_unit = line.price_unit * self.ex_rate
-                self.currency_id = 74
-            for line_tax in self.tax_line_ids:
-                tax = self.env['account.tax'].search([('id', '=', line_tax.tax_id.id)])
-                _logger.info(tax.amount)
-                _logger.info(line_tax.base)
-                line_tax.amount = (line_tax.base * tax.amount) / 100
-            self.amount_tax = sum(line_tax.amount for line_tax in self.tax_line_ids)
-
-        elif self.currency_id.name == 'DOP':
-            _logger.info('Pesos Dominicanos 74')
-            _logger.info(self.currency_id.id)
-            _logger.info(self.currency_id.name)
-            for line in line_ids:
-                line.price_unit = line.price_unit / self.ex_rate
-                self.currency_id = 3
-            for line_tax in self.tax_line_ids:
-                tax = self.env['account.tax'].search([('id', '=', line_tax.tax_id.id)])
-                _logger.info(tax.amount)
-                _logger.info(line_tax.base)
-                line_tax.amount = (line_tax.base * tax.amount) / 100
-            self.amount_tax = sum(line_tax.amount for line_tax in self.tax_line_ids)
+        self.env['wolftrak.tools'].currency_exchange(self)
 
     def move_rename(self, type):
         new_move = self.env['account.move'].search([('id', '=', self.move_id.id)])
@@ -277,7 +222,8 @@ class WolftrakInvoice(models.Model):
              "Its related journal entries may or may not be reconciled.\n"
              " * The 'Cancelled' status is used when user cancel invoice.")
 
-    ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4), default=default_ex_rate_2)
+    ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4),
+                           default=lambda self: self.env['wolftrak.tools'].default_ex_rate_2())
 
     comment = fields.Text(string='Additional Information', readonly=False, states={'draft': [('readonly', False)]})
 

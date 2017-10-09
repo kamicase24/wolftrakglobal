@@ -28,7 +28,7 @@
         'report/wolftrak_report_act_det.xml',
         'report/wolftrak_report_statement.xml',  # estado de cuenta
         'report/wolftrak_report_payslip.xml',  # nomina
-        'report/wolftrak_report_header.xml',
+        'report/wolftrak_report_header.xml',  # header
         'report/wolftrak_report_invoice.xml',  # factura
         'report/wolftrak_report_saleorder.xml',  # presupuesto
         'report/wolftrak_report_daily_journal.xml',
@@ -51,6 +51,8 @@
         'views/layouts.xml',
         'views/maintenance_wolftrak.xml',
         'views/partners_report_wolftrak.xml',
+        'views/product_wolftrak.xml',
+        'views/purchase_wolftrak.xml',
         # data
         'data/base_action_wolftrak.xml',
         # wizards
