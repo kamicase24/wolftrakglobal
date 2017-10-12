@@ -15,7 +15,7 @@
                                     <!--<span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>-->
                                     <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
                                     <!--<span t-if="o.type == 'out_invoice' and o.state == 'draft'">Invoice</span>-->
-                                    <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Orden de Pago</span>
+                                    <!--<span t-if="o.type == 'out_invoice' and o.state == 'draft'">Orden de Pago</span>-->
                                     <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
                                     <span t-if="o.type == 'out_refund'">Refund</span>
                                     <span t-if="o.type == 'in_refund'">Vendor Refund</span>
@@ -68,8 +68,8 @@
                         </tr>
                     </table>
 
-                    <div class="row mt32 mb32" invisible='1'>
-                        <div name="reference" class="col-xs-2" t-if="o.reference" invisible='1'>
+                    <div invisible='1'>
+                        <div name="reference" t-if="o.reference" invisible='1'>
                             <strong>Reference:</strong>
                             <p t-field="o.reference" invisible='1'/>
                         </div>
