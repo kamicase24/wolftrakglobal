@@ -64,7 +64,7 @@ class WolftrakTools(models.Model):
                 if record._name == 'sale.order':
                     record.pricelist_id = 1
 
-            if record._name == 'account_invoice':
+            if record._name == 'account.invoice':
                 for line_tax in record.tax_line_ids:
                     tax = record.env['account.tax'].search([('id', '=', line_tax.tax_id.id)])
                     _logger.info(tax.amount)
@@ -83,7 +83,7 @@ class WolftrakTools(models.Model):
                 if record._name == 'sale.order':
                     record.pricelist_id = 2
 
-            if record._name == 'account_invoice':
+            if record._name == 'account.invoice':
                 for line_tax in record.tax_line_ids:
                     tax = record.env['account.tax'].search([('id', '=', line_tax.tax_id.id)])
                     _logger.info(tax.amount)
