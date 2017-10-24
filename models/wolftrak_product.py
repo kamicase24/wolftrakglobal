@@ -48,3 +48,13 @@ class PackWolftrak(models.Model):
     uom_id = fields.Many2one('product.uom', string='Unidad de Medida')
     currency_id = fields.Many2one('res.currency', string='Moneda')
 
+
+class ProductProductWolftrak(models.Model):
+    _inherit = 'product.product'
+
+    @api.multi
+    def _need_procurement(self):
+        for product in self:
+            if product.type not in ['service', 'digital', 'pack']:
+                return True
+        return super(ProductProductWolftrak, self)._need_procurement()

@@ -165,14 +165,14 @@
                     <tr>
                         <td align="center">
                             <!--<img class="img img-responsive linea" src="wolftrakglobal/static/src/img/paypal.png"/>-->
-                            <i class="fa fa-paypal fa-3x" aria-hidden="true"/>
+                            <i class="fa fa-paypal fa-2x" aria-hidden="true"/>
                         </td>
                         <td align="left">
                             <h4>administracion@wolftrakglobal.com</h4>
                             <small class="help-block">Los pagos por este medio poseen un recargo por paypal</small>
                         </td>
                         <td align="center">
-                            <i class="fa fa-globe fa-3x" aria-hidden="true"/>
+                            <i class="fa fa-globe fa-2x" aria-hidden="true"/>
                             <h4>http://wolftrakglobal.com</h4>
                         </td>
                     </tr>
@@ -187,11 +187,11 @@
                         </td>
                         <td align="center">
                             <!--<img src="wolftrakglobal/static/src/img/fb2.png"/>-->
-                            <i class="fa fa-facebook-square fa-3x" aria-hidden="true"/>
+                            <i class="fa fa-facebook-square fa-2x" aria-hidden="true"/>
                             <!--<img src="wolftrakglobal/static/src/img/tw2.png"/>-->
-                            <i class="fa fa-twitter-square fa-3x" aria-hidden="true"/>
+                            <i class="fa fa-twitter-square fa-2x" aria-hidden="true"/>
                             <!--<img src="wolftrakglobal/static/src/img/ins2.png"/>-->
-                            <i class="fa fa-instagram fa-3x" aria-hidden="true"/>
+                            <i class="fa fa-instagram fa-2x" aria-hidden="true"/>
                             <h4>WOLFTRAKGLOBAL</h4>
                         </td>
                     </tr>
@@ -201,18 +201,18 @@
                     <tr align="center">
                         <td>
                             <!--<img class="img img-responsive  text-center" src="wolftrakglobal/static/src/img/send2.png"/>-->
-                            <i class="fa fa-paper-plane fa-3x" aria-hidden="true"/>
+                            <i class="fa fa-paper-plane fa-2x" aria-hidden="true"/>
                             <h4 class="text-center">info@wolftrakglobal.com</h4>
                         </td>
                         <td  align="center">
                             <!--<img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/logotype.png"/>-->
-                            <i class="fa fa-skype fa-3x" aria-hidden="true"/>
+                            <i class="fa fa-skype fa-2x" aria-hidden="true"/>
                             <h4 class="text-center">de.wolftrak</h4>
                         </td>
                         <td>
                             <!--<img class="img img-responsive text-center" src="wolftrakglobal/static/src/img/call2.png"/>-->
-                            <i class="fa fa-phone fa-3x" aria-hidden="true"/>
-                            <h4 class="text-center">+1 829 956 5565</h4>
+                            <i class="fa fa-phone fa-2x" aria-hidden="true"/>
+                            <h4 class="text-center">+1 829 594 6821</h4>
                         </td>
                     </tr>
                 </table>

@@ -72,7 +72,6 @@ class WolftrakTools(models.Model):
                     line_tax.amount = (line_tax.base * tax.amount) / 100
                 record.amount_tax = sum(line_tax.amount for line_tax in record.tax_line_ids)
 
-
         elif record.currency_id.name == 'DOP':
             _logger.info('Pesos Dominicanos 74')
             _logger.info(record.currency_id.id)
