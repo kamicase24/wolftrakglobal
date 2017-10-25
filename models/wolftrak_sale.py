@@ -53,6 +53,34 @@ class WolftrakSaleOrder(models.Model):
 
     pack_count = fields.Integer(string='Paquetes', compute=_compute_pack_ids)
 
+    def _delete_pack_picking(self):
+        _logger.info("CASASASCASACASASCAA")
+        for line in self.order_line:
+            picking_id = line.order_id.picking_ids
+            if line.product_id.type == 'pack':
+                if len(picking_id.move_lines) <= 1:
+                    if picking_id.move_lines.product_id.type == 'pack':
+
+                        sql = 'delete from stock_move where id = %s' % picking_id.move_lines.id
+                        _logger.info("ELIMINAR EL MOVE " + sql)
+                        self.env.cr.execute(sql)
+                    sql = 'delete from stock_picking where id = %s' % picking_id.id
+                    _logger.info("VOY A ELIMINAR EL PICKING " + sql)
+                    self.env.cr.execute(sql)
+
+                else:
+                    for move in picking_id.move_lines:
+                        if move.product_id.type == 'pack':
+                            sql = 'delete from stock_move where id = %s' % move.id
+                            _logger.info("ELIMIAR EL MOVE DE PACK " + sql)
+                            self.env.cr.execute(sql)
+
+    @api.multi
+    def action_confirm(self):
+        res = super(WolftrakSaleOrder, self).action_confirm()
+        self._delete_pack_picking()
+        return res
+
 
 class WolftrakSaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -89,10 +117,7 @@ class WolftrakSaleOrderLine(models.Model):
 
                 if not picking_id:
                     picking_id = self.env['stock.picking'].create(datas)
-                # sql = "delete from stock.picking where id = %s" % picking_id.id
-                # self.env.cr.excecute(sql)
 
-                _logger.info(picking_id)
                 if pack_lines:
                     for item in pack_lines:
                         if item.pack_item_id.type == 'product':
@@ -117,9 +142,34 @@ class WolftrakSaleOrderLine(models.Model):
                             move_id = self.env['stock.move'].create(move)
                             _logger.info(move_id)
 
+    def _delete_pack_picking(self):
+        for line in self:
+            picking_id = line.order_id.picking_ids
+            if line.product_id.type == 'pack':
+                if len(picking_id.move_lines) <= 1:
+                    if picking_id.move_lines.product_id.type == 'pack':
+
+                        sql = 'delete from stock_move where id = %s' % picking_id.move_lines.id
+                        _logger.info("ELIMINAR EL MOVE " + sql)
+                        self.env.cr.execute(sql)
+                    sql = 'delete from stock_picking where id = %s' % picking_id.id
+                    _logger.info("VOY A ELIMINAR EL PICKING " + sql)
+                    self.env.cr.execute(sql)
+
+                else:
+                    for move in picking_id.move_lines:
+                        if move.product_id.type == 'pack':
+                            sql = 'delete from stock_move where id = %s' % move.id
+                            _logger.info("ELIMIAR EL MOVE DE PACK " + sql)
+                            self.env.cr.execute(sql)
+
     @api.multi
     def _action_procurement_create(self):
+
         res = super(WolftrakSaleOrderLine, self)._action_procurement_create()
         self._calculate_packages()
+        # self._delete_pack_picking()
 
         return res
+
+

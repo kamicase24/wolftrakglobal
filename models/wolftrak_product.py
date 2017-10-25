@@ -56,5 +56,7 @@ class ProductProductWolftrak(models.Model):
     def _need_procurement(self):
         for product in self:
             if product.type not in ['service', 'digital', 'pack']:
+                _logger.info("Need procurement:")
+                _logger.info("TRUE")
                 return True
         return super(ProductProductWolftrak, self)._need_procurement()
