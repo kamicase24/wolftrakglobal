@@ -54,7 +54,6 @@ class WolftrakSaleOrder(models.Model):
     pack_count = fields.Integer(string='Paquetes', compute=_compute_pack_ids)
 
     def _delete_pack_picking(self):
-        _logger.info("CASASASCASACASASCAA")
         for line in self.order_line:
             picking_id = line.order_id.picking_ids
             if line.product_id.type == 'pack':
@@ -62,17 +61,14 @@ class WolftrakSaleOrder(models.Model):
                     if picking_id.move_lines.product_id.type == 'pack':
 
                         sql = 'delete from stock_move where id = %s' % picking_id.move_lines.id
-                        _logger.info("ELIMINAR EL MOVE " + sql)
                         self.env.cr.execute(sql)
                     sql = 'delete from stock_picking where id = %s' % picking_id.id
-                    _logger.info("VOY A ELIMINAR EL PICKING " + sql)
                     self.env.cr.execute(sql)
 
                 else:
                     for move in picking_id.move_lines:
                         if move.product_id.type == 'pack':
                             sql = 'delete from stock_move where id = %s' % move.id
-                            _logger.info("ELIMIAR EL MOVE DE PACK " + sql)
                             self.env.cr.execute(sql)
 
     @api.multi
@@ -150,17 +146,14 @@ class WolftrakSaleOrderLine(models.Model):
                     if picking_id.move_lines.product_id.type == 'pack':
 
                         sql = 'delete from stock_move where id = %s' % picking_id.move_lines.id
-                        _logger.info("ELIMINAR EL MOVE " + sql)
                         self.env.cr.execute(sql)
                     sql = 'delete from stock_picking where id = %s' % picking_id.id
-                    _logger.info("VOY A ELIMINAR EL PICKING " + sql)
                     self.env.cr.execute(sql)
 
                 else:
                     for move in picking_id.move_lines:
                         if move.product_id.type == 'pack':
                             sql = 'delete from stock_move where id = %s' % move.id
-                            _logger.info("ELIMIAR EL MOVE DE PACK " + sql)
                             self.env.cr.execute(sql)
 
     @api.multi

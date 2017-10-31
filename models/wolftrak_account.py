@@ -250,16 +250,13 @@ class WolftrakInvoice(models.Model):
         if not last_id.draft_number:
             self.draft_number = 'OP/'+date_str+'/1'
         else:
-            _logger.info('DRAFT NUMBER!!')
             inv_chain = self.env['account.invoice'].search([], order='id asc')
-            _logger.info(inv_chain)
             i = 0
             for inv in inv_chain:
                 number = int(inv.draft_number[9:])
                 _logger.info(number)
                 if number > i:
                     i = number
-            _logger.info("contador: "+str(i))
             self.draft_number = "OP/"+date_str+"/"+str(i+1)
 
     @api.onchange('isr')
@@ -302,12 +299,20 @@ class WolftrakInvoice(models.Model):
 
     @api.onchange('ncf')
     def ncf_db_validation(self):
-        _logger.info(self.search([('ncf', '=', self.ncf)]))
         if self.search([('ncf', '=', self.ncf)]) and self.ncf:
             self.ncf = ''
-
             raise ValidationError(_("EL Número de Comprobante Fiscal ya se encuentra registrado en el Sistema\n "
                                     "Verifique nuevamente la información antes de proceder."))
+        self.update_ncf_fields()
+
+    def update_ncf_fields(self):
+        if not self.ncf_date and self.ncf:
+            self.ncf_date = fields.Datetime.now()
+        if self.move_id and self.state not in ['draft', 'cancel']:
+            self.move_id.write({
+                'ncf': self.ncf,
+                'ncf_date': self.ncf_date
+            })
 
 
 class WolftrakInvoiceLine(models.Model):
@@ -325,7 +330,7 @@ class WolftrakMove(models.Model):
     ncf = fields.Char(string="Número de Comprobante Fiscal")
 
     type_comp = fields.Char(string="Tipo de Comprobante", readonly=True, compute='ncf_validation')
-
+    ncf_date = fields.Date(string="Fecha de Comprobante Fiscal")
     ncf_result = fields.Char(string="Resultado", readonly=True, compute='ncf_validation')
 
     type_buy = fields.Selection([('01', '01 - Gastos de personal'),
@@ -354,6 +359,21 @@ class WolftrakMove(models.Model):
             self.ncf_result = "El Número de Comprobante Fiscal digitado es válido."
         else:
             self.ncf_result = "El Número de Comprobante Fiscal ingresado no es correcto o no corresponde a este RNC"
+
+    @api.onchange('ncf')
+    def ncf_date_update(self):
+        inv_id = self.env['account.invoice'].search([('ncf', '=', self.ncf)])
+        if len(inv_id) == 1:
+            if inv_id.ncf_date:
+                self.ncf_date = inv_id.ncf_date
+            else:
+                raise ValidationError(_('La factura poseedora de esté NCF no posee fecha de NCF, '
+                                        'por favor verifique antes de continuar'))
+
+    def sync_ncf_fields(self):
+        inv_id = self.env['account.invoice'].search([('number', '=', self.name)])
+        self.ncf_date = inv_id.ncf_date
+        self.ncf = inv_id.ncf
 
 
 class WolftrakPayment(models.Model):

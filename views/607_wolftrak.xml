@@ -27,9 +27,15 @@
 						<notebook>
 							<page string="Lineas">
 								<field name="invoices">
-									<form>
-
-									</form>
+									<tree>
+										<field name="number"/>
+										<field name="ncf"/>
+										<field name="partner_id"/>
+										<field name="ncf_date"/>
+										<field name="date_invoice"/>
+										<field name="amount_total"/>
+										<field name="state" invisible="1"/>
+									</tree>
 								</field>
 							</page>
 						</notebook>
