@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="account.view_account_invoice_filter"/>
             <field name="arch" type="xml">
                 <xpath expr="//search/group" position="inside">
-                    <filter string="Fecha de Comprobante Fiscal" domain="[('state','=','paid')]" context="{'group_by': 'ncf_date'}"/>
+                    <filter string="Fecha de Comprobante Fiscal" domain="[('state','in',['paid','open'])]" context="{'group_by': 'ncf_date'}"/>
                 </xpath>
             </field>
         </record>
