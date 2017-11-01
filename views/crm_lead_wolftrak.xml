@@ -81,6 +81,9 @@
 								icon="fa-refresh"/>
 					</div>
 				</xpath>
+				<xpath expr="//form/sheet/group/group[1]/field[1]" position="after">
+					<field name="alias"/>
+				</xpath>
 
 				<xpath expr="//form/sheet/group/group[4]/field[@name='tag_ids']" position="attributes">
 					<attribute name="string">Categoría</attribute>

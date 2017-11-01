@@ -144,6 +144,7 @@
                 <sheet>
                     <h1><field name="name" placeholder="Ficha"/></h1>
                     <h4><field name="partner_id" placeholder="Cliente"/></h4>
+                    <h4><field name="alias" placeholder="Razón Comercial"/></h4>
                     <group string="Datos del dispositivo">
                         <group>
                             <field name="proyect" placeholder="Proyecto"/>

@@ -76,7 +76,6 @@ class WolftrakPartner(models.Model):
                     partner.tag_ids = tag
 
     def update_fields(self):
-
         leads = self.env['crm.lead'].search([('partner_id', 'in', self.ids)])
         for lead in leads:
             _logger.info(lead)
@@ -96,6 +95,8 @@ class WolftrakPartner(models.Model):
                 self.email = lead.email_from
             if lead.phone and not self.phone:
                 self.phone = lead.phone
+            if lead.alias and not self.alias:
+                self.alias = lead.alias
 
 
     doc_ident = fields.Char(string='Documento de Identificación')
@@ -105,7 +106,7 @@ class WolftrakPartner(models.Model):
     user_id = fields.Many2one('res.users', string='Comercial', default=_default_user_id)
     total_device = fields.Integer(string='Dispositivos', help='Total de dispositivos vendidos a este cliente', compute=_total_device)
     start_date = fields.Date(string='Fecha de Inicio', help='Fecha en que inicio el contrato el cliente.')
-
+    alias = fields.Char(string='Razón Comercial')
     tag_ids = fields.Many2many('crm.lead.tag', string='Categoría', compute=_compute_tags)
 
     def _get_partner_invoices(self):

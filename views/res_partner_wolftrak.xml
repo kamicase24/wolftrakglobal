@@ -29,6 +29,10 @@
                     </h3>
                 </xpath>
 
+                <xpath expr="//form/sheet/div[2]/h1" position="after">
+                    <field name="alias" placeholder="Razón Comercial"/>
+                </xpath>
+
                 <xpath expr="//form/sheet/group/group" position="inside">
                     <field name="dgii_state"/>
                     <field name="pay_reg"/>

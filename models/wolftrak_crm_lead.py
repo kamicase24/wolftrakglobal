@@ -9,14 +9,6 @@ class LeadWolftrak(models.Model):
     _inherit = "crm.lead"
 
     def update_fields(self):
-
-        _logger.info(self.partner_id.street)
-        _logger.info(self.street)
-        _logger.info(self.partner_id.street2)
-        _logger.info(self.street2)
-        _logger.info(self.partner_id.city)
-
-
         if self.partner_id.email:
             self.email_from = self.partner_id.email
         if self.partner_id.phone:
@@ -33,6 +25,8 @@ class LeadWolftrak(models.Model):
             self.zip = self.partner_id.zip
         if self.partner_id.country_id:
             self.country_id = self.partner_id.country_id
+        if self.partner_id.alias:
+            self.alias = self.partner_id.alias
 
     def confirm_rnc(self):
         if self.partner_id:
@@ -44,4 +38,6 @@ class LeadWolftrak(models.Model):
     country_id = fields.Many2one('res.country', string='Country', default=62)
     confirm_note = fields.Html(string='RNC')
     assigned_by = fields.Many2one('res.users', string='Asignado por', domain=[('id', '!=', 1), ('share', '=', False)])
+    alias = fields.Char(string='Razón Comercial')
+
 

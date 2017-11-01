@@ -156,6 +156,7 @@ class GpsDevice(models.Model):
     car_model_id = fields.Many2one('car.model', string='Modelo del Vehiculo')
     year = fields.Char(string='Año del Vehiculo')
     partner_id = fields.Many2one('res.partner', string='Cliente')
+    alias = fields.Char(string='Razón Comercial', related='partner_id.alias', store=True)
     status = fields.Selection([('on', 'Activado'),
                                ('off', 'Desactivado'),
                                ('personal', 'Personal'),
