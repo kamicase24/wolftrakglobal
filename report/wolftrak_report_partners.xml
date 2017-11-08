@@ -13,10 +13,10 @@
         <template id="partners_report_template">
             <t t-foreach="docs" t-as="o">
                 <div class="page">
-                        <h1 class="textcolor3">
-                            <b>Wolftrak Global</b>
-                            <img src="wolftrakglobal/static/src/img/lobo1.png"/>
-                        </h1>
+                    <h1 class="textcolor3">
+                        <b>Wolftrak Global</b>
+                        <img src="wolftrakglobal/static/src/img/lobo1.png"/>
+                    </h1>
                     <t t-set="month" t-value="str(o.month).upper()"/>
                     <h1><span t-esc="month"/></h1><br/>
 

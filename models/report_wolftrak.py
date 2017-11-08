@@ -268,35 +268,6 @@ class WizardReport606(models.Model):
         })
         return {'type': 'ir.actions.do_nothing'}
 
-# result = self._default_report_result()
-#
-# return {
-#     'type':'ir.action.act_url',
-#     'url':'/web/binary/download_document?model=wizard.report.606&field=binary_report&id=%s&filename=test1.txt'%(self.id),
-# }
-
-# return self.write({'file_name':'test1.txt','binary_report':base64.encodestring(result)})
-
-# self.write({'data': base64.encodestring(result)})
-# this = self.browse()[0]
-# _logger.info(this)
-# _logger.info(self.inv.context)
-# return {
-#     'type' : 'ir.actions.act_window',
-#     'res_model' : 'wizard.report606',
-#     'view_mode' : 'form',
-#     'view_type' : 'form',
-#     'res_id' : this.id,
-#     'views' : [(False,'form')],
-#     'target' : 'new'
-# }
-
-# file = open("DGII_F_606_131104371_yearmonth.txt","w")
-# file.write(result)
-# file.close
-# opener = urllib.URLopener
-# opener.retrieve("http://localhost:8069/web/
-
 
 class WolftrakPartnersWizard(models.TransientModel):
     _name = 'wizard.partner.report'
@@ -404,7 +375,7 @@ class WolftrakPartnersDashboard(models.Model):
                               ('3', 'Pago y No Pago')], string='Tipo de Reporte')
     partner_report = fields.Many2many('partner.report', string='Reporte', store=True)
 
-    @api.onchange('month','year')
+    @api.onchange('month', 'year')
     def set_invoice(self):
         # year = int(datetime.now().strftime('%Y'))
         if self.month:
@@ -463,12 +434,6 @@ class WolftrakPartnersDashboard(models.Model):
 class WolftrakPartnersReport(models.Model):
     _name = 'partner.report'
 
-    # dashboard_id = fields.Many2one('partner.dashboard')
-
-    # def _default_currency(self):
-    #     self.currency_id = 3
-    #     return 3
-
     currency_id = fields.Many2one('res.currency', string='Moneda')
 
     partner_id = fields.Integer(string='Id Cliente')
@@ -477,3 +442,69 @@ class WolftrakPartnersReport(models.Model):
     quantity = fields.Integer(string='Cantidad')
     price_unit = fields.Float(string='Precio Unitario')
     total = fields.Float(string='Total')
+
+
+class WolftrakDebtClientsDashboard(models.Model):
+    _name = "debt.clients.dashboard"
+
+    date_from = fields.Date(string='Desde')
+    date_to = fields.Date(string='Hasta')
+    debt_clients_report = fields.One2many('debt.clients.report', 'dashboard_id', string='Clientes Morosos')
+
+    @api.onchange('date_to')
+    def set_data(self):
+        if self.date_from and self.date_to:
+
+            self.env.cr.execute("delete from debt_clients_report")
+
+            sql = """insert into debt_clients_report(partner_name, 
+            date_invoice, 
+            number, 
+            draft_number, 
+            date_due,
+            amount_total,
+            residual,
+            state,
+            ncf,
+            currency_id)
+            select
+                (select name from res_partner where id = partner_id) partner_name, 
+                date_invoice, 
+                number, 
+                draft_number, 
+                date_due, 
+                amount_total, 
+                residual, 
+                state, 
+                ncf,
+                currency_id
+            from account_invoice
+            where 
+                state in ('payorder', 'open2', 'open') and
+                date_invoice > '%s' and date_invoice < '%s'""" % (self.date_from, self.date_to)
+            _logger.info(sql)
+            self.env.cr.execute(sql)
+            self.debt_clients_report = self.env['debt.clients.report'].search([])
+
+    def print_report(self):
+
+        self.debt_clients_report = None
+        self.debt_clients_report = self.env['debt.clients.report'].search([])
+        return self.env['report'].get_action(self, 'wolftrakglobal.debt_clients_template')
+
+
+class WolftrakDebtClientsReport(models.Model):
+    _name = 'debt.clients.report'
+
+    dashboard_id = fields.Many2one('debt.clients.dashboard')
+    currency_id = fields.Many2one('res.currency', string='Moneda')
+
+    partner_name = fields.Char(string='Cliente')
+    date_invoice = fields.Date(string='Fecha')
+    number = fields.Char(string='Numero')
+    draft_number = fields.Char(string='Numero')
+    date_due = fields.Date(string='Fecha de Vencimiento')
+    amount_total = fields.Float(string='Total')
+    residual = fields.Float(string='Importe Adeudado')
+    state = fields.Char(string='Estado')
+    ncf = fields.Char(string='NCF')

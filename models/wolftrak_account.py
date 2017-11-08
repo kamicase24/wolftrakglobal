@@ -14,38 +14,33 @@ from datetime import date
 import calendar
 _logger = logging.getLogger(__name__)
 
-main_base = os.path.dirname(os.path.abspath(__file__))
-CONFIG_FILE_NAME = 'ncf.json'
-CONFIG_FILE = os.path.join(main_base, CONFIG_FILE_NAME)
-
-
-def load_config(json_file):
-    with open(json_file, 'r') as wfile:
-        config_data = json.load(wfile)
-        return config_data
-
-
-def get_ncf_record(ncf, rnc, config_data=None):
-    if not config_data:
-        config_data = load_config(CONFIG_FILE)
-    req_headers = config_data['request_headers']
-    # req_cookies = config_data['request_cookies']
-    req_params = config_data['request_parameters']
-    uri = ''.join([config_data['url'], config_data['web_resource']])
-    req_params['txtNCF'] = ncf
-    req_params['txtRNC'] = rnc
-    result = requests.get(uri, params=req_params, headers=req_headers)
-    if result.status_code == requests.codes.ok:
-        soup = BeautifulSoup(result.content)
-        if soup.find('span', attrs={'id': 'lblContribuyente'}):
-            data_rows1 = soup.find('span', attrs={'id': 'lblContribuyente'})
-            data_rows2 = soup.find('span', attrs={'id': 'lblTipoComprobante'})
-            span = []
-            span.append(data_rows1.string)
-            span.append(data_rows2.string)
-            return span
-        else:
-            print soup.find('span', attrs={'id': 'lblErrorWebService'}).string
+# def load_config(json_file):
+#     with open(json_file, 'r') as wfile:
+#         config_data = json.load(wfile)
+#         return config_data
+#
+#
+# def get_ncf_record(ncf, rnc, config_data=None):
+#     if not config_data:
+#         config_data = load_config(CONFIG_FILE)
+#     req_headers = config_data['request_headers']
+#     # req_cookies = config_data['request_cookies']
+#     req_params = config_data['request_parameters']
+#     uri = ''.join([config_data['url'], config_data['web_resource']])
+#     req_params['txtNCF'] = ncf
+#     req_params['txtRNC'] = rnc
+#     result = requests.get(uri, params=req_params, headers=req_headers)
+#     if result.status_code == requests.codes.ok:
+#         soup = BeautifulSoup(result.content)
+#         if soup.find('span', attrs={'id': 'lblContribuyente'}):
+#             data_rows1 = soup.find('span', attrs={'id': 'lblContribuyente'})
+#             data_rows2 = soup.find('span', attrs={'id': 'lblTipoComprobante'})
+#             span = []
+#             span.append(data_rows1.string)
+#             span.append(data_rows2.string)
+#             return span
+#         else:
+#             print soup.find('span', attrs={'id': 'lblErrorWebService'}).string
 
 
 class WolftrakInvoice(models.Model):
@@ -54,17 +49,12 @@ class WolftrakInvoice(models.Model):
 
     def default_draft_number(self):
         invoices = self.env['account.invoice'].search([], limit=1, order='id desc')
-        _logger.info(invoices)
         last_id = invoices and max(invoices)
         date_str = str(date.today().year)+str(date.today().month)
         if not last_id.draft_number:
             return 'OP/'+date_str+'/0001'
         else:
-            # number = ''.join(last_id.draft_number[9:])
             number = int(re.findall(r'\d+', last_id.draft_number[9:])[0])+1
-            # number = int(''.join(last_id.draft_number[9:]))+1
-            _logger.info(number)
-            _logger.info('OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1))
             return 'OP/'+date_str+'/'+str(number).zfill(last_id.draft_number[9:].count('0')+1)
 
     @api.onchange('partner_id')
@@ -163,24 +153,15 @@ class WolftrakInvoice(models.Model):
         return self.action_cancel()
 
     draft_number = fields.Char(readonly=False, default=default_draft_number)
-
     ncf = fields.Char(string="Número de Comprobante Fiscal")
-
     type_comp = fields.Char(string="Tipo de Comprobante", readonly=True, compute='ncf_validation')
-
     ncf_result = fields.Char(string="Resultado", readonly=True, compute='ncf_validation')
-
     tax_hold = fields.Monetary(string="ITBIS Retenido")
-
     type_ci = fields.Char(string="Tipo de Identificación")
-
     isr = fields.Selection([('0.3', '30%'),
                             ('0.27', '27%')], string="Impuesto Sobre la Renta")
-
     isr_hold = fields.Float(string="Total retenido")
-
     isr_date = fields.Date(string="Fecha de la Retencion")
-
     type_buy = fields.Selection([('01', '01 - Gastos de personal'),
                                 ('02', '02 - Gastos por trabajos suministros y servicios'),
                                 ('03', '03 - Arrendamientos'),
@@ -192,7 +173,6 @@ class WolftrakInvoice(models.Model):
                                 ('09', '09 - Compras y Gastos que formaran parte del costo de venta'),
                                 ('10', '10 - Adquisiciones de activos'),
                                 ('11', '11 - Gastos de Seguros')], string="Tipo de Bienes o Servicios comprados")
-
     type_nul = fields.Selection([('01', '01 Deterioro de Factura Pre-Imresa'),
                                 ('02', '02 Errores de Impresión (factura Pre-Impresa)'),
                                 ('03', '03 Impresión Defectuosa'),
@@ -202,26 +182,12 @@ class WolftrakInvoice(models.Model):
                                 ('07', '07 Devolución de Productos'),
                                 ('08', '08 Omisión de Productos'),
                                 ('09', '09 Errores de Secuencias de NCF')], string="Tipo de Anulación")
-
-    state = fields.Selection([
-            ('draft', 'Draft'),
-            ('payorder', 'Orden de Pago'),
-            ('proforma', 'Pro-forma'),
-            ('proforma2', 'Pro-forma'),
-            ('open', 'Open'),
-            ('open2', 'Abierto (Sin credito Fiscal)'),
-            ('paid', 'Paid'),
-            ('cancel', 'Cancelled')
-        ], string='Status', index=True, readonly=True, default='draft',
-        track_visibility='onchange', copy=False,
-        help=" * The 'Draft' status is used when a user is encoding a new and unconfirmed Invoice.\n"
-             " * The 'Pro-forma' status is used when the invoice does not have an invoice number.\n"
-             " * The 'Open' status is used when user creates invoice, an invoice number is generated."
-             "It stays in the open status till the user pays the invoice.\n"
-             " * The 'Paid' status is set automatically when the invoice is paid. "
-             "Its related journal entries may or may not be reconciled.\n"
-             " * The 'Cancelled' status is used when user cancel invoice.")
-
+    state = fields.Selection([('draft', 'Draft'), ('payorder', 'Orden de Pago'),
+                              ('proforma', 'Pro-forma'), ('proforma2', 'Pro-forma'),
+                              ('open', 'Open'), ('open2', 'Abierto (Sin credito Fiscal)'),
+                              ('paid', 'Paid'), ('cancel', 'Cancelled')],
+                             string='Status', index=True, readonly=True, default='draft',
+                             track_visibility='onchange', copy=False)
     ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4),
                            default=lambda self: self.env['wolftrak.tools'].default_ex_rate_2())
 
@@ -280,8 +246,8 @@ class WolftrakInvoice(models.Model):
     @api.depends('ncf')
     def ncf_validation(self):
         supplier_rnc = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
-        values_in_inv = get_ncf_record(self.ncf, supplier_rnc.doc_ident)
-        values_out_inv = get_ncf_record(self.ncf, '131104371')
+        values_in_inv = self.env['wolftrak.tools'].get_ncf_record(self.ncf, supplier_rnc.doc_ident)
+        values_out_inv = self.env['wolftrak.tools'].get_ncf_record(self.ncf, '131104371')
         if self.type == 'out_invoice':
             # if values_out_inv != None:
             if values_out_inv is not None:

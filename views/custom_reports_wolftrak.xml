@@ -15,15 +15,44 @@
                     </group>
                     <field name="partner_report">
                         <tree>
-                            <!--<field name="partner_id"/>-->
                             <field name="partner_name"/>
-                            <!--<field name="product_id"/>-->
-                            <!--<field name="currency_id"/>-->
                             <field name="quantity"/>
                             <field name="price_unit" string="Valor/U" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                             <field name="total" sum="total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </tree>
                     </field>
+                </form>
+            </field>
+        </record>
+
+        <record id="debt_clients_report_form" model="ir.ui.view">
+            <field name="name">Clientes Morosos</field>
+            <field name="model">debt.clients.dashboard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <field name="debt_clients_report">
+                        <tree>
+                            <field name="partner_name"/>
+                            <field name="date_invoice"/>
+                            <field name="number"/>
+                            <field name="draft_number"/>
+                            <field name="date_due"/>
+                            <field name="amount_total"/>
+                            <field name="residual"/>
+                            <field name="state"/>
+                            <field name="ncf"/>
+                            <field name="currency_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button name="print_report" type="object" string="Imprimir" class="oe_highlight"/>
+                    </footer>
                 </form>
             </field>
         </record>
@@ -41,7 +70,14 @@
             <field name="res_model">partner.dashboard</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
-            <!--<field name="target">new</field>-->
+        </record>
+
+        <record id="debt_clients_report_action" model="ir.actions.act_window">
+            <field name="name">Clientes Morosos</field>
+            <field name="res_model">debt.clients.dashboard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
         </record>
 
         <menuitem
@@ -49,6 +85,14 @@
             name="Reporte Dispositivos"
             sequence="1"
             action="partners_report_action"
+            parent="account.menu_finance_reports"
+        />
+
+        <menuitem
+            id="debt_clients_report_menu"
+            name="Clientes Morosos"
+            sequence="1"
+            action="debt_clients_report_action"
             parent="account.menu_finance_reports"
         />
     </data>

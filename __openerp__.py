@@ -34,6 +34,7 @@
         'report/wolftrak_report_daily_journal.xml',
         'report/wolftrak_report_gps_device.xml',  # dispositivos gps
         'report/wolftrak_report_partners.xml',  # reporte dispositivos mensuales (cliente)
+        'report/wolftrak_report_debt_clients.xml',  # Clientes Morosos
         # views
         'views/606_wolftrak.xml',
         'views/607_wolftrak.xml',
@@ -50,9 +51,10 @@
         # 'views/hr_timesheet_wolftrak.xml',
         'views/layouts.xml',
         'views/maintenance_wolftrak.xml',
-        'views/partners_report_wolftrak.xml',
+        'views/custom_reports_wolftrak.xml',
         'views/product_wolftrak.xml',
         'views/purchase_wolftrak.xml',
+        'views/example_webpage.xml',
         # data
         'data/base_action_wolftrak.xml',
         # wizards

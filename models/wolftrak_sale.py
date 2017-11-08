@@ -153,15 +153,13 @@ class WolftrakSaleOrderLine(models.Model):
                 else:
                     for move in picking_id.move_lines:
                         if move.product_id.type == 'pack':
-                            sql = 'delete from stock_move where id = %s' % move.id
+                            sql  = 'delete from stock_move where id = %s' % move.id
                             self.env.cr.execute(sql)
 
     @api.multi
     def _action_procurement_create(self):
-
         res = super(WolftrakSaleOrderLine, self)._action_procurement_create()
         self._calculate_packages()
-        # self._delete_pack_picking()
 
         return res
 

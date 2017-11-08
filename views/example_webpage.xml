@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="example_page" name="Pagina Ejemplo" page="True">
+            <t t-call="website.layout">
+                <div class="oe_structure">
+                    <div class="container">
+                        <center><h3>Hola mundo</h3></center>
+                        <p>
+                            Toda la información aquí.<br/>
+                            <a t-attf-href="/example/detail" class="btn btn-info">Pagina de Informacion</a>
+                        </p>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

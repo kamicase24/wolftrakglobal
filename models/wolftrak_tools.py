@@ -13,10 +13,65 @@ import datetime
 from datetime import date
 import calendar
 _logger = logging.getLogger(__name__)
+main_base = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE_NAME = "config.json"
+CONFIG_FILE = os.path.join(main_base, CONFIG_FILE_NAME)
+
+CONFIG_FILE_NAME_2 = 'ncf.json'
+CONFIG_FILE_2 = os.path.join(main_base, CONFIG_FILE_NAME_2)
 
 
 class WolftrakTools(models.Model):
     _name = 'wolftrak.tools'
+
+    @api.multi
+    def load_config(self, json_file):
+        with open(json_file, 'r') as file:
+            config_data = json.load(file)
+        return config_data
+
+    def get_rnc_record(self, rnc, config_data=None):
+        if not config_data:
+            config_data = self.load_config(CONFIG_FILE)
+        req_headers = config_data['request_headers']
+        # req_cookies = config_data.get('request_cookies')
+        req_params = config_data['request_parameters']
+        uri = ''.join([config_data['url'], config_data['web_resource']])
+
+        req_params['txtRncCed'] = rnc
+        result = requests.get(uri, params=req_params, headers=req_headers)
+        if result.status_code == requests.codes.ok:
+            soup = BeautifulSoup(result.content)
+            data_rows = soup.find('tr', attrs={'class': 'GridItemStyle'})
+            try:
+                tds = data_rows.findChildren('td')
+                rnc_vals = [str(td.text.strip()) for td in tds]
+                # rnc = Rnc(rnc_vals)
+                return rnc_vals
+            except:
+                pass
+
+    def get_ncf_record(self, ncf, rnc, config_data=None):
+        if not config_data:
+            config_data = self.load_config(CONFIG_FILE_2)
+        req_headers = config_data['request_headers']
+        # req_cookies = config_data['request_cookies']
+        req_params = config_data['request_parameters']
+        uri = ''.join([config_data['url'], config_data['web_resource']])
+        req_params['txtNCF'] = ncf
+        req_params['txtRNC'] = rnc
+        result = requests.get(uri, params=req_params, headers=req_headers)
+        if result.status_code == requests.codes.ok:
+            soup = BeautifulSoup(result.content)
+            if soup.find('span', attrs={'id': 'lblContribuyente'}):
+                data_rows1 = soup.find('span', attrs={'id': 'lblContribuyente'})
+                data_rows2 = soup.find('span', attrs={'id': 'lblTipoComprobante'})
+                span = []
+                span.append(data_rows1.string)
+                span.append(data_rows2.string)
+                return span
+            else:
+                print soup.find('span', attrs={'id': 'lblErrorWebService'}).string
 
     def default_ex_rate(self):
         if not self.ex_rate:
