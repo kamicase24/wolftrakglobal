@@ -318,7 +318,7 @@ class WolftrakMove(models.Model):
     @api.depends('ncf')
     def ncf_validation(self):
         supplier_rnc = self.partner_id
-        values_in_inv = get_ncf_record(self.ncf, supplier_rnc.doc_ident)
+        values_in_inv = self.env['wolftrak.tools'].get_ncf_record(self.ncf, supplier_rnc.doc_ident)
         # if values_in_inv != None:
         if values_in_inv is not None:
             self.type_comp = values_in_inv[1]
