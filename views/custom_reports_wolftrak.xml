@@ -45,7 +45,7 @@
                             <field name="date_due"/>
                             <field name="amount_total"/>
                             <field name="residual"/>
-                            <field name="state"/>
+                            <field name="state" invisible="1"/>
                             <field name="ncf"/>
                             <field name="currency_id" invisible="1"/>
                         </tree>

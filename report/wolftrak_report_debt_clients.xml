@@ -16,35 +16,36 @@
                     <h1 class="textcolor3">
                         <b>Wolftrakglobal</b>
                         <img src="wolftrakglobal/static/src/img/lobo1.png"/>
-                        <table class="table table-bordered">
-                            <tr class="tablecolor textcolor">
-                                <td>Cliente</td>
-                                <td>Fecha</td>
-                                <td>Número</td>
-                                <!--<td>Fecha de Vencimiento</td>-->
-                                <td>Total</td>
-                                <td>Importe Adeudado</td>
-                                <td>Estado</td>
-                                <td>NCF</td>
-                            </tr>
-                            <tr t-foreach="o.debt_clients_report" t-as="dc">
-                                <td><span t-field="dc.partner_name"/></td>
-                                <td><span t-field="dc.date_invoice"/></td>
-                                <t t-if="dc.state == 'payorder'">
-                                    <td><span t-field="dc.draft_number"/></td>
-                                </t>
-                                <t t-else="">
-                                    <td><span t-field="dc.number"/></td>
-                                </t>
-                                <td><span t-esc="dc.amount_total" t-options="{'widget': 'monetary','display_currency': dc.currency_id}"/></td>
-                                <td><span t-esc="dc.residual" t-options="{'widget': 'monetary','display_currency': dc.currency_id}"/></td>
-                                <td t-if="dc.state == 'payorder'">Orden de Pago</td>
-                                <td t-if="dc.state == 'open'">Abierto</td>
-                                <td t-if="dc.state == 'open2'">Abierto Sin credito Fiscal</td>
-                                <td><span t-field="dc.ncf"/></td>
-                            </tr>
-                        </table>
+                        <b></b>
                     </h1>
+                    <table class="table table-bordered">
+                        <tr class="tablecolor textcolor">
+                            <td>Cliente</td>
+                            <td>Fecha</td>
+                            <td>Número</td>
+                            <!--<td>Fecha de Vencimiento</td>-->
+                            <td>Total</td>
+                            <td>Importe Adeudado</td>
+                            <td>Estado</td>
+                            <td>NCF</td>
+                        </tr>
+                        <tr t-foreach="o.debt_clients_report.sorted(key=lambda dc: dc.date_invoice)" t-as="dc">
+                            <td><span t-field="dc.partner_name"/></td>
+                            <td><span t-field="dc.date_invoice"/></td>
+                            <t t-if="dc.state == 'payorder'">
+                                <td><span t-field="dc.draft_number"/></td>
+                            </t>
+                            <t t-else="">
+                                <td><span t-field="dc.number"/></td>
+                            </t>
+                            <td><span t-esc="dc.amount_total" t-options="{'widget': 'monetary','display_currency': dc.currency_id}"/></td>
+                            <td><span t-esc="dc.residual" t-options="{'widget': 'monetary','display_currency': dc.currency_id}"/></td>
+                            <td t-if="dc.state == 'payorder'">Orden de Pago</td>
+                            <td t-if="dc.state == 'open'">Abierto</td>
+                            <td t-if="dc.state == 'open2'">Abierto Sin credito Fiscal</td>
+                            <td><span t-field="dc.ncf"/></td>
+                        </tr>
+                    </table>
                 </div>
             </t>
         </template>
