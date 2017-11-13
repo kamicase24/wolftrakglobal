@@ -188,8 +188,8 @@ class WolftrakInvoice(models.Model):
                               ('paid', 'Paid'), ('cancel', 'Cancelled')],
                              string='Status', index=True, readonly=True, default='draft',
                              track_visibility='onchange', copy=False)
-    ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4),
-                           default=lambda self: self.env['wolftrak.tools'].default_ex_rate_2())
+    ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4))
+                           # default=lambda self: self.env['wolftrak.tools'].default_ex_rate_2())
 
     comment = fields.Text(string='Additional Information', readonly=False, states={'draft': [('readonly', False)]})
 
