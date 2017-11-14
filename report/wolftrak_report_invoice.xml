@@ -20,8 +20,9 @@
                                     <span t-if="o.type == 'out_refund'">Refund</span>
                                     <span t-if="o.type == 'in_refund'">Vendor Refund</span>
                                     <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
-                                    <t t-if="o.state != 'draft'"><span t-field="o.number"/></t>
+                                    <t t-if="o.state != 'draft' and o.state != 'payorder'"><span t-field="o.number"/></t>
                                     <t t-if="o.state == 'draft'"><span t-field="o.draft_number"/></t>
+                                    <t t-if="o.state == 'payorder'"><span t-field="o.draft_number"/></t>
                                 </h2>
                             </td>
                         </tr>
