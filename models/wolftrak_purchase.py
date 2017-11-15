@@ -18,8 +18,12 @@ class WolftrakPurchase(models.Model):
     def currency_exchange(self):
         self.env['wolftrak.tools'].currency_exchange(self)
 
+    def default_ex_rate(self):
+        if not self.partner_id and not self.ex_rate:
+            return self.env['wolftrak.tools'].default_ex_rate_2()
+
     ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4),
-                           default=lambda self: self.env['wolftrak.tools'].default_ex_rate_2())
+                           default=lambda self: self.default_ex_rate())
 
     @api.onchange('partner_id', 'company_id')
     def onchange_partner_id(self):

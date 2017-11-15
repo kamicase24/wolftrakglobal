@@ -42,14 +42,17 @@ class WolftrakSaleOrder(models.Model):
             if line.product_id.type == 'pack':
                 _logger.info(line.product_id.name)
                 packs += 1
-
         self.pack_count = len(self.pack_picking_ids)
+
+    def default_ex_rate(self):
+        if not self.partner_id and not self.ex_rate:
+            return self.env['wolftrak.tools'].default_ex_rate_2()
 
     pricelist_id = fields.Many2one('product.pricelist', string='Pricelist', required=True, readonly=True,
                                    states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
                                    help="Pricelist for current sales order.", default=2)
     ex_rate = fields.Float(string='Tasa de Cambio del dia', digits=(1, 4),
-                           default=lambda self: self.env['wolftrak.tools'].default_ex_rate_2())
+                           default=lambda self: self.default_ex_rate())
 
     pack_count = fields.Integer(string='Paquetes', compute=_compute_pack_ids)
 

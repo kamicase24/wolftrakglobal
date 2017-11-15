@@ -146,6 +146,15 @@ class WolftrakInvoice(models.Model):
         else:
             raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
 
+    def default_ex_rate(self):
+        if self.origin:
+            so = self.env['sale.order'].search('name', '=', self.origin)
+            return so.ex_rate
+        else:
+            if not self.partner_id and not self.ex_rate:
+                return self.env['wolftrak.tools'].default_ex_rate_2()
+
+
     @api.multi
     def action_payorder_cancel(self):
         if self.filtered(lambda inv: inv.state not in ['proforma2', 'draft', 'open', 'payorder']):
@@ -188,8 +197,8 @@ class WolftrakInvoice(models.Model):
                               ('paid', 'Paid'), ('cancel', 'Cancelled')],
                              string='Status', index=True, readonly=True, default='draft',
                              track_visibility='onchange', copy=False)
-    ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4))
-                           # default=lambda self: self.env['wolftrak.tools'].default_ex_rate_2())
+    ex_rate = fields.Float(string='Tasa de Cambio', digits=(1, 4),
+                           default=lambda self: self.default_ex_rate())
 
     comment = fields.Text(string='Additional Information', readonly=False, states={'draft': [('readonly', False)]})
 

@@ -92,9 +92,11 @@ class WolftrakTools(models.Model):
         soup = BeautifulSoup(page.content, 'lxml')
         body = soup.body
         rate = body.find_all('span')[1].string
+        _logger.info(rate)
         user = self.env.user
         if user.company_id.name == 'MYTRAK TECHNOLOGY SRL':
-            return rate
+            # return round(float(rate), 4)
+            return float(rate)
         else:
             return 0.0
 

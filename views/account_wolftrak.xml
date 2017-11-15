@@ -107,6 +107,12 @@
                     <button name="currency_exchange" string="Cambio monetario" icon="fa-repeat" type="object" class="oe_highlight"/>
                 </xpath>
 
+                <xpath expr="//form/sheet/notebook/page/group" position="after">
+                    <group>
+                        <field name="install_date"/>
+                    </group>
+                </xpath>
+
                 <xpath expr="//form/sheet/notebook/page/group/group[2]" position="inside">
             		<field name="ncf"/>
                     <field name="type_comp"/>
@@ -117,7 +123,7 @@
                 <xpath expr="//form/sheet/notebook/page/group/group/field[6]" position="replace">
                     <field name="date_due"/>
                     <field name="ncf_date"/>
-                    <field name="install_date"/>
+
                 </xpath>
 
                 <xpath expr="//form/sheet/notebook/page/field" position="replace">
