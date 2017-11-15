@@ -22,6 +22,12 @@ class WolftrakSaleOrder(models.Model):
     pack_picking_ids = fields.Many2many('stock.picking', compute=_compute_pack_picking_ids,
                                         string='Movimientos de los paquetes asociado con este SO')
 
+    @api.multi
+    def _prepare_invoice(self):
+        invoice_vals = super(WolftrakSaleOrder, self)._prepare_invoice()
+        invoice_vals['ex_rate'] = self.ex_rate
+        return invoice_vals
+
     def currency_exchange(self):
         self.env['wolftrak.tools'].currency_exchange(self)
 

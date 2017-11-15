@@ -147,12 +147,8 @@ class WolftrakInvoice(models.Model):
             raise ValidationError(_("La factura no puede pasar al siguiente estado mientras que su moneda no sea DOP"))
 
     def default_ex_rate(self):
-        if self.origin:
-            so = self.env['sale.order'].search('name', '=', self.origin)
-            return so.ex_rate
-        else:
-            if not self.partner_id and not self.ex_rate:
-                return self.env['wolftrak.tools'].default_ex_rate_2()
+        if not self.partner_id and not self.ex_rate:
+            return self.env['wolftrak.tools'].default_ex_rate_2()
 
 
     @api.multi
