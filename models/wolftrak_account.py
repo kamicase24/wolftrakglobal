@@ -9,8 +9,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from bs4 import BeautifulSoup
 import requests
-import datetime
-from datetime import date
+from datetime import date, timedelta, datetime
 import calendar
 _logger = logging.getLogger(__name__)
 
@@ -230,6 +229,17 @@ class WolftrakInvoice(models.Model):
                     i = number
             self.draft_number = "OP/"+date_str+"/"+str(i+1)
 
+    @api.onchange('date_invoice')
+    def _set_date_due(self):
+        if self.date_invoice:
+            inv_day = int(self.date_invoice[-2:])
+            inv_month = int(self.date_invoice[5:7])
+            date_inv = datetime(2017, inv_month, inv_day)
+            days = timedelta(days=30)
+            date_inv_due = date_inv + days
+            _logger.info(date_inv_due.strftime('%Y-%m-%d'))
+            self.date_due = date_inv_due.strftime('%Y-%m-%d')
+
     @api.onchange('isr')
     def isr_holding(self):
         self.isr_hold = self.amount_total * float(self.isr)
@@ -288,7 +298,7 @@ class WolftrakInvoice(models.Model):
 
 class WolftrakInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
-    now = datetime.datetime.now()
+    now = datetime.now()
     description = fields.Char(string='Detalle',
                               default="Mes: " + calendar.month_name[date.today().month] + " " + str(now.year))
 
