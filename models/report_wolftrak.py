@@ -466,7 +466,8 @@ class WolftrakDebtClientsDashboard(models.Model):
             residual,
             state,
             ncf,
-            currency_id)
+            currency_id,
+            date_payment)
             select
                 (select name from res_partner where id = partner_id) partner_name, 
                 date_invoice, 
@@ -477,7 +478,9 @@ class WolftrakDebtClientsDashboard(models.Model):
                 residual, 
                 state, 
                 ncf,
-                currency_id
+                currency_id,
+                (select payment_date from account_payment where communication = number order by payment_date desc limit 1) date_payment
+                
             from account_invoice
             where 
                 state in ('payorder', 'open2', 'open') and
@@ -496,15 +499,28 @@ class WolftrakDebtClientsDashboard(models.Model):
 class WolftrakDebtClientsReport(models.Model):
     _name = 'debt.clients.report'
 
+    def _compute_due_days(self):
+        for line in self:
+            date_due = datetime(int(line.date_due[:4]), int(line.date_due[5:7]), int(line.date_due[-2:]))
+            days = abs(date_due - datetime.now()).days
+            line.due_days = days
+
+    def _compute_amonut_pay(self):
+        for line in self:
+            line.amount_pay = line.amount_total - line.residual
+
     dashboard_id = fields.Many2one('debt.clients.dashboard')
     currency_id = fields.Many2one('res.currency', string='Moneda')
 
     partner_name = fields.Char(string='Cliente')
-    date_invoice = fields.Date(string='Fecha')
     number = fields.Char(string='Numero')
     draft_number = fields.Char(string='Numero')
+    amount_total = fields.Float(string='Monto')
+    amount_pay = fields.Float(string='Abonado', compute=_compute_amonut_pay, store=True)
+    residual = fields.Float(string='Restante')
+    date_invoice = fields.Date(string='Fecha de Emision')
     date_due = fields.Date(string='Fecha de Vencimiento')
-    amount_total = fields.Float(string='Total')
-    residual = fields.Float(string='Importe Adeudado')
-    state = fields.Char(string='Estado')
+    due_days = fields.Integer(string='Dias Vencidos', compute=_compute_due_days, store=True)
+    date_payment = fields.Date(string='Fecha de Pago')
     ncf = fields.Char(string='NCF')
+    state = fields.Char(string='Estado')

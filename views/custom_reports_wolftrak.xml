@@ -39,12 +39,15 @@
                     <field name="debt_clients_report">
                         <tree>
                             <field name="partner_name"/>
-                            <field name="date_invoice"/>
                             <field name="number"/>
                             <field name="draft_number"/>
-                            <field name="date_due"/>
                             <field name="amount_total"/>
+                            <field name="amount_pay"/>
                             <field name="residual"/>
+                            <field name="date_invoice"/>
+                            <field name="date_due"/>
+                            <field name="due_days"/>
+                            <field name="date_payment"/>
                             <field name="state" invisible="1"/>
                             <field name="ncf"/>
                             <field name="currency_id" invisible="1"/>
