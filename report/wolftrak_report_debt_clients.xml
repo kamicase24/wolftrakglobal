@@ -32,6 +32,9 @@
                             <td>NCF</td>
                             <td>Estado</td>
                         </tr>
+                        <t t-set="total_line_1" t-value="0.0"/>
+                        <t t-set="total_line_2" t-value="0.0"/>
+                        <t t-set="total_line_3" t-value="0.0"/>
                         <tr t-foreach="o.debt_clients_report.sorted(key=lambda dc: dc.date_invoice)" t-as="dc">
                             <td><span t-field="dc.partner_name"/></td>
 
@@ -55,6 +58,16 @@
                             <td t-if="dc.state == 'open'">Abierto</td>
                             <td t-if="dc.state == 'open2'">Abierto Sin credito Fiscal</td>
 
+                            <t t-set="total_line_1" t-value="total_line_1 + dc.amount_total"/>
+                            <t t-set="total_line_2" t-value="total_line_2 + dc.amount_pay"/>
+                            <t t-set="total_line_3" t-value="total_line_3 + dc.residual"/>
+                        </tr>
+                        <tr class="total1 textcolor" t-foreach="o.debt_clients_report.search([], limit=1)" t-as="dc">
+                            <td></td>
+                            <td></td>
+                            <td><span t-esc="total_line_1"  t-options="{'widget': 'monetary','display_currency': dc.currency_id}"/></td>
+                            <td><span t-esc="total_line_2"  t-options="{'widget': 'monetary','display_currency': dc.currency_id}"/></td>
+                            <td><span t-esc="total_line_3"  t-options="{'widget': 'monetary','display_currency': dc.currency_id}"/></td>
                         </tr>
                     </table>
                 </div>
