@@ -9,6 +9,7 @@
                 <xpath expr="//search" position="inside">
                     <field name="ncf_date"/>
                     <field name="ncf"/>
+                    <field name="draft_number" string="Orden de Pago"/>
                 </xpath>
                 <xpath expr="//search/group" position="inside">
                     <filter string="Fecha de Comprobante Fiscal" domain="[('state','in',['paid','open'])]" context="{'group_by': 'ncf_date'}"/>
@@ -232,6 +233,14 @@
                 <!--</xpath>-->
                 <xpath expr="//tree" position="inside">
                     <field name="ncf"/>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='number']" position="attributes">
+                    <attribute name="attrs">{'invisible':[('state', 'in', ('draft','payorder'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='number']" position="before">
+                    <field name="draft_number" string="Orden de Pago" attrs="{'invisible': [('state', 'in', ('open','open2','paid'))]}"/>
                 </xpath>
             </field>
         </record>
