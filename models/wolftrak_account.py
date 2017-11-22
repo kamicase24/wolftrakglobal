@@ -70,8 +70,10 @@ class WolftrakInvoice(models.Model):
             sql = "update account_move set name = '%s' where id = %s" % (self.draft_number, new_move.id)
             self.env.cr.execute(sql)
         if type == 'open':
-            sql = "update account_move set name = '%s' where id = %s" % (self.number, new_move.id)
+            sql = "update account_move set name = '%s', date='%s' where id = %s" % (self.number, time.strftime('%Y-%m-%d'), new_move.id)
             self.env.cr.execute(sql)
+            sql_line = "update account_move_line set date='%s' where move_Id = %s" % (time.strftime('%Y-%m-%d'), new_move.id)
+            self.env.cr.execute(sql_line)
 
     def pay_order(self):
         to_open_invoices = self.filtered(lambda inv: inv.state != 'payorder')
