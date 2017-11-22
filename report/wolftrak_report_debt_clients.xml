@@ -4,7 +4,7 @@
         <report
             id="debt_clients_report"
             model="debt.clients.dashboard"
-            string="Clientes Morosos"
+            string="Cuentas por pagar"
             report_type="qweb-pdf"
             name="wolftrakglobal.debt_clients_template"
             file="wolftrakglobal.wolftrak_report_debt_clients"

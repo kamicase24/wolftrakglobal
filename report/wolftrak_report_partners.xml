@@ -23,12 +23,11 @@
                     <table class="table table-bordered">
                         <tr class="tablecolor textcolor">
                             <td>#</td>
-                            <!--<td>Id Cliente</td>-->
                             <td>Cliente</td>
-                            <!--<td>Id Prod.</td>-->
                             <td>Cantidad</td>
                             <td>Valor/U</td>
                             <td>Total</td>
+                            <!--<td>Estado</td>-->
                         </tr>
                         <t t-set="total_res" t-value="0.0"/>
                         <t t-set="total_qty" t-value="0"/>
@@ -36,32 +35,32 @@
                         <t t-set="almonte_total" t-value="0"/>
                         <t t-set="price_unit" t-value="0"/>
                         <t t-set="num" t-value="1"/>
-                    <t t-foreach="o.partner_report" t-as="pr">
-                        <t t-if="pr.product_id == 8 and pr.partner_id == 2214">
-                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
-                            <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
-                        </t>
-                        <t t-if="pr.product_id == 38 and pr.partner_id == 2214">
-                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
-                            <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
-                        </t>
 
-                        <t t-if="pr.product_id == 8 and pr.partner_id == 9">
-                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
-                            <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
+                        <t t-foreach="o.partner_report" t-as="pr">
+                            <t t-if="pr.product_id == 8 and pr.partner_id == 2214">
+                                <t t-set="almonte" t-value="almonte + pr.price_unit"/>
+                                <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
+                            </t>
+                            <t t-if="pr.product_id == 38 and pr.partner_id == 2214">
+                                <t t-set="almonte" t-value="almonte + pr.price_unit"/>
+                                <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
+                            </t>
+                            <t t-if="pr.product_id == 8 and pr.partner_id == 9">
+                                <t t-set="almonte" t-value="almonte + pr.price_unit"/>
+                                <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
+                            </t>
+                            <t t-if="pr.product_id == 38 and pr.partner_id == 9">
+                                <t t-set="almonte" t-value="almonte + pr.price_unit"/>
+                                <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
+                            </t>
                         </t>
-                        <t t-if="pr.product_id == 38 and pr.partner_id == 9">
-                            <t t-set="almonte" t-value="almonte + pr.price_unit"/>
-                            <t t-set="almonte_total" t-value="almonte_total + pr.total"/>
-                        </t>
-                    </t>
                     <t t-foreach="o.partner_report" t-as="pr">
-                        <tr>
+                        <t t-if="pr.inv_state == 'paid'"> <t t-set="condition" t-value="'success'"/> </t>
+                        <t t-else=""> <t t-set="condition" t-value="'danger'"/> </t>
+                        <tr t-att-class="condition">
                         <t t-if="pr.product_id != 8">
                             <td><span t-esc="num"/></td>
-                            <!--<td><span t-field="pr.partner_id"/></td>-->
                             <td><span t-field="pr.partner_name"/></td>
-                            <!--<td><span t-field="pr.product_id"/></td>-->
                             <td><span t-field="pr.quantity"/></td>
                             <t t-if="almonte > 0 and pr.partner_id == 2214">
                                 <td><span t-esc="almonte" t-options="{'widget': 'monetary',
@@ -84,6 +83,7 @@
                                                             'display_currency': pr.currency_id}"/></td>
                                 <t t-set="total_res" t-value="total_res + pr.total"/>
                             </t>
+                            <!--<td><span t-field="pr.inv_state"/></td>-->
                             <t t-set="total_qty" t-value="total_qty + pr.quantity"/>
                             <t t-set="num" t-value="num+1"/>
                         </t>

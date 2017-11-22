@@ -397,18 +397,20 @@ class WolftrakPartnersDashboard(models.Model):
 
             self.env.cr.execute("delete from partner_report")
 
-            sql = """insert into partner_report(partner_id, partner_name, product_id, price_unit, quantity, total, currency_id)
+            sql = """insert into partner_report(partner_id, partner_name, product_id, price_unit, quantity, total, currency_id, inv_state)
             
-            select  res_partner.id,
+            select res_partner.id,
                 res_partner.name,
                 account_invoice_line.product_id,
                 round( CAST(float8 (case when account_invoice_line.discount > 0 then (round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2))-round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2)*round( CAST(float8 (account_invoice_line.discount/100)as numeric),2) else round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2) end) as numeric),2) as price_unit_usd,
                     sum(account_invoice_line.quantity) as total_quantity, 
-                    round( CAST(float8 ((case when account_invoice_line.discount > 0 then (round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2))-round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2)*round( CAST(float8 (account_invoice_line.discount/100)as numeric),2) else round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2) end)*sum(account_invoice_line.quantity)) as numeric),2) as total_price, 3
+                    round( CAST(float8 ((case when account_invoice_line.discount > 0 then (round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2))-round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2)*round( CAST(float8 (account_invoice_line.discount/100)as numeric),2) else round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2) end)*sum(account_invoice_line.quantity)) as numeric),2) as total_price, 
+                    3,
+                    (select state from account_invoice where id = account_invoice_line.invoice_id)
             
             from account_invoice_line join res_partner on (account_invoice_line.partner_id = res_partner.id) join account_invoice on (account_invoice_line.invoice_id = account_invoice.id)
             where ((upper(account_invoice_line.description) like '%s') OR (upper(account_invoice_line.description) like '%s')) and account_invoice_line.description like '%s' and account_invoice_line.product_id in (38,39,40,41,30,31,32,8)
-            group by res_partner.id,res_partner.name,account_invoice_line.product_id,(case when account_invoice_line.discount > 0 then (round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2))-round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2)*round( CAST(float8 (account_invoice_line.discount/100)as numeric),2) else round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2) end)
+            group by res_partner.id,res_partner.name,account_invoice_line.product_id,(case when account_invoice_line.discount > 0 then (round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2))-round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2)*round( CAST(float8 (account_invoice_line.discount/100)as numeric),2) else round( CAST(float8 (account_invoice_line.price_unit/(case when account_invoice_line.currency_id = 3 then 1 else account_invoice.ex_rate end)) as numeric),2) end),account_invoice_line.invoice_id
             order by 5,2 asc""" % (month_spa, month_eng, year)
 
             self.env.cr.execute(sql)
@@ -435,6 +437,7 @@ class WolftrakPartnersReport(models.Model):
     _name = 'partner.report'
 
     currency_id = fields.Many2one('res.currency', string='Moneda')
+    inv_state = fields.Char(string='Estado')
 
     partner_id = fields.Integer(string='Id Cliente')
     partner_name = fields.Char(string='Cliente')
@@ -449,7 +452,7 @@ class WolftrakDebtClientsDashboard(models.Model):
 
     date_from = fields.Date(string='Desde')
     date_to = fields.Date(string='Hasta')
-    debt_clients_report = fields.One2many('debt.clients.report', 'dashboard_id', string='Clientes Morosos')
+    debt_clients_report = fields.One2many('debt.clients.report', 'dashboard_id', string='Cuentas por Cobrar')
 
     @api.onchange('date_to')
     def set_data(self):

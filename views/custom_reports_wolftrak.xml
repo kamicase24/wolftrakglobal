@@ -26,7 +26,7 @@
         </record>
 
         <record id="debt_clients_report_form" model="ir.ui.view">
-            <field name="name">Clientes Morosos</field>
+            <field name="name">Cuentas por Cobrar</field>
             <field name="model">debt.clients.dashboard</field>
             <field name="arch" type="xml">
                 <form>
@@ -76,7 +76,7 @@
         </record>
 
         <record id="debt_clients_report_action" model="ir.actions.act_window">
-            <field name="name">Clientes Morosos</field>
+            <field name="name">Cuentas por Cobrar</field>
             <field name="res_model">debt.clients.dashboard</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
@@ -93,7 +93,7 @@
 
         <menuitem
             id="debt_clients_report_menu"
-            name="Clientes Morosos"
+            name="Cuentas por Cobrar"
             sequence="1"
             action="debt_clients_report_action"
             parent="account.menu_finance_reports"
