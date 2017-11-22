@@ -203,7 +203,8 @@ class WolftrakInvoice(models.Model):
         states={'draft': [('readonly', False)], 'payorder': [('readonly', False)]},
         index=True, help="Keep empty to use the current date", copy=False)
 
-    date_due = fields.Date(string='Due Date', readonly=True, states={'draft': [('readonly', False)]}, required=True,
+    date_due = fields.Date(string='Due Date', readonly=True, states={'draft': [('readonly', False)],
+                                                                     'payorder': [('readonly', False)]}, required=True,
                            index=True, copy=False, help="If you use payment terms, the due date will be computed "
                            "automatically at the generation of accounting entries. The payment term may compute "
                            "several due dates, for example 50% now and 50% in one month, but if you want to force a "
