@@ -228,9 +228,9 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_tree"/>
             <field name="arch" type="xml">
-                <!--<xpath expr="//tree" position="attributes">-->
-                    <!--<attribute name="decoration-info">{'state': 'draft'}</attribute>-->
-                <!--</xpath>-->
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="colors">green:state == 'paid'</attribute>
+                </xpath>
                 <xpath expr="//tree" position="inside">
                     <field name="ncf"/>
                 </xpath>

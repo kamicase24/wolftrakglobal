@@ -12,3 +12,9 @@ access_hr_payroll_report,access_hr_payroll_report,model_hr_payroll_report,hr_pay
 
 access_partner_report,access_partner_report,model_partner_report,account.group_account_manager,1,1,1,1
 access_partner_dashboard,access_partner_dashboard,model_partner_dashboard,account.group_account_manager,1,1,1,1
+
+access_mobile_device,access_mobile_device,model_mobile_device,maintenance.group_equipment_manager,1,1,1,1
+access_mobile_brand,access_mobile_brand,model_mobile_brand,maintenance.group_equipment_manager,1,1,1,1
+access_mobile_model,access_mobile_model,model_mobile_model,maintenance.group_equipment_manager,1,1,1,1
+access_hr_payroll_report_list,access_hr_payroll_report_list,model_hr_payroll_report_list,hr_payroll.group_hr_payroll_user,1,1,1,1
+access_wolftrak_tools,access_wolftrak_tools,model_wolftrak_tools,base.group_system,1,1,1,1

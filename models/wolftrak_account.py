@@ -13,34 +13,6 @@ from datetime import date, timedelta, datetime
 import calendar
 _logger = logging.getLogger(__name__)
 
-# def load_config(json_file):
-#     with open(json_file, 'r') as wfile:
-#         config_data = json.load(wfile)
-#         return config_data
-#
-#
-# def get_ncf_record(ncf, rnc, config_data=None):
-#     if not config_data:
-#         config_data = load_config(CONFIG_FILE)
-#     req_headers = config_data['request_headers']
-#     # req_cookies = config_data['request_cookies']
-#     req_params = config_data['request_parameters']
-#     uri = ''.join([config_data['url'], config_data['web_resource']])
-#     req_params['txtNCF'] = ncf
-#     req_params['txtRNC'] = rnc
-#     result = requests.get(uri, params=req_params, headers=req_headers)
-#     if result.status_code == requests.codes.ok:
-#         soup = BeautifulSoup(result.content)
-#         if soup.find('span', attrs={'id': 'lblContribuyente'}):
-#             data_rows1 = soup.find('span', attrs={'id': 'lblContribuyente'})
-#             data_rows2 = soup.find('span', attrs={'id': 'lblTipoComprobante'})
-#             span = []
-#             span.append(data_rows1.string)
-#             span.append(data_rows2.string)
-#             return span
-#         else:
-#             print soup.find('span', attrs={'id': 'lblErrorWebService'}).string
-
 
 class WolftrakInvoice(models.Model):
     _name = 'account.invoice'
